@@ -3,11 +3,90 @@
 @use "../abstracts/mixins/_index" as *;
 
 @mixin create-header {
+  @property --header-aurora_angle {
+    inherits: false;
+    initial-value: 0deg;
+    syntax: "<angle>";
+  }
+
   header {
-   block-size: var(--header_height, calc(100svb - var(--nav_height)));
+    position: relative;
+    isolation: isolate;
+    block-size: var(--header_height, calc(100svb - var(--nav_height)));
 
     &:empty {
       display: none;
+    }
+
+    // Blueprint grid backdrop — static, theme-aware, faded out towards edges
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(
+          light-dark(rgb(0 0 0 / 7%), rgb(255 255 255 / 8%)) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          light-dark(rgb(0 0 0 / 7%), rgb(255 255 255 / 8%)) 1px,
+          transparent 1px
+        );
+      background-size: 3rem 3rem;
+      z-index: -2;
+      mask-image: radial-gradient(
+        120% 90% at 50% 45%,
+        black 25%,
+        transparent 78%
+      );
+      pointer-events: none;
+    }
+
+    // Aurora glow in the glitch palette, slowly orbiting behind the title.
+    // Hovering the hero gently brightens and speeds it up.
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: conic-gradient(
+        from var(--header-aurora_angle) at 50% 42%,
+        transparent 0turn,
+        var(--color-purple-300) 0.12turn,
+        transparent 0.26turn,
+        transparent 0.48turn,
+        var(--color-turquoise-300) 0.6turn,
+        transparent 0.74turn,
+        transparent 1turn
+      );
+      opacity: 0.14;
+      filter: blur(clamp(40px, 8svb, 90px));
+      animation: header-aurora-spin 26s linear infinite;
+      transition: opacity 0.6s $trans-fnc;
+      z-index: -1;
+      mask-image: radial-gradient(
+        75% 62% at 50% 45%,
+        black 30%,
+        transparent 72%
+      );
+      pointer-events: none;
+
+      @include mq-reduce-motion {
+        animation: none;
+      }
+    }
+
+    @include mq-hover {
+      &::after {
+        opacity: 0.26;
+        animation-duration: 14s;
+      }
+    }
+  }
+
+  @keyframes header-aurora-spin {
+    to {
+      --header-aurora_angle: 360deg;
     }
   }
 

@@ -768,12 +768,11 @@ strong {
     z-index: 1000;
     animation-timeline: scroll(block);
     block-size: clamp(2px, 1svi, 0.25rem);
+    will-change: scale;
   }
   .blog__progress--fallback {
     animation: none;
-    scale: none;
-    transform: scaleX(0);
-    will-change: transform;
+    scale: 0 1;
   }
   .blog header {
     block-size: unset;
@@ -784,10 +783,45 @@ strong {
   .blog header::before, .blog header::after {
     display: none !important;
   }
-  .blog :is(h2, h3, h4, h5, h6) > :is(a) {
-    display: contents;
-    color: inherit !important;
-    text-decoration: none;
+  .blog :is(h2, h3, h4, h5, h6).heading-with-anchor {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(0.5rem, 1.5svi, 1rem);
+    scroll-margin-block-start: calc(1rem + var(--nav_height));
+  }
+  .blog .heading-anchor__text {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+  .blog .heading-anchor-copy {
+    display: inline-flex;
+    flex: 0 0 auto;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-start;
+    margin-block-start: 0.12em;
+    margin-inline-start: auto;
+    opacity: 0;
+    color: light-dark(var(--color-gray-800), var(--color-gray-300)) !important;
+    text-decoration: none !important;
+    translate: 0.35rem 0;
+    transition: opacity 0.2s ease-in-out, translate 0.2s ease-in-out, color 0.2s ease-in-out;
+    block-size: clamp(1.1rem, 2svi, 1.5rem);
+    inline-size: clamp(1.1rem, 2svi, 1.5rem);
+  }
+  .blog .heading-anchor-copy__icon {
+    display: block;
+    block-size: 100%;
+    inline-size: 100%;
+  }
+  .blog :is(h2, h3, h4, h5, h6).heading-with-anchor:hover .heading-anchor-copy,
+  .blog :is(h2, h3, h4, h5, h6).heading-with-anchor:focus-within .heading-anchor-copy {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .blog .heading-anchor-copy:hover,
+  .blog .heading-anchor-copy:focus-visible {
+    color: light-dark(hsl(0, 0%, 0%), hsl(0, 0%, 100%)) !important;
   }
   .blog h1 {
     margin-bottom: clamp(0.5em, 1.5svi, 0.7em);
@@ -812,8 +846,6 @@ strong {
     font-size: clamp(1rem, 0.5em, 2rem);
   }
   .blog h2 {
-    display: flex;
-    align-items: center;
     margin-top: clamp(1.8em, 5svi, 2.5em);
     margin-bottom: clamp(0.6em, 1.5svi, 0.8em);
     padding-inline-start: clamp(0.5rem, 2svi, 1rem);
@@ -822,7 +854,6 @@ strong {
     font-weight: 500;
     line-height: 1.3;
     color: light-dark(var(--color-gray-800), var(--color-gray-300));
-    scroll-margin-block-start: calc(1rem + var(--nav_height));
     text-box: trim-both ex alphabetic;
   }
   @media screen and (width <= 768px) {
@@ -836,9 +867,6 @@ strong {
       margin-top: clamp(1.2em, 3.5svi, 1.8em);
       font-size: clamp(1.5rem, 4svi, 1.75rem);
     }
-  }
-  .blog h2 > a:has(> span.icon.icon-link) {
-    display: none;
   }
   .blog h3 {
     font-size: clamp(1.5rem, 4svi, 1.65rem);
@@ -867,7 +895,7 @@ strong {
     margin-bottom: 0;
   }
   .blog .link,
-  .blog a:not(.podcast-link) {
+  .blog a:not(.podcast-link):not(.heading-anchor-copy) {
     color: light-dark(hsl(0, 0%, 0%), hsl(0, 0%, 100%));
     text-decoration: underline;
     transition: color 0.2s ease-in-out, text-decoration-color 0.2s ease-in-out;
@@ -907,6 +935,22 @@ strong {
   .blog ol li {
     counter-increment: item;
   }
+  .blog table {
+    display: block;
+    overflow: auto;
+    overflow-x: auto;
+    max-inline-size: 100%;
+  }
+  .blog table :is(th, td) code {
+    white-space: nowrap;
+  }
+  @media screen and (width <= 560px) {
+    .blog table :is(th, td):nth-child(2) {
+      inline-size: 250px;
+      max-inline-size: 250px;
+      min-inline-size: 250px;
+    }
+  }
   .blog pre {
     display: block;
     margin: clamp(1.5em, 4svi, 2em) 0;
@@ -939,11 +983,57 @@ strong {
       scale: 1 1;
     }
   }
+  @property --header-aurora_angle {
+    inherits: false;
+    initial-value: 0deg;
+    syntax: "<angle>";
+  }
   header {
+    position: relative;
+    isolation: isolate;
     block-size: var(--header_height, calc(100svb - var(--nav_height)));
   }
   header:empty {
     display: none;
+  }
+  header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(light-dark(rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0.08)) 1px, transparent 1px), linear-gradient(90deg, light-dark(rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0.08)) 1px, transparent 1px);
+    background-size: 3rem 3rem;
+    z-index: -2;
+    mask-image: radial-gradient(120% 90% at 50% 45%, black 25%, transparent 78%);
+    pointer-events: none;
+  }
+  header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: conic-gradient(from var(--header-aurora_angle) at 50% 42%, transparent 0turn, var(--color-purple-300) 0.12turn, transparent 0.26turn, transparent 0.48turn, var(--color-turquoise-300) 0.6turn, transparent 0.74turn, transparent 1turn);
+    opacity: 0.14;
+    filter: blur(clamp(40px, 8svb, 90px));
+    animation: header-aurora-spin 26s linear infinite;
+    transition: opacity 0.6s ease-in-out;
+    z-index: -1;
+    mask-image: radial-gradient(75% 62% at 50% 45%, black 30%, transparent 72%);
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    header::after {
+      animation: none;
+    }
+  }
+  @media (hover: hover) {
+    header:hover::after {
+      opacity: 0.26;
+      animation-duration: 14s;
+    }
+  }
+  @keyframes header-aurora-spin {
+    to {
+      --header-aurora_angle: 360deg;
+    }
   }
   @supports (view-timeline-name: --foo) {
     .intro {
