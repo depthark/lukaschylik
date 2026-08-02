@@ -3,6 +3,27 @@
 @use "../abstracts/mixins/_index" as *;
 
 @mixin create-reference {
+  .reference__preview {
+    padding: 4px;
+    background-image: conic-gradient(
+      from var(--gradient-angle),
+      var(--color-turquoise-300),
+      var(--color-turquoise-500),
+      var(--color-purple-300),
+      var(--color-purple-500),
+      var(--color-purple-700),
+      var(--color-purple-500),
+      var(--color-purple-300),
+      var(--color-turquoise-500),
+      var(--color-turquoise-300)
+    );
+    animation: rotateGradient 3s linear infinite;
+
+    @include mq-reduce-motion {
+      animation: none;
+    }
+  }
+
   .reference {
     @include mq-hover {
       --ref-before_trans-y: -100%;

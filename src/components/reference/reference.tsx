@@ -53,7 +53,6 @@ const Reference = component$<ReferenceProps>(
                 'hidden lg:block',
                 'absolute end-[calc(100%-2rem)] top-1/2 -translate-y-1/2',
                 'w-[min(300px,22vw)] aspect-square rounded-full object-cover object-top',
-                'border-4 border-black dark:border-white',
                 'shadow-2xl',
                 'opacity-0 group-hover:opacity-100',
                 'motion-safe:scale-75 motion-safe:group-hover:scale-100',

@@ -533,6 +533,16 @@ strong {
       translate: 0 0;
     }
   }
+  .reference__preview {
+    padding: 4px;
+    background-image: conic-gradient(from var(--gradient-angle), var(--color-turquoise-300), var(--color-turquoise-500), var(--color-purple-300), var(--color-purple-500), var(--color-purple-700), var(--color-purple-500), var(--color-purple-300), var(--color-turquoise-500), var(--color-turquoise-300));
+    animation: rotateGradient 3s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reference__preview {
+      animation: none;
+    }
+  }
   @media (hover: hover) {
     .reference:hover {
       --ref-before_trans-y: -100%;
