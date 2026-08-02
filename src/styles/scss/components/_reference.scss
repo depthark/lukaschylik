@@ -9,7 +9,7 @@
       --ref-after_trans-y: 0;
     }
 
-    :where(span, small) {
+    .reference__flip {
       position: relative;
       overflow: clip;
 
@@ -30,10 +30,6 @@
         color: $color-yellow;
         translate: 0 var(--ref-after_trans-y, 100%);
       }
-    }
-
-    > small::before {
-      color: $color-transparent;
     }
   }
 

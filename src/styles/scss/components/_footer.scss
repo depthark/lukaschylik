@@ -1,0 +1,18 @@
+@use "../abstracts/variables/_index" as *;
+@use "../abstracts/functions/_index" as *;
+@use "../abstracts/mixins/_index" as *;
+
+@mixin create-footer {
+  .site-footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(255 255 255 / 4%) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 4%) 1px, transparent 1px);
+    background-size: 3rem 3rem;
+    z-index: -1;
+    mask-image: linear-gradient(black 40%, transparent 95%);
+    pointer-events: none;
+  }
+}

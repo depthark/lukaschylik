@@ -2,6 +2,7 @@
 @use "./animated-content" as *;
 @use "./button" as *;
 @use "./card" as *;
+@use "./footer" as *;
 @use "./icon" as *;
 @use "./me" as *;
 @use "./navigation" as *;
@@ -16,6 +17,7 @@
   @include create-animated-content;
   @include create-button;
   @include create-card;
+  @include create-footer;
   @include create-icon;
   @include create-me;
   @include create-nav;

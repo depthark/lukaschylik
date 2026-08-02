@@ -87,48 +87,6 @@ const References = component$(() => {
                   href="#services">
                   {t.servicesButton}
                 </Button>
-                <div
-                  class="video-carousel relative
-                    grid grid-flow-col [grid-auto-columns:calc(100%-2rem)] gap-2 md:gap-4
-                    mt-10 md:mt-20 max-w-full md:max-w-[560px]
-                    overflow-x-auto overscroll-x-contain scroll-smooth
-                    snap-x snap-mandatory [scroll-padding-inline:1rem]
-                    [scrollbar-width:none] [-ms-overflow-style:'none'] [&::-webkit-scrollbar]:hidden
-                    [&>*]:min-w-0 [&>*]:snap-center [&>*]:snap-always">
-                  {VIDEO_SOURCES.map((src, index) => (
-                    <div key={src} class="relative group" onClick$={openPiP}>
-                      <iframe
-                        class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
-                        loading="lazy"
-                        width="560"
-                        src={src}
-                        title={t.videoTitles[index]}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        allowFullscreen></iframe>
-                      <button
-                        type="button"
-                        data-pip
-                        aria-label={t.pipButton}
-                        title={t.pipButton}
-                        class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round">
-                          <rect x="2" y="3" width="20" height="14" rx="2" />
-                          <rect x="11" y="9" width="10" height="7" rx="1" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
             <ul class="ref-list list-none p-0 m-0 min-w-0">
@@ -230,6 +188,48 @@ const References = component$(() => {
             />
             */}
             </ul>
+          </div>
+          <div
+            class="video-carousel relative
+        grid grid-flow-col [grid-auto-columns:calc(100%-2rem)] md:[grid-auto-columns:min(480px,60%)] gap-3 md:gap-5
+        mt-10 md:mt-16 max-w-full
+        overflow-x-auto overscroll-x-contain scroll-smooth
+        snap-x snap-mandatory [scroll-padding-inline:1rem]
+        [scrollbar-width:none] [-ms-overflow-style:'none'] [&::-webkit-scrollbar]:hidden
+        [&>*]:min-w-0 [&>*]:snap-center [&>*]:snap-always">
+            {VIDEO_SOURCES.map((src, index) => (
+              <div key={src} class="relative group" onClick$={openPiP}>
+                <iframe
+                  class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
+                  loading="lazy"
+                  width="560"
+                  src={src}
+                  title={t.videoTitles[index]}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullscreen></iframe>
+                <button
+                  type="button"
+                  data-pip
+                  aria-label={t.pipButton}
+                  title={t.pipButton}
+                  class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                    <rect x="11" y="9" width="10" height="7" rx="1" />
+                  </svg>
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </Container>
