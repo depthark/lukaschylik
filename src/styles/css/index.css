@@ -196,9 +196,11 @@ strong {
   @keyframes content-fade-in {
     0%, 20% {
       opacity: 0;
+      scale: var(--content_scale, 0.95);
     }
     50%, 100% {
       opacity: 1;
+      scale: 1;
     }
   }
   @property --btn_gradient-length {

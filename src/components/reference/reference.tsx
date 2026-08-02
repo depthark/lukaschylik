@@ -10,17 +10,17 @@ import type { ReferenceProps } from './reference.types'
 const Reference = component$<ReferenceProps>(
   ({ title, webURL, website, type }) => {
     return (
-      <li class="border-b border-black/30 dark:border-white/30 first:border-t isolate hover:z-10 relative">
+      <li class="border-b border-black/30 dark:border-white/30 first:border-t lg:first:border-t-0 lg:break-inside-avoid isolate hover:z-10 relative">
         <a
           href={webURL}
           target="_blank"
           rel="noopener noreferrer"
-          class="reference group grid grid-cols-[1fr_auto] items-center gap-4 py-3 no-underline w-full min-w-0">
+          class="reference group grid grid-cols-[1fr_auto] items-center gap-4 py-2.5 no-underline w-full min-w-0">
           <span class="min-w-0 grid gap-1">
             <strong
               class={cls(
                 'relative overflow-hidden',
-                'text-lg sm:text-xl md:text-2xl lg:text-xl 2xl:text-2xl 3xl:text-3xl',
+                'text-lg sm:text-xl md:text-2xl lg:text-lg xl:text-xl 2xl:text-2xl',
                 'font-medium leading-tight tracking-wide uppercase',
               )}>
               <span
