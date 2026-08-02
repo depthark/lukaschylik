@@ -224,6 +224,10 @@ export default component$(() => {
             text: navLabels.contact,
           },
           {
+            href: '/sessions/',
+            text: navLabels.sessions,
+          },
+          {
             href: '/blog/',
             text: navLabels.blog,
           },

@@ -1,57 +1,16 @@
-import { $, component$ } from '@qwik.dev/core'
+import { component$ } from '@qwik.dev/core'
 import { Button } from '~/components'
 import Container from '~/components/container/container'
 import Reference from '~/components/reference/reference'
 import Section from '~/components/section/section'
 import SectionTitle from '~/components/section/section.title'
-import { useLocale } from '~/i18n'
+import { localizePath, useLocale } from '~/i18n'
 import i18n from './references.i18n.json'
 
-const VIDEO_SOURCES = [
-  'https://www.youtube.com/embed/MCVuRMBOXUU?si=MC5Ah5u53jbdbfYZ',
-  'https://www.youtube.com/embed/FAbaIpGWmR4?si=0_zKp6MHe_-_n6P8',
-  'https://www.youtube.com/embed/eTjXcx5DUqM?si=P3ea1dfnwKqxrzyC',
-  'https://www.youtube.com/embed/ITDfqStMym0?si=sWTLYIfZVc-OusDf',
-  'https://www.youtube.com/embed/hwhuSdO5fU0?si=ZckQ-cJlCGZpJExv',
-  'https://www.youtube.com/embed/p8sQyt4YFdk?si=WDxTC4029EeFecKk',
-]
-
 const References = component$(() => {
-  const t = i18n[useLocale()]
+  const locale = useLocale()
+  const t = i18n[locale]
 
-  const openPiP = $((event: MouseEvent) => {
-    const button = (event.target as HTMLElement).closest('button[data-pip]')
-    if (!button) return
-
-    const wrapper = button.parentElement
-    if (!wrapper) return
-
-    const iframe = wrapper.querySelector('iframe')
-    if (!iframe) return
-
-    if (!('documentPictureInPicture' in window)) {
-      return
-    }
-
-    ;(window as any).documentPictureInPicture
-      .requestWindow({ width: 640, height: 360 })
-      .then((pipWindow: any) => {
-        pipWindow.document.head.innerHTML = `<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;width:100%;height:100vh}iframe{width:100%;height:100%;border:none}</style>`
-
-        const placeholder = document.createElement('div')
-        placeholder.className = iframe.className
-        placeholder.style.cssText =
-          'display:flex;align-items:center;justify-content:center;color:#888;font-size:14px;font-family:monospace'
-        placeholder.textContent = t.pipPlaceholder
-        wrapper.insertBefore(placeholder, iframe)
-
-        pipWindow.document.body.append(iframe)
-
-        pipWindow.addEventListener('pagehide', () => {
-          placeholder.replaceWith(iframe)
-        })
-      })
-  })
   return (
     <Section id="references" centerContent={false} fullHeight={false}>
       <Container size="full">
@@ -80,13 +39,22 @@ const References = component$(() => {
                   </a>
                   {t.paragraph3After}
                 </p>
-                <Button
-                  variant="secondary"
-                  ariaLabel={t.servicesButton}
-                  title={t.servicesButton}
-                  href="#services">
-                  {t.servicesButton}
-                </Button>
+                <div class="flex flex-wrap gap-4">
+                  <Button
+                    variant="secondary"
+                    ariaLabel={t.servicesButton}
+                    title={t.servicesButton}
+                    href="#services">
+                    {t.servicesButton}
+                  </Button>
+                  <Button
+                    variant="primary"
+                    ariaLabel={t.sessionsButton}
+                    title={t.sessionsButton}
+                    href={localizePath('/sessions/', locale)}>
+                    {t.sessionsButton}
+                  </Button>
+                </div>
               </div>
             </div>
             <ul class="ref-list list-none p-0 m-0 min-w-0">
@@ -192,48 +160,6 @@ const References = component$(() => {
             />
             */}
             </ul>
-          </div>
-          <div
-            class="video-carousel relative
-        grid grid-flow-col [grid-auto-columns:calc(100%-2rem)] md:[grid-auto-columns:min(480px,60%)] gap-3 md:gap-5
-        mt-10 md:mt-16 max-w-full
-        overflow-x-auto overscroll-x-contain scroll-smooth
-        snap-x snap-mandatory [scroll-padding-inline:1rem]
-        [scrollbar-width:none] [-ms-overflow-style:'none'] [&::-webkit-scrollbar]:hidden
-        [&>*]:min-w-0 [&>*]:snap-center [&>*]:snap-always">
-            {VIDEO_SOURCES.map((src, index) => (
-              <div key={src} class="relative group" onClick$={openPiP}>
-                <iframe
-                  class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
-                  loading="lazy"
-                  width="560"
-                  src={src}
-                  title={t.videoTitles[index]}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullscreen></iframe>
-                <button
-                  type="button"
-                  data-pip
-                  aria-label={t.pipButton}
-                  title={t.pipButton}
-                  class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" />
-                    <rect x="11" y="9" width="10" height="7" rx="1" />
-                  </svg>
-                </button>
-              </div>
-            ))}
           </div>
         </div>
       </Container>

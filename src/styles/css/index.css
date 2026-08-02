@@ -567,71 +567,44 @@ strong {
     color: hsl(51, 100%, 53%);
     translate: 0 var(--ref-after_trans-y, 100%);
   }
-  div:has(> .ref-list)::-webkit-scrollbar,
-  .video-carousel::-webkit-scrollbar {
+  div:has(> .ref-list)::-webkit-scrollbar {
     background: transparent;
   }
-  div:has(> .ref-list)::-webkit-scrollbar:vertical,
-  .video-carousel::-webkit-scrollbar:vertical {
+  div:has(> .ref-list)::-webkit-scrollbar:vertical {
     width: 0.5rem;
   }
-  div:has(> .ref-list)::-webkit-scrollbar:horizontal,
-  .video-carousel::-webkit-scrollbar:horizontal {
+  div:has(> .ref-list)::-webkit-scrollbar:horizontal {
     height: 0.5rem;
   }
-  div:has(> .ref-list)::-webkit-scrollbar-track,
-  .video-carousel::-webkit-scrollbar-track {
+  div:has(> .ref-list)::-webkit-scrollbar-track {
     border-radius: 100vmax;
   }
-  div:has(> .ref-list)::-webkit-scrollbar-thumb,
-  .video-carousel::-webkit-scrollbar-thumb {
+  div:has(> .ref-list)::-webkit-scrollbar-thumb {
     background: hsl(0, 0%, 20%);
     border-radius: 100vmax;
   }
   .ref-list > li {
     transition: opacity 0.2s ease-in-out;
   }
+  @media screen and (width <= 1024px) {
+    @supports (animation-timeline: view()) {
+      .ref-list > li {
+        opacity: 0;
+        animation: content-fade-in both;
+        animation-range: entry 0% entry 80%;
+        animation-timeline: view();
+        will-change: opacity, scale;
+      }
+    }
+  }
+  @media screen and (width <= 1024px) and (prefers-reduced-motion: reduce) {
+    .ref-list > li {
+      opacity: 1;
+      animation: none;
+    }
+  }
   .ref-list:hover > li:not(:hover) {
     opacity: 0.5;
-  }
-  .video-carousel {
-    container-type: scroll-state;
-    anchor-name: --video-carousel;
-    scroll-snap-align: center;
-  }
-  .video-carousel::scroll-button(*) {
-    position: absolute;
-    display: block;
-    background-color: hsla(0, 0%, 0%, 0.25);
-    backdrop-filter: blur(0.5rem);
-    border: none;
-    border-radius: 100vmax;
-    font-size: 2em;
-    font-weight: bold;
-    line-height: 1;
-    color: white;
-    scale: 1.1;
-    transition: translate 0.25s ease-out, opacity 0.25s ease-out, scale 0.25s ease-out;
-    z-index: 10;
-    cursor: pointer;
-    aspect-ratio: 1;
-    inline-size: 2.5rem;
-    position-anchor: --video-carousel;
-    text-box: trim-both ex alphabetic;
-  }
-  .video-carousel::scroll-button(*):disabled {
-    opacity: 0;
-    translate: 0;
-  }
-  .video-carousel::scroll-button(left) {
-    content: "‹";
-    translate: calc(100% + 0.5rem) 0;
-    position-area: center left;
-  }
-  .video-carousel::scroll-button(right) {
-    content: "›";
-    translate: calc(-100% - 0.5rem) 0;
-    position-area: center right;
   }
   input[type=search]::-webkit-search-cancel-button {
     --cancel-btn_color: light-dark(hsl(from black h s l / var(--cancel-btn_opacity, 0.7)), hsl(from white h s l / var(--cancel-btn_opacity, 0.7))) ;
@@ -664,25 +637,25 @@ strong {
   h2.content-fade-in::after {
     content: "";
     display: block;
-    inline-size: 2.5em;
-    block-size: 0.075em;
     margin-block-start: 0.15em;
-    border-radius: 999px;
     background: linear-gradient(90deg, var(--color-turquoise-300), var(--color-purple-500));
+    border-radius: 999px;
+    block-size: 0.075em;
+    inline-size: 2.5em;
   }
   @supports (view-timeline-name: --foo) {
     h2.content-fade-in::after {
+      animation: section-accent-grow forwards;
       scale: 0 1;
       transform-origin: 0 50%;
-      animation: section-accent-grow forwards;
-      animation-timeline: --section-view;
       animation-range: entry 10% entry 70%;
+      animation-timeline: --section-view;
     }
   }
   @media (prefers-reduced-motion: reduce) {
     h2.content-fade-in::after {
-      scale: 1 1;
       animation: none;
+      scale: 1 1;
     }
   }
   h2.content-fade-in--bottom::after {

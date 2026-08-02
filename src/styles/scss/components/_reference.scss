@@ -54,65 +54,32 @@
     }
   }
 
-  div:has(> .ref-list),
-  .video-carousel {
+  div:has(> .ref-list) {
     @include set-scrollbar;
   }
 
   .ref-list {
     > li {
       transition: opacity $trans-time $trans-fnc;
+
+      @include mq-responsive(desktop-s) {
+        @supports (animation-timeline: view()) {
+          opacity: 0;
+          animation: content-fade-in both;
+          animation-range: entry 0% entry 80%;
+          animation-timeline: view();
+          will-change: opacity, scale;
+        }
+
+        @include mq-reduce-motion {
+          opacity: 1;
+          animation: none;
+        }
+      }
     }
 
     &:hover > li:not(:hover) {
       opacity: 0.5;
-    }
-  }
-
-  .video-carousel {
-    container-type: scroll-state;
-    anchor-name: --video-carousel;
-    scroll-snap-align: center;
-
-    &::scroll-button(*) {
-      position: absolute;
-      display: block;
-      background-color: hsl(0deg 0% 0% / 25%);
-      backdrop-filter: blur(0.5rem);
-      border: none;
-      border-radius: 100vmax;
-      font-size: 2em;
-      font-weight: bold;
-      line-height: 1;
-      color: white;
-      scale: 1.1;
-      transition:
-        translate 0.25s ease-out,
-        opacity 0.25s ease-out,
-        scale 0.25s ease-out;
-      z-index: 10;
-      cursor: pointer;
-      aspect-ratio: 1;
-      inline-size: 2.5rem;
-      position-anchor: --video-carousel;
-      text-box: trim-both ex alphabetic;
-    }
-
-    &::scroll-button(*):disabled {
-      opacity: 0;
-      translate: 0;
-    }
-
-    &::scroll-button(left) {
-      content: "‹";
-      translate: calc(100% + 0.5rem) 0;
-      position-area: center left;
-    }
-
-    &::scroll-button(right) {
-      content: "›";
-      translate: calc(-100% - 0.5rem) 0;
-      position-area: center right;
     }
   }
 }

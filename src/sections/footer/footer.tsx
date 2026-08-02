@@ -24,6 +24,7 @@ const Footer = component$(() => {
     { href: '/#references', text: nav.references },
     { href: '/#services', text: nav.services },
     { href: '/#contact', text: nav.contact },
+    { href: '/sessions/', text: nav.sessions },
     { href: '/blog/', text: nav.blog },
   ]
 

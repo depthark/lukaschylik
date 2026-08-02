@@ -61,6 +61,7 @@ const generateSitemap = (): void => {
   const pages: Omit<SitemapUrl, 'loc'>[] = [
     { basePath: '/', lastmod: generatedAt, priority: '1.00' },
     { basePath: '/blog/', lastmod: generatedAt, priority: '0.80' },
+    { basePath: '/sessions/', lastmod: generatedAt, priority: '0.80' },
     { basePath: '/gdpr/', lastmod: generatedAt, priority: '0.50' },
     ...skPosts.map((post) => ({
       basePath: `/blog/articles/${post.slug}/`,

@@ -4,8 +4,8 @@ import { About, Contact, References, Services, Stats } from '~/sections'
 export default component$(() => {
   return (
     <>
-      <Stats />
       <About />
+      <Stats />
       <References />
       <Services />
       <Contact />

@@ -50,8 +50,10 @@ const Navigation = component$<NavigationProps>(({ links }) => {
 
   // Scroll lock handled via CSS in _navigation.scss using :has(.nav--open)
 
-  // Check if current path is blog or blog detail page
-  const isBlogPage = stripLocale(location.url.pathname).startsWith('/blog')
+  // Check if current path is a standalone page (blog, blog detail, sessions)
+  const currentPath = stripLocale(location.url.pathname)
+  const isBlogPage = currentPath.startsWith('/blog')
+  const isSessionsPage = currentPath.startsWith('/sessions')
 
   return (
     <nav
@@ -59,7 +61,7 @@ const Navigation = component$<NavigationProps>(({ links }) => {
         'nav',
         'sticky inset-x-0 top-0',
         'flex justify-between items-center',
-        'md:grid md:grid-cols-[auto_1fr_auto] justify-between items-stretch',
+        'md:grid md:grid-cols-[1fr_auto_1fr] justify-between items-stretch',
         'text-center',
         'py-2 md:py-0 px-4 md:px-18',
         'md:backdrop-blur-sm',
@@ -101,7 +103,9 @@ const Navigation = component$<NavigationProps>(({ links }) => {
         )}>
         {links?.map((link: NavigationLinkProps) => {
           const href = localizePath(link.href ?? '/', locale)
-          const isActive = link.href === '/blog/' && isBlogPage
+          const isActive =
+            (link.href === '/blog/' && isBlogPage) ||
+            (link.href === '/sessions/' && isSessionsPage)
           const isHashLink = href.includes('#')
 
           return (
@@ -146,7 +150,7 @@ const Navigation = component$<NavigationProps>(({ links }) => {
           )
         })}
       </ul>
-      <div class="flex gap-4 items-center">
+      <div class="flex gap-4 items-center md:justify-self-end">
         <LanguageSwitch />
         <ThemeSwitch />
         <Button

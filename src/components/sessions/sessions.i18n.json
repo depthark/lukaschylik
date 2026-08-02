@@ -1,0 +1,34 @@
+{
+  "sk": {
+    "title": "Prednášky",
+    "intro": "Okrem vývoja sa venujem aj prednášaniu na meetupoch a konferenciách o modernom CSS, frontende a AI vo vývoji. Tu nájdete záznamy mojich vystúpení.",
+    "headTitle": "Prednášky | Lukáš Chylík",
+    "headDescription": "Záznamy prednášok Lukáša Chylíka z meetupov a konferencií – moderné CSS, frontend a AI vo vývoji.",
+    "pipButton": "Picture-in-Picture",
+    "pipPlaceholder": "Video sa prehráva v Picture-in-Picture",
+    "videos": [
+      "Figma Beyond Design: Automatizácia design-to-code workflow",
+      "Konzistentné AI agentic workflow naprieč vývojovými tímami",
+      "CSS scroll-state container queries",
+      "CSS scroll driven animations",
+      "Frontendové novinky Máj 2025",
+      "CSS anchor positioning"
+    ]
+  },
+  "en": {
+    "title": "Sessions",
+    "intro": "Beyond development, I give talks at meetups and conferences about modern CSS, frontend and AI in development. Here you can find recordings of my sessions.",
+    "headTitle": "Sessions | Lukáš Chylík",
+    "headDescription": "Recordings of Lukáš Chylík's talks from meetups and conferences – modern CSS, frontend and AI in development.",
+    "pipButton": "Picture-in-Picture",
+    "pipPlaceholder": "Video is playing in Picture-in-Picture",
+    "videos": [
+      "Figma Beyond Design: Automating the design-to-code workflow",
+      "A consistent AI agentic workflow across development teams",
+      "CSS scroll-state container queries",
+      "CSS scroll driven animations",
+      "Frontend news May 2025",
+      "CSS anchor positioning"
+    ]
+  }
+}

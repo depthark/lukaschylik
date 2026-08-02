@@ -44,15 +44,6 @@ const About = component$(() => {
             text={t.title}
             className="about-title lg:row-start-1 lg:col-span-2 lg:col-start-1"
           />
-          <div class="content-fade-in">
-            {t.paragraphs.map((paragraph) => (
-              <p
-                key={paragraph[0].text}
-                class="text-sm lg:text-base 3xl:text-lg leading-relaxed font-light mb-4 md:mb-8 text-gray-800 dark:text-gray-300 font-mono">
-                <RichText segments={paragraph} />
-              </p>
-            ))}
-          </div>
           <div class="lg:row-start-1 lg:row-span-2 lg:col-start-2">
             <img
               class="me relative z-0 block mx-auto"
@@ -63,9 +54,20 @@ const About = component$(() => {
               height={768}
             />
           </div>
+          <div class="mx-[calc(50%-50vw)] lg:row-start-3 lg:col-start-1 lg:col-span-2">
+            <Skills />
+          </div>
+          <div class="content-fade-in max-lg:mt-8 lg:row-start-2 lg:col-start-1">
+            {t.paragraphs.map((paragraph) => (
+              <p
+                key={paragraph[0].text}
+                class="text-sm lg:text-base 3xl:text-lg leading-relaxed font-light mb-4 md:mb-8 text-gray-800 dark:text-gray-300 font-mono">
+                <RichText segments={paragraph} />
+              </p>
+            ))}
+          </div>
         </div>
       </Container>
-      <Skills />
     </Section>
   )
 })

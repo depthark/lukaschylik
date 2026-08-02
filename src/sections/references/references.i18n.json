@@ -7,16 +7,7 @@
     "paragraph3Link": "Frontendisti",
     "paragraph3After": ".",
     "servicesButton": "Služby a spoupráca",
-    "pipButton": "Picture-in-Picture",
-    "pipPlaceholder": "Video sa prehráva v Picture-in-Picture",
-    "videoTitles": [
-      "YouTube video Lukáš Chylík - Figma Beyond Design: Automatizácia design-to-code workflow",
-      "YouTube video Lukáš Chylík - Konzistentné AI agentic workflow naprieč vývojovými tímami",
-      "YouTube video Lukáš Chylík - CSS scroll-state container queries",
-      "YouTube video Lukáš Chylík - CSS scroll driven animations",
-      "YouTube video Lukáš Chylík - Frontendové novinky Máj 2025",
-      "YouTube video Lukáš Chylík - CSS anchor positioning"
-    ],
+    "sessionsButton": "Pozrieť prednášky",
     "types": {
       "designSystem": "Design System",
       "collaboration": "Spolupráca",
@@ -31,16 +22,7 @@
     "paragraph3Link": "Frontendisti",
     "paragraph3After": " community.",
     "servicesButton": "Services & collaboration",
-    "pipButton": "Picture-in-Picture",
-    "pipPlaceholder": "Video is playing in Picture-in-Picture",
-    "videoTitles": [
-      "YouTube video Lukáš Chylík - Figma Beyond Design: Automating the design-to-code workflow",
-      "YouTube video Lukáš Chylík - A consistent AI agentic workflow across development teams",
-      "YouTube video Lukáš Chylík - CSS scroll-state container queries",
-      "YouTube video Lukáš Chylík - CSS scroll driven animations",
-      "YouTube video Lukáš Chylík - Frontend news May 2025",
-      "YouTube video Lukáš Chylík - CSS anchor positioning"
-    ],
+    "sessionsButton": "View sessions",
     "types": {
       "designSystem": "Design System",
       "collaboration": "Collaboration",
