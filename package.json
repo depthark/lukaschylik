@@ -1,39 +1,28 @@
 {
   "name": "lukas-chylik-portfolio-website",
   "version": "2.0.0",
+  "private": true,
   "description": "Modern personal portfolio website built with Qwik featuring SSR, dynamic blog posts, and optimized performance. Showcases skills, services, references, and includes a fully functional blog with markdown support.",
+  "keywords": [
+    "blog",
+    "frontend-developer",
+    "personal-website",
+    "portfolio",
+    "qwik",
+    "ssr",
+    "tailwindcss",
+    "typescript"
+  ],
+  "homepage": "https://lukaschylik.dev",
+  "license": "MIT",
   "author": {
     "name": "Lukas Chylik",
     "url": "https://lukaschylik.dev"
   },
-  "license": "MIT",
-  "keywords": [
-    "portfolio",
-    "qwik",
-    "ssr",
-    "blog",
-    "typescript",
-    "tailwindcss",
-    "personal-website",
-    "frontend-developer"
-  ],
-  "homepage": "https://lukaschylik.dev",
   "repository": {
     "type": "git",
     "url": "https://github.com/Luko248/lukaschylik/"
   },
-  "engines": {
-    "node": "^20.0.0 || ^22.0.0"
-  },
-  "engines-annotation": "Mostly required by sharp which needs a Node-API v9 compatible runtime",
-  "private": true,
-  "trustedDependencies": [
-    "@parcel/watcher",
-    "@toolwind/anchors",
-    "esbuild",
-    "sharp"
-  ],
-  "trustedDependencies-annotation": "Needed for bun to allow running install scripts",
   "type": "module",
   "scripts": {
     "build": "bun run tailwind:optimize && qwik build && bun run scripts/generate-sitemap.ts",
@@ -45,10 +34,11 @@
     "deploy": "echo 'Run \"bun run qwik add\" to install a server adapter'",
     "dev": "vite --mode ssr",
     "dev.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
-    "format": "biome format --write .",
-    "biome:check": "biome check .",
-    "biome:lint": "biome lint .",
-    "biome:ci": "biome ci .",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "lint:ci": "oxlint --deny-warnings && oxfmt --check",
     "stylelint": "stylelint \"src/**/*.scss\"",
     "stylelint:fix": "stylelint \"src/**/*.scss\" --fix",
     "preview": "vite build --ssr src/entry.preview.tsx && vite preview --open",
@@ -58,39 +48,41 @@
     "tailwind:optimize": "tailwindcss --input ./src/styles/css/tailwind.css --output ./src/styles/css/tailwind.optimized.css --minify",
     "qwik": "qwik"
   },
-  "devDependencies": {
-    "@biomejs/biome": "2.4.10",
-    "@builder.io/qwik": "^1.19.2",
-    "@builder.io/qwik-city": "^1.19.2",
-    "@tailwindcss/postcss": "^4.2.2",
-    "@types/node": "^25.5.2",
-    "autoprefixer": "^10.4.27",
-    "concurrently": "^9.2.1",
-    "depcheck": "^1.4.7",
-    "esbuild": "^0.27.7",
-    "nodemon": "^3.1.14",
-    "postcss": "^8.5.8",
-    "postcss-preset-env": "^11.2.0",
-    "postcss-scss": "^4.0.9",
-    "sass": "^1.99.0",
-    "stylelint": "^17.6.0",
-    "stylelint-order": "^7.0.1",
-    "tailwindcss": "^4.2.2",
-    "typescript": "^5.9.3",
-    "vite": "^7.3.2",
-    "vite-tsconfig-paths": "^6.1.1"
-  },
   "dependencies": {
-    "@tailwindcss/cli": "^4.2.2",
+    "@tailwindcss/cli": "^4.3.3",
     "@toolwind/anchors": "^1.0.10",
-    "caniuse-lite": "^1.0.30001786",
+    "baseline-browser-mapping": "^2.11.10",
+    "caniuse-lite": "^1.0.30001806",
     "gray-matter": "^4.0.3",
     "hast-util-from-html": "^2.0.3",
     "rehype-autolink-headings": "^7.1.0",
-    "shiki": "^3.23.0",
-    "tailwind-merge": "^3.5.0",
-    "tailwind-variants": "^3.2.2",
+    "shiki": "^4.4.1",
+    "tailwind-merge": "^3.6.0",
+    "tailwind-variants": "^3.3.0",
     "unist-util-visit": "^5.1.0"
+  },
+  "devDependencies": {
+    "@qwik.dev/core": "^2.0.0-beta.38",
+    "@qwik.dev/router": "^2.0.0-beta.38",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.1.2",
+    "autoprefixer": "^10.5.4",
+    "concurrently": "^10.0.4",
+    "depcheck": "^1.4.7",
+    "esbuild": "^0.28.1",
+    "nodemon": "^3.1.14",
+    "oxfmt": "^0.61.0",
+    "oxlint": "^1.76.0",
+    "postcss": "^8.5.25",
+    "postcss-preset-env": "^11.3.2",
+    "postcss-scss": "^4.0.9",
+    "sass": "^1.102.0",
+    "stylelint": "^17.14.1",
+    "stylelint-order": "^8.1.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^7.3.6",
+    "vite-tsconfig-paths": "^6.1.1"
   },
   "browserslist": [
     "> 1%",
@@ -100,5 +92,16 @@
     "not op_mini all",
     "not android < 5",
     "not ios < 12"
-  ]
+  ],
+  "engines": {
+    "node": "^20.0.0 || ^22.0.0"
+  },
+  "engines-annotation": "Mostly required by sharp which needs a Node-API v9 compatible runtime",
+  "trustedDependencies": [
+    "@parcel/watcher",
+    "@toolwind/anchors",
+    "esbuild",
+    "sharp"
+  ],
+  "trustedDependencies-annotation": "Needed for bun to allow running install scripts"
 }

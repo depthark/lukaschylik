@@ -1,4 +1,4 @@
-import type { PropFunction } from '@builder.io/qwik'
+import type { QRL } from '@qwik.dev/core'
 
 /**
  * Props interface for the Card component
@@ -14,5 +14,5 @@ export interface CardProps {
   priceLabel?: string // when provided, overrides numeric price display
   priceNote?: string // small note under price (e.g., Cena za 1 hod)
   available?: boolean // controls button disabled state
-  onClick$?: PropFunction<() => void>
+  onClick$?: QRL<() => void>
 }

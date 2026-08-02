@@ -1,5 +1,5 @@
-import { component$ } from '@builder.io/qwik'
-import { Link } from '@builder.io/qwik-city'
+import { component$ } from '@qwik.dev/core'
+import { Link } from '@qwik.dev/router'
 import Icon from '~/components/icon/icon'
 import { cls } from '~/utils'
 import type { BlogPost } from '~/utils/markdown.server'
@@ -34,7 +34,7 @@ const BlogCard = component$(({ post }: BlogCardProps) => {
 
   return (
     <Link
-      href={`/blog/articles/${post.slug}`}
+      href={`/blog/articles/${post.slug}/`}
       class={cls(
         'card overflow-clip',
         'group relative block',

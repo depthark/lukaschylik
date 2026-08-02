@@ -1,4 +1,4 @@
-import type { QRL } from '@builder.io/qwik'
+import type { QRL } from '@qwik.dev/core'
 
 /**
  * Checks URL parameters for form submission flags and shows appropriate alerts

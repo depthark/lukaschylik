@@ -1,5 +1,5 @@
-import { component$, Slot } from '@builder.io/qwik'
-import type { DocumentHead } from '@builder.io/qwik-city'
+import { component$, Slot } from '@qwik.dev/core'
+import type { DocumentHead } from '@qwik.dev/router'
 import Container from '~/components/container/container'
 import Section from '~/components/section/section'
 import '~/styles/css/shiki.css'

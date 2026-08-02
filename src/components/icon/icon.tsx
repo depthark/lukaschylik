@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik'
+import { component$ } from '@qwik.dev/core'
 import type { IconProps } from './icon.types'
 import portfolioData from './portfolio.json'
 
@@ -24,16 +24,14 @@ interface PortfolioData {
 
 /**
  * Helper function to parse portfolio.json and convert it to iconPaths format
- * @param portfolioData - The imported portfolio JSON data
+ * @param data - The imported portfolio JSON data
  * @returns Record<string, string> - Icon name to SVG path mapping
  */
-const parsePortfolioIcons = (
-  portfolioData: PortfolioData,
-): Record<string, string> => {
+const parsePortfolioIcons = (data: PortfolioData): Record<string, string> => {
   const iconPaths: Record<string, string> = {}
 
-  portfolioData.selection.forEach((selection, index) => {
-    const iconData = portfolioData.icons[index]
+  data.selection.forEach((selection, index) => {
+    const iconData = data.icons[index]
     if (iconData && iconData.paths.length > 0) {
       const paths = iconData.paths.join(' ')
       iconPaths[selection.name] = paths

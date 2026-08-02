@@ -1,4 +1,4 @@
-import { $, component$, useOn } from '@builder.io/qwik'
+import { $, component$, useOn } from '@qwik.dev/core'
 import { Button, Container } from '~/components'
 import { cls } from '~/utils'
 
@@ -6,14 +6,16 @@ const Header = component$(() => {
   useOn(
     'qvisible',
     $(() => {
-      const titleElement = document.querySelector('.intro__title') as HTMLElement
+      const titleElement = document.querySelector(
+        '.intro__title',
+      ) as HTMLElement
       if (titleElement) {
         // Set the client dimensions as data attributes for use in CSS
         const clientHeight = titleElement.clientHeight
-      const clientWidth = titleElement.clientWidth
-      console.log('Title element height:', clientHeight)
-      console.log('Title element width:', clientWidth)
-      titleElement.setAttribute('data-height', clientHeight.toString())
+        const clientWidth = titleElement.clientWidth
+        console.log('Title element height:', clientHeight)
+        console.log('Title element width:', clientWidth)
+        titleElement.setAttribute('data-height', clientHeight.toString())
         titleElement.setAttribute('data-width', clientWidth.toString())
         console.log(
           'Data attributes set - height:',

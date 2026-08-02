@@ -1,4 +1,4 @@
-import { $, component$, isBrowser, useSignal, useTask$ } from '@builder.io/qwik'
+import { $, component$, isBrowser, useSignal, useTask$ } from '@qwik.dev/core'
 import { cls } from '~/utils'
 import { Icon } from '../icon'
 import type { AlertProps } from './alert.types'

@@ -1,4 +1,4 @@
-import { $, component$, useOnDocument, useSignal } from '@builder.io/qwik'
+import { $, component$, useOnDocument, useSignal } from '@qwik.dev/core'
 import { Button, Container } from '~/components'
 
 type ConsentPrefs = {

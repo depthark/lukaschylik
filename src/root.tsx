@@ -1,24 +1,27 @@
-import { component$ } from '@builder.io/qwik'
-import { isDev } from '@builder.io/qwik/build'
+import { component$ } from '@qwik.dev/core'
+import { isDev } from '@qwik.dev/core/build'
 import {
-  QwikCityProvider,
   RouterOutlet,
   ServiceWorkerRegister,
-} from '@builder.io/qwik-city'
+  useQwikRouter,
+} from '@qwik.dev/router'
 import { RouterHead } from './components/router-head/router-head'
 import { THEME_INIT_SCRIPT } from './utils'
 import './styles/scss/index.scss'
 import './styles/css/tailwind.css'
+
+/**
+ * Root component of the application. Initializes Qwik Router via the
+ * `useQwikRouter()` hook (Qwik 2 API), immediately followed by the
+ * document's `<head>` and `<body>`.
+ *
+ * Don't remove the `<head>` and `<body>` elements.
+ */
 export default component$(() => {
-  /**
-   * The root of a QwikCity site always start with the <QwikCityProvider> component,
-   * immediately followed by the document's <head> and <body>.
-   *
-   * Don't remove the `<head>` and `<body>` elements.
-   */
+  useQwikRouter()
 
   return (
-    <QwikCityProvider>
+    <>
       <head>
         <meta charset="utf-8" />
         <RouterHead />
@@ -34,17 +37,13 @@ export default component$(() => {
         )}
       </head>
       <body class="bg-black-900" lang="sk">
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-KQFH8PWL"
-            height="0"
-            width="0"
-            title="Google Tag Manager"
-            style={{ display: 'none', visibility: 'hidden' }}></iframe>
-        </noscript>
+        <noscript
+          dangerouslySetInnerHTML={
+            '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQFH8PWL" height="0" width="0" title="Google Tag Manager" style="display:none;visibility:hidden"></iframe>'
+          }></noscript>
         <RouterOutlet />
         {!isDev && <ServiceWorkerRegister />}
       </body>
-    </QwikCityProvider>
+    </>
   )
 })

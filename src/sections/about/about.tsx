@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik'
+import { component$ } from '@qwik.dev/core'
 import { Container, Section, Skills } from '~/components'
 import SectionTitle from '~/components/section/section.title'
 import { cls } from '~/utils'
@@ -18,10 +18,9 @@ const About = component$(() => {
           />
           <div class="content-fade-in">
             <p class="text-sm lg:text-base 3xl:text-lg leading-relaxed font-light mb-4 md:mb-8 text-gray-800 dark:text-gray-300 font-mono">
-              Som frontend developer s{' '}
-              <strong>veľkým presahom do UX/UI</strong>. Za posledných 10 rokov
-              som pracoval na projektoch od prezentačných webov po PWA a
-              informačné systémy.
+              Som frontend developer s <strong>veľkým presahom do UX/UI</strong>
+              . Za posledných 10 rokov som pracoval na projektoch od
+              prezentačných webov po PWA a informačné systémy.
               <strong>Technické SEO a prístupnosť</strong> sú samozrejmosťou.
               Venujem sa implementácii
               <strong> dizajnových systémov</strong> aj{' '}

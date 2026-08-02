@@ -1,4 +1,4 @@
-import { $, component$ } from '@builder.io/qwik'
+import { $, component$ } from '@qwik.dev/core'
 import { applyTheme, getDocumentTheme, storeTheme } from '~/utils'
 import { Button } from '../button'
 import { Icon } from '../icon'

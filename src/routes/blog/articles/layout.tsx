@@ -1,5 +1,5 @@
-import { $, component$, Slot, useContext } from '@builder.io/qwik'
-import { type DocumentHead, Link, routeLoader$ } from '@builder.io/qwik-city'
+import { $, component$, Slot, useContext } from '@qwik.dev/core'
+import { type DocumentHead, Link, routeLoader$ } from '@qwik.dev/router'
 import { Icon } from '~/components'
 import { BlogProgress } from '~/components/blog/BlogProgress'
 import Container from '~/components/container/container'
@@ -37,7 +37,7 @@ export const useCurrentPost = routeLoader$(async ({ status, url }) => {
     }
 
     const allPosts = getAllPosts()
-    const post = allPosts.find((post) => post.slug === slug)
+    const post = allPosts.find((p) => p.slug === slug)
 
     if (!post) {
       status(404)
@@ -113,7 +113,7 @@ export default component$(() => {
         <BlogProgress />
         <Container size="blog">
           <Link
-            href="/blog"
+            href="/blog/"
             class="inline-flex items-center text-gray-800 dark:text-gray-300 mb-6 underline underline-offset-4">
             ← Späť na zoznam článkov
           </Link>

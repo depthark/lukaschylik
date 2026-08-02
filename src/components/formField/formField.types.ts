@@ -1,4 +1,4 @@
-import type { PropFunction } from '@builder.io/qwik'
+import type { QRL } from '@qwik.dev/core'
 
 /**
  * Props for the FormField component.
@@ -13,7 +13,7 @@ export interface FormFieldProps {
   /** The value of the input field */
   value: string
   /** The onInput event handler */
-  onInput$: PropFunction<(e: Event) => void>
+  onInput$: QRL<(e: Event) => void>
   /** Whether the input field is required */
   required?: boolean
   /** Custom class name for the input field */

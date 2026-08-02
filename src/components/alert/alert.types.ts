@@ -1,4 +1,4 @@
-import type { PropFunction } from '@builder.io/qwik'
+import type { QRL } from '@qwik.dev/core'
 
 export interface AlertProps {
   /**
@@ -14,7 +14,7 @@ export interface AlertProps {
   /**
    * Function to call when the alert is closed
    */
-  onClose$?: PropFunction<() => void>
+  onClose$?: QRL<() => void>
 
   /**
    * The duration in seconds before the alert auto-hides

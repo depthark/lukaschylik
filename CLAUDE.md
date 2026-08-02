@@ -19,11 +19,13 @@ bun run build
 bun run preview
 
 # Linting & Formatting
-bun run biome:check      # Check JS/TS with Biome
-bun run biome:lint       # Lint JS/TS
+bun run lint             # Lint JS/TS with oxlint
+bun run lint:fix         # Lint and auto-fix
+bun run lint:ci          # CI check (oxlint --deny-warnings + oxfmt --check)
 bun run stylelint        # Lint SCSS files
 bun run stylelint:fix    # Fix SCSS issues
-bun run format           # Format with Biome
+bun run format           # Format with oxfmt
+bun run format:check     # Check formatting without writing
 
 # Fix all (runs stylelint:fix + format)
 bun run fix
@@ -35,9 +37,11 @@ bun run build.types
 ## Architecture
 
 ### Framework & Routing
-- **Qwik** with **Qwik City** for file-based routing and SSR
+- **Qwik 2** (`@qwik.dev/core`) with **Qwik Router** (`@qwik.dev/router`, formerly Qwik City) for file-based routing and SSR
 - Path alias: `~/` maps to `src/`
-- Static adapter in `adapters/static/` for deployment
+- SSG adapter (`ssgAdapter`) config in `adapters/static/` for deployment
+- Custom 404 page in `src/routes/404.tsx` (emitted as `404.html` during SSG)
+- Linting/formatting: **oxlint** (`.oxlintrc.json`) + **oxfmt** (`.oxfmtrc.json`); SCSS via Stylelint
 
 ### Directory Structure
 - `src/routes/` - File-based routing (Qwik City convention)

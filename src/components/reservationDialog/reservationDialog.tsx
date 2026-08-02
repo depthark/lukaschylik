@@ -1,4 +1,4 @@
-import { $, component$, useOn, useSignal, useTask$ } from '@builder.io/qwik'
+import { $, component$, useOn, useSignal, useTask$ } from '@qwik.dev/core'
 import { Button, Icon } from '~/components'
 import type { ReservationDialogProps } from './reservationDialog.types'
 

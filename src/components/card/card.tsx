@@ -1,4 +1,4 @@
-import { component$, Slot } from '@builder.io/qwik'
+import { component$, Slot } from '@qwik.dev/core'
 import { cls } from '~/utils'
 import { Button } from '../button'
 import type { CardProps } from './card.types'

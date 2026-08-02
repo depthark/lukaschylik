@@ -1,4 +1,4 @@
-import { $, component$, useOnDocument, useSignal } from '@builder.io/qwik'
+import { $, component$, useOnDocument, useSignal } from '@qwik.dev/core'
 import { SOCIAL_LINKS } from '~/constants/socialLinks'
 import { cls } from '~/utils'
 import Icon from '../icon/icon'

@@ -1,31 +1,31 @@
-import { component$ } from "@builder.io/qwik";
-import SkillItem from "./skills.item";
+import { component$ } from '@qwik.dev/core'
+import SkillItem from './skills.item'
 
 const Skills = component$(() => {
   const skills = [
-    "HTML",
-    "CSS",
-    "SVG",
-    "JavaScript",
-    "TypeScript",
-    "pnpm",
-    "Web",
-    "React",
-    "Astro",
-    "Qwik",
-    "AI",
-    "MCP",
-    "AMP",
-    "Tailwind",
-    "Stylex",
-    "SCSS",
-    "Agent SKILLS",
-    "Web AR",
-    "bun",
-    "Rollup",
-    "Vite",
-    "Webpack",
-  ];
+    'HTML',
+    'CSS',
+    'SVG',
+    'JavaScript',
+    'TypeScript',
+    'pnpm',
+    'Web',
+    'React',
+    'Astro',
+    'Qwik',
+    'AI',
+    'MCP',
+    'AMP',
+    'Tailwind',
+    'Stylex',
+    'SCSS',
+    'Agent SKILLS',
+    'Web AR',
+    'bun',
+    'Rollup',
+    'Vite',
+    'Webpack',
+  ]
 
   return (
     <div class="skills relative z-20 grid gap-y-4 lg:gap-y-5 2xl:gap-y-8 overflow-clip bg-white dark:bg-black">
@@ -40,7 +40,7 @@ const Skills = component$(() => {
         ))}
       </ul>
     </div>
-  );
-});
+  )
+})
 
-export default Skills;
+export default Skills

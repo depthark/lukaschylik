@@ -1,5 +1,5 @@
-import { component$ } from "@builder.io/qwik";
-import type { FormFieldProps } from "./formField.types";
+import { component$ } from '@qwik.dev/core'
+import type { FormFieldProps } from './formField.types'
 
 /**
  * FormField component renders a label and an input or textarea element based on the type prop.
@@ -34,24 +34,24 @@ const FormField = component$<FormFieldProps>(
     autocomplete,
   }) => {
     const inputClass = [
-      type === "textarea" ? "field-sizing-content min-h-40" : "",
-      "block w-full bg-transparent border-gray-600 dark:border-gray-400 border-b-1 px-2 md:px-6 py-2 md:py-4 user-invalid:border-red-500 user-valid:border-green-400 text-base text-black placeholder-gray-500 dark:placeholder-gray-400",
+      type === 'textarea' ? 'field-sizing-content min-h-40' : '',
+      'block w-full bg-transparent border-gray-600 dark:border-gray-400 border-b-1 px-2 md:px-6 py-2 md:py-4 user-invalid:border-red-500 user-valid:border-green-400 text-base text-black placeholder-gray-500 dark:placeholder-gray-400',
       inputClassName,
     ]
       .filter(Boolean)
-      .join(" ");
+      .join(' ')
 
     const labelClass = [
-      "text-black grid gap-2 text-sm sm:text-md md:text-lg font-mono",
+      'text-black grid gap-2 text-sm sm:text-md md:text-lg font-mono',
       className,
     ]
       .filter(Boolean)
-      .join(" ");
+      .join(' ')
 
     return (
       <label class={labelClass} for={name}>
         {label}
-        {type === "textarea" ? (
+        {type === 'textarea' ? (
           <textarea
             id={name}
             name={name}
@@ -84,8 +84,8 @@ const FormField = component$<FormFieldProps>(
           />
         )}
       </label>
-    );
+    )
   },
-);
+)
 
-export default FormField;
+export default FormField

@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "import", "react"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "typescript/no-explicit-any": "off",
+    "typescript/consistent-type-imports": "warn",
+    "typescript/no-non-null-assertion": "off",
+    "typescript/array-type": "error",
+    "react/jsx-no-useless-fragment": "warn",
+    "react/react-in-jsx-scope": "off",
+    "react/no-unknown-property": "off",
+    "react/jsx-key": "off",
+    "react/no-danger-with-children": "off",
+    "react/style-prop-object": "off",
+    "react/iframe-missing-sandbox": "off",
+    "import/no-unassigned-import": "off",
+    "no-underscore-dangle": "off"
+  },
+  "ignorePatterns": [
+    "dist",
+    "server",
+    "tmp",
+    "node_modules",
+    "src/styles/css",
+    "public"
+  ]
+}

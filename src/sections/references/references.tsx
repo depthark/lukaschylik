@@ -1,9 +1,9 @@
-import { $, component$ } from "@builder.io/qwik";
-import { Button } from "~/components";
-import Container from "~/components/container/container";
-import Reference from "~/components/reference/reference";
-import Section from "~/components/section/section";
-import SectionTitle from "~/components/section/section.title";
+import { $, component$ } from '@qwik.dev/core'
+import { Button } from '~/components'
+import Container from '~/components/container/container'
+import Reference from '~/components/reference/reference'
+import Section from '~/components/section/section'
+import SectionTitle from '~/components/section/section.title'
 
 const References = component$(() => {
   const openPiP = $((event: MouseEvent) => {
@@ -27,7 +27,8 @@ const References = component$(() => {
 
         const placeholder = document.createElement('div')
         placeholder.className = iframe.className
-        placeholder.style.cssText = 'display:flex;align-items:center;justify-content:center;color:#888;font-size:14px;font-family:monospace'
+        placeholder.style.cssText =
+          'display:flex;align-items:center;justify-content:center;color:#888;font-size:14px;font-family:monospace'
         placeholder.textContent = 'Video sa prehráva v Picture-in-Picture'
         wrapper.insertBefore(placeholder, iframe)
 
@@ -67,8 +68,7 @@ const References = component$(() => {
                     class="underline"
                     href="https://www.frontendisti.cz/"
                     target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                    rel="noopener noreferrer">
                     Frontendisti
                   </a>
                   .
@@ -77,8 +77,7 @@ const References = component$(() => {
                   variant="secondary"
                   ariaLabel="Služby a spoupráca"
                   title="Služby a spoupráca"
-                  href="#services"
-                >
+                  href="#services">
                   Služby a spoupráca
                 </Button>
                 <div
@@ -88,8 +87,7 @@ const References = component$(() => {
                     overflow-x-auto overscroll-x-contain scroll-smooth
                     snap-x snap-mandatory [scroll-padding-inline:1rem]
                     [scrollbar-width:none] [-ms-overflow-style:'none'] [&::-webkit-scrollbar]:hidden
-                    [&>*]:min-w-0 [&>*]:snap-center [&>*]:snap-always"
-                >
+                    [&>*]:min-w-0 [&>*]:snap-center [&>*]:snap-always">
                   <div class="relative group" onClick$={openPiP}>
                     <iframe
                       class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
@@ -99,10 +97,26 @@ const References = component$(() => {
                       title="YouTube video Lukáš Chylík - Figma Beyond Design: Automatizácia design-to-code workflow"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen
-                    ></iframe>
-                    <button type="button" data-pip aria-label="Picture-in-Picture" title="Picture-in-Picture" class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><rect x="11" y="9" width="10" height="7" rx="1" /></svg>
+                      allowFullscreen></iframe>
+                    <button
+                      type="button"
+                      data-pip
+                      aria-label="Picture-in-Picture"
+                      title="Picture-in-Picture"
+                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <rect x="11" y="9" width="10" height="7" rx="1" />
+                      </svg>
                     </button>
                   </div>
                   <div class="relative group" onClick$={openPiP}>
@@ -114,10 +128,26 @@ const References = component$(() => {
                       title="YouTube video Lukáš Chylík - Konzistentné AI agentic workflow naprieč vývojovými tímami"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen
-                    ></iframe>
-                    <button type="button" data-pip aria-label="Picture-in-Picture" title="Picture-in-Picture" class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><rect x="11" y="9" width="10" height="7" rx="1" /></svg>
+                      allowFullscreen></iframe>
+                    <button
+                      type="button"
+                      data-pip
+                      aria-label="Picture-in-Picture"
+                      title="Picture-in-Picture"
+                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <rect x="11" y="9" width="10" height="7" rx="1" />
+                      </svg>
                     </button>
                   </div>
                   <div class="relative group" onClick$={openPiP}>
@@ -129,10 +159,26 @@ const References = component$(() => {
                       title="YouTube video Lukáš Chylík - CSS scroll-state container queries"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen
-                    ></iframe>
-                    <button type="button" data-pip aria-label="Picture-in-Picture" title="Picture-in-Picture" class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><rect x="11" y="9" width="10" height="7" rx="1" /></svg>
+                      allowFullscreen></iframe>
+                    <button
+                      type="button"
+                      data-pip
+                      aria-label="Picture-in-Picture"
+                      title="Picture-in-Picture"
+                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <rect x="11" y="9" width="10" height="7" rx="1" />
+                      </svg>
                     </button>
                   </div>
                   <div class="relative group" onClick$={openPiP}>
@@ -144,10 +190,26 @@ const References = component$(() => {
                       title="YouTube video Lukáš Chylík - CSS scroll driven animations"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen
-                    ></iframe>
-                    <button type="button" data-pip aria-label="Picture-in-Picture" title="Picture-in-Picture" class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><rect x="11" y="9" width="10" height="7" rx="1" /></svg>
+                      allowFullscreen></iframe>
+                    <button
+                      type="button"
+                      data-pip
+                      aria-label="Picture-in-Picture"
+                      title="Picture-in-Picture"
+                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <rect x="11" y="9" width="10" height="7" rx="1" />
+                      </svg>
                     </button>
                   </div>
                   <div class="relative group" onClick$={openPiP}>
@@ -159,10 +221,26 @@ const References = component$(() => {
                       title="YouTube video Lukáš Chylík - Frontendové novinky Máj 2025"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen
-                    ></iframe>
-                    <button type="button" data-pip aria-label="Picture-in-Picture" title="Picture-in-Picture" class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><rect x="11" y="9" width="10" height="7" rx="1" /></svg>
+                      allowFullscreen></iframe>
+                    <button
+                      type="button"
+                      data-pip
+                      aria-label="Picture-in-Picture"
+                      title="Picture-in-Picture"
+                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <rect x="11" y="9" width="10" height="7" rx="1" />
+                      </svg>
                     </button>
                   </div>
                   <div class="relative group" onClick$={openPiP}>
@@ -174,10 +252,26 @@ const References = component$(() => {
                       title="YouTube video Lukáš Chylík - CSS anchor positioning"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen
-                    ></iframe>
-                    <button type="button" data-pip aria-label="Picture-in-Picture" title="Picture-in-Picture" class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><rect x="11" y="9" width="10" height="7" rx="1" /></svg>
+                      allowFullscreen></iframe>
+                    <button
+                      type="button"
+                      data-pip
+                      aria-label="Picture-in-Picture"
+                      title="Picture-in-Picture"
+                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <rect x="11" y="9" width="10" height="7" rx="1" />
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -286,7 +380,7 @@ const References = component$(() => {
         </div>
       </Container>
     </Section>
-  );
-});
+  )
+})
 
-export default References;
+export default References

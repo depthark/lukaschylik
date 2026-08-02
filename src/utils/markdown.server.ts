@@ -104,7 +104,7 @@ export const getAllPosts = (): BlogPost[] => {
       .map(findPostBySlug)
       .filter((post): post is BlogPost => post !== null)
 
-    return allPostsData.sort(
+    return allPostsData.toSorted(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
     )
   } catch (error) {

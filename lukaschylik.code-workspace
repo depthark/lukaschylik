@@ -1,8 +1,8 @@
 {
   "folders": [
     {
-      "path": "."
-    }
+      "path": ".",
+    },
   ],
   "settings": {
     "editor.formatOnSave": true,
@@ -11,9 +11,9 @@
     "prettier.useTabs": false,
     "prettier.tabWidth": 2,
     "prettier.bracketSameLine": true,
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "extensions": {
-    "recommendations": []
-  }
+    "recommendations": [],
+  },
 }

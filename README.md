@@ -4,16 +4,17 @@ A modern personal portfolio website built with **Qwik** featuring server-side re
 
 ## Tech Stack
 
-- **[Qwik](https://qwik.dev/)** - Resumable framework with O(1) loading time
-- **[Qwik City](https://qwik.dev/qwikcity/overview/)** - Full-stack meta-framework with file-based routing
-- **[Vite](https://vitejs.dev/)** - Fast build tool and development server
+- **[Qwik 2](https://qwik.dev/)** (`@qwik.dev/core`) - Resumable framework with O(1) loading time
+- **[Qwik Router](https://qwik.dev/)** (`@qwik.dev/router`, formerly Qwik City) - Full-stack meta-framework with file-based routing
+- **[Vite 7](https://vitejs.dev/)** - Fast build tool and development server
 - **[Bun](https://bun.sh/)** - Fast JavaScript runtime and package manager
-- **[TailwindCSS v4](https://tailwindcss.com/blog/tailwindcss-v4-alpha)** - Utility-first CSS framework (latest alpha)
+- **[TailwindCSS v4](https://tailwindcss.com/)** - Utility-first CSS framework
 - **[Tailwind Variants](https://tailwind-variants.org/)** - First-class variant API for TailwindCSS
 - **[PostCSS](https://postcss.org/)** - CSS transformation tool with plugins ecosystem
 - **[PostCSS Preset Env](https://preset-env.cssdb.org/)** - Modern CSS features with automatic polyfills
 - **[Autoprefixer](https://autoprefixer.github.io/)** - Automatic vendor prefixing for CSS
-- **[Biome](https://biomejs.dev/)** - Fast formatter and linter for JavaScript/TypeScript
+- **[oxlint](https://oxc.rs/docs/guide/usage/linter)** - Rust-based linter for JavaScript/TypeScript
+- **[oxfmt](https://oxc.rs/docs/guide/usage/formatter)** - Rust-based formatter for JavaScript/TypeScript
 - **[Stylelint](https://stylelint.io/)** - CSS/SCSS linter
 - **[SASS](https://sass-lang.com/)** - CSS preprocessor
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
@@ -26,7 +27,7 @@ A modern personal portfolio website built with **Qwik** featuring server-side re
 
 ## Prerequisites
 
-- **Node.js**: `^18.17.0 || ^20.3.0 || ^22.0.0 || >=24.0.0`
+- **Node.js**: `^20.0.0 || ^22.0.0`
 - **Package Manager**: Bun (recommended) or npm/pnpm
 
 ## Installation
@@ -76,7 +77,7 @@ pnpm start  # or pnpm dev
 
 The `bun start` command will:
 
-- Format styles with Stylelint and code with Biome
+- Format styles with Stylelint and code with oxfmt
 - Start Vite development server in SSR mode
 - Watch for SCSS changes and compile to CSS
 - Open browser automatically
@@ -105,20 +106,23 @@ pnpm run preview
 
 ## Code Quality & Formatting
 
-### Format Code
+### Format & Lint Code
 
 ```bash
-# Format all files with Biome
-bun run biome:format
+# Format all files with oxfmt
+bun run format
 
 # Check formatting without changes
-bun run biome:check
+bun run format:check
 
-# Lint with Biome
-bun run biome:lint
+# Lint with oxlint
+bun run lint
 
-# CI check (format + lint)
-bun run biome:ci
+# Lint and auto-fix
+bun run lint:fix
+
+# CI check (lint + format)
+bun run lint:ci
 ```
 
 ### CSS/SCSS Linting
@@ -129,16 +133,13 @@ bun run stylelint
 
 # Fix style issues automatically
 bun run stylelint:fix
-
-# Detailed style check
-bun run stylelint:check
 ```
 
 ### Format Everything
 
 ```bash
 # Fix styles and format code in one command
-bun run fix:all
+bun run fix
 ```
 
 ## Component Architecture & Styling
@@ -290,8 +291,9 @@ The website includes a fully functional blog system with:
 - **Markdown Support**: Write blog posts in markdown with frontmatter
 - **SSR**: Server-side rendered blog posts for better SEO
 - **Code Highlighting**: Shiki for syntax highlighting
-- **Dynamic Routing**: File-based routing with Qwik City
+- **Dynamic Routing**: File-based routing with Qwik Router
 - **Blog Progress**: Reading progress indicator on articles
+- **Custom 404 Page**: Statically generated `404.html` served by GitHub Pages
 
 ### Adding Blog Posts
 
@@ -343,7 +345,8 @@ const example = "Hello World";
 │   │   └── scss/        # SCSS source files
 │   ├── services/        # Business logic
 │   └── utils/           # Utility functions
-├── biome.json          # Biome configuration
+├── .oxlintrc.json      # oxlint configuration
+├── .oxfmtrc.json       # oxfmt configuration
 ├── bun.toml           # Bun configuration
 ├── postcss.config.js  # PostCSS configuration (TailwindCSS v4)
 └── vite.config.ts     # Vite configuration
@@ -361,13 +364,15 @@ bun run build         # Production build
 bun run preview       # Preview production build
 
 # Code Quality
-bun run biome:format  # Format code with Biome
-bun run biome:lint    # Lint with Biome
-bun run biome:check   # Check formatting
-bun run biome:ci      # CI check (format + lint)
+bun run format        # Format code with oxfmt
+bun run format:check  # Check formatting
+bun run lint          # Lint with oxlint
+bun run lint:fix      # Lint and auto-fix
+bun run lint:ci       # CI check (lint + format)
 bun run stylelint     # Lint CSS/SCSS
 bun run stylelint:fix # Fix CSS/SCSS issues
-bun run fix:all       # Fix styles + format code
+bun run fix           # Fix styles + format code
+bun run build.types   # TypeScript type check
 
 # CSS
 bun run build:css     # Compile SCSS to CSS

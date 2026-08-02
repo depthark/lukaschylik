@@ -1,6 +1,6 @@
-import { qwikVite } from '@builder.io/qwik/optimizer'
-import { staticAdapter } from '@builder.io/qwik-city/adapters/static/vite'
-import { qwikCity } from '@builder.io/qwik-city/vite'
+import { qwikVite } from '@qwik.dev/core/optimizer'
+import { ssgAdapter } from '@qwik.dev/router/adapters/ssg/vite'
+import { qwikRouter } from '@qwik.dev/router/vite'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { rehypeHeadingAnchor } from '../../src/utils/rehype-heading-anchor'
@@ -8,7 +8,7 @@ import { rehypeShiki } from '../../src/utils/rehype-shiki'
 
 export default defineConfig({
   plugins: [
-    qwikCity({
+    qwikRouter({
       mdxPlugins: {
         remarkGfm: false,
         rehypeSyntaxHighlight: false,
@@ -20,7 +20,7 @@ export default defineConfig({
     }),
     qwikVite(),
     tsconfigPaths(),
-    staticAdapter({
+    ssgAdapter({
       origin: 'https://lukaschylik.dev',
       maxWorkers: 1,
     }),
@@ -29,14 +29,9 @@ export default defineConfig({
     ssr: true,
     target: 'esnext',
     rollupOptions: {
-      input: ['@qwik-city-plan'],
+      input: ['@qwik-router-config'],
       output: {
         assetFileNames: 'assets/[name]-[hash][extname]',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        entryFileNames: 'assets/[name]-[hash].js',
-        manualChunks: {
-          vendor: ['@builder.io/qwik', '@builder.io/qwik-city'],
-        },
       },
     },
   },

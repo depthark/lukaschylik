@@ -3,8 +3,8 @@
  */
 
 import { fileURLToPath } from 'node:url'
-import { qwikVite } from '@builder.io/qwik/optimizer'
-import { qwikCity } from '@builder.io/qwik-city/vite'
+import { qwikVite } from '@qwik.dev/core/optimizer'
+import { qwikRouter } from '@qwik.dev/router/vite'
 import { defineConfig, type UserConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import pkg from './package.json'
@@ -23,7 +23,7 @@ errorOnDuplicatesPkgDeps(devDependencies, dependencies)
 export default defineConfig((): UserConfig => {
   return {
     plugins: [
-      qwikCity({
+      qwikRouter({
         mdxPlugins: {
           remarkGfm: false,
           rehypeSyntaxHighlight: false,
@@ -54,8 +54,6 @@ export default defineConfig((): UserConfig => {
       rollupOptions: {
         output: {
           assetFileNames: 'assets/[name]-[hash][extname]',
-          chunkFileNames: 'assets/[name]-[hash].js',
-          entryFileNames: 'assets/[name]-[hash].js',
         },
       },
     },
@@ -74,22 +72,18 @@ export default defineConfig((): UserConfig => {
 
 /**
  * Validates that dependencies are not duplicated between devDependencies and dependencies
- * @param devDependencies - Development dependencies
- * @param dependencies - Production dependencies
+ * @param devDeps - Development dependencies
+ * @param deps - Production dependencies
  */
 function errorOnDuplicatesPkgDeps(
-  devDependencies: Record<string, string>,
-  dependencies: Record<string, string>,
+  devDeps: Record<string, string>,
+  deps: Record<string, string>,
 ) {
   let msg = ''
 
-  const duplicateDeps = Object.keys(devDependencies).filter(
-    (dep) => dependencies[dep],
-  )
+  const duplicateDeps = Object.keys(devDeps).filter((dep) => deps[dep])
 
-  const qwikPkg = Object.keys(dependencies).filter((value) =>
-    /qwik/i.test(value),
-  )
+  const qwikPkg = Object.keys(deps).filter((value) => /qwik/i.test(value))
 
   msg = `Move qwik packages ${qwikPkg.join(', ')} to devDependencies`
 

@@ -1,4 +1,4 @@
-import type { Signal } from '@builder.io/qwik'
+import type { Signal } from '@qwik.dev/core'
 
 // Extend HTMLDialogElement to include the closedby attribute
 declare global {

@@ -1,4 +1,4 @@
-import type { LinkProps } from '@builder.io/qwik-city'
+import type { LinkProps } from '@qwik.dev/router'
 
 export interface NavigationLinkProps extends LinkProps {
   icon?: string

@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik'
+import { component$ } from '@qwik.dev/core'
 import Icon from '../icon/icon'
 import type { SocialItemProps } from './socialItem.types'
 

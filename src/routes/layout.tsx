@@ -8,23 +8,23 @@ import {
   useStore,
   useTask$,
   useVisibleTask$,
-} from "@builder.io/qwik";
-import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
-import { useLocation } from "@builder.io/qwik-city";
-import { Alert, Navigation, ReservationDialog } from "~/components";
-import CookieConsent from "~/components/cookie-consent/cookie-consent";
-import Social from "~/components/social/social";
-import { Footer, Header } from "~/sections";
-import { checkUrlForAlerts } from "~/services";
-import { AlertContext, type AlertMessage, DialogContext } from "~/utils";
+} from '@qwik.dev/core'
+import type { DocumentHead, RequestHandler } from '@qwik.dev/router'
+import { useLocation } from '@qwik.dev/router'
+import { Alert, Navigation, ReservationDialog } from '~/components'
+import CookieConsent from '~/components/cookie-consent/cookie-consent'
+import Social from '~/components/social/social'
+import { Footer, Header } from '~/sections'
+import { checkUrlForAlerts } from '~/services'
+import { AlertContext, type AlertMessage, DialogContext } from '~/utils'
 
 export const onGet: RequestHandler = async ({ cacheControl, headers }) => {
   cacheControl({
     staleWhileRevalidate: 60 * 60 * 24 * 7,
     maxAge: 5,
-  });
-  headers.set("Permissions-Policy", "picture-in-picture=*, fullscreen=*");
-};
+  })
+  headers.set('Permissions-Policy', 'picture-in-picture=*, fullscreen=*')
+}
 
 /**
  * Default head metadata for all routes
@@ -33,7 +33,7 @@ export const onGet: RequestHandler = async ({ cacheControl, headers }) => {
 export const head: DocumentHead = {
   scripts: [
     {
-      key: "consent-defaults",
+      key: 'consent-defaults',
       script:
         "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',analytics_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:1000});",
       props: {
@@ -41,11 +41,11 @@ export const head: DocumentHead = {
       },
     },
     {
-      key: "consent-restore",
+      key: 'consent-restore',
       script: `try{var k='cookie-consent-v1';var raw=localStorage.getItem(k);if(raw){var parsed=JSON.parse(raw);var v=parsed.analytics?'granted':'denied';window.dataLayer=window.dataLayer||[];window.gtag=window.gtag||function(){dataLayer.push(arguments);};gtag('consent','update',{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v});}}catch(e){}`,
     },
     {
-      key: "gtm",
+      key: 'gtm',
       script: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -56,7 +56,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       },
     },
     {
-      key: "structuredData",
+      key: 'structuredData',
       script: `{
   "@context": "https://schema.org",
   "@graph": [
@@ -109,96 +109,96 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   ]
 }`,
       props: {
-        type: "application/ld+json",
+        type: 'application/ld+json',
       },
     },
   ],
-};
+}
 
 export default component$(() => {
-  const location = useLocation();
+  const location = useLocation()
 
   // Create alert store
   const alertState = useStore<AlertMessage>({
-    text: "",
+    text: '',
     visible: false,
-  });
+  })
 
   // Create dialog ref for global reservation dialog
-  const dialogRef = useSignal<HTMLDialogElement>();
-  const clientReady = useSignal(false);
+  const dialogRef = useSignal<HTMLDialogElement>()
+  const clientReady = useSignal(false)
 
   // Provide alert context
   useContextProvider(AlertContext, {
     alertMessage: alertState,
     showAlert: $((message: string) => {
-      alertState.text = message;
-      alertState.visible = true;
+      alertState.text = message
+      alertState.visible = true
     }),
     hideAlert: $(() => {
-      alertState.visible = false;
+      alertState.visible = false
     }),
-  });
+  })
 
   // Provide dialog context
   useContextProvider(DialogContext, {
     dialogRef,
     showDialog: $(() => {
-      dialogRef.value?.showModal();
+      dialogRef.value?.showModal()
     }),
     hideDialog: $(() => {
-      dialogRef.value?.close();
+      dialogRef.value?.close()
     }),
-  });
+  })
 
   useOn(
-    "qvisible",
+    'qvisible',
     $(() => {
-      clientReady.value = true;
+      clientReady.value = true
     }),
-  );
+  )
 
   // Check for URL parameters on initial load
   useTask$(({ track }) => {
     // React to URL changes (e.g., query params added by client-side navigation)
-    track(() => location.url.href);
-    track(() => clientReady.value);
-    if (!clientReady.value) return;
+    track(() => location.url.href)
+    track(() => clientReady.value)
+    if (!clientReady.value) return
 
     // Use the alert service to check for URL parameters and show appropriate alerts
     const showAlertFn = $((message: string) => {
-      alertState.text = message;
-      alertState.visible = true;
-    });
+      alertState.text = message
+      alertState.visible = true
+    })
 
-    checkUrlForAlerts(location.url, showAlertFn);
-  });
+    checkUrlForAlerts(location.url, showAlertFn)
+  })
 
   // Disable smooth scroll only when navigating forward into a blog article
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
-    const navigating = track(() => location.isNavigating);
-    const pathname = location.url.pathname;
+    const navigating = track(() => location.isNavigating)
+    const pathname = location.url.pathname
     const goingToArticle =
-      pathname.startsWith("/blog/") && pathname !== "/blog/";
+      pathname.startsWith('/blog/') && pathname !== '/blog/'
 
     if (navigating && goingToArticle) {
-      document.documentElement.style.scrollBehavior = "auto";
+      document.documentElement.style.scrollBehavior = 'auto'
     } else {
-      document.documentElement.style.scrollBehavior = "";
+      document.documentElement.style.scrollBehavior = ''
     }
-  });
+  })
 
   // Check if we're on the homepage
-  const isHomePage = location.url.pathname === "/";
+  const isHomePage = location.url.pathname === '/'
 
   // Check if we're on a blog post page
-  const isBlogPostPage = location.url.pathname.startsWith("/blog/articles/");
+  const isBlogPostPage = location.url.pathname.startsWith('/blog/articles/')
 
   // Handle alert close
   const handleAlertClose = $(() => {
-    alertState.visible = false;
-  });
+    alertState.visible = false
+  })
 
   return (
     <>
@@ -206,24 +206,24 @@ export default component$(() => {
       <Navigation
         links={[
           {
-            href: "/#about-me",
-            text: "O mne",
+            href: '/#about-me',
+            text: 'O mne',
           },
           {
-            href: "/#references",
-            text: "Referencie",
+            href: '/#references',
+            text: 'Referencie',
           },
           {
-            href: "/#services",
-            text: "Služby",
+            href: '/#services',
+            text: 'Služby',
           },
           {
-            href: "/#contact",
-            text: "Kontakt",
+            href: '/#contact',
+            text: 'Kontakt',
           },
           {
-            href: "/blog",
-            text: "Blog",
+            href: '/blog',
+            text: 'Blog',
           },
         ]}
       />
@@ -241,5 +241,5 @@ export default component$(() => {
       <Footer />
       <ReservationDialog dialogRef={dialogRef} />
     </>
-  );
-});
+  )
+})

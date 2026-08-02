@@ -1,4 +1,4 @@
-import type { PropFunction } from '@builder.io/qwik'
+import type { QRL } from '@qwik.dev/core'
 
 /**
  * Extends the HTMLButtonElement to include custom command attributes
@@ -26,7 +26,7 @@ declare global {
  */
 export interface ButtonProps extends NewHTMLButtonElement {
   /** Click event handler */
-  onClick$?: PropFunction<() => void>
+  onClick$?: QRL<() => void>
 
   /** Whether the button is disabled */
   disabled?: boolean
