@@ -16,7 +16,7 @@ const Reference = component$<ReferenceProps>(
           target="_blank"
           rel="noopener noreferrer"
           class="reference group grid grid-cols-[1fr_auto] items-center gap-4 py-2.5 no-underline w-full min-w-0">
-          <span class="min-w-0 grid gap-1">
+          <span class="relative z-10 min-w-0 grid gap-1">
             <strong
               class={cls(
                 'relative overflow-hidden',
@@ -40,23 +40,23 @@ const Reference = component$<ReferenceProps>(
               aria-hidden="true"
               loading="lazy"
               decoding="async"
-              width={1280}
-              height={900}
+              width={425}
+              height={425}
               class={cls(
                 'reference__preview',
                 'hidden lg:block',
-                'absolute end-full me-8 top-1/2 -translate-y-1/2',
-                'w-[min(320px,24vw)] aspect-square rounded-full object-cover object-top',
+                'absolute -start-24 top-1/2 -translate-y-1/2',
+                'w-[min(300px,22vw)] aspect-square rounded-full object-cover object-top',
                 'border-4 border-black dark:border-white',
                 'shadow-2xl',
                 'opacity-0 group-hover:opacity-100',
                 'motion-safe:scale-75 motion-safe:group-hover:scale-100',
                 'motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out',
-                'pointer-events-none select-none z-30',
+                'pointer-events-none select-none z-0',
               )}
             />
           )}
-          <span class="flex items-center gap-2 md:gap-3 shrink-0">
+          <span class="relative z-10 flex items-center gap-2 md:gap-3 shrink-0">
             <span
               class={cls(
                 'inline-flex items-center rounded-full',
