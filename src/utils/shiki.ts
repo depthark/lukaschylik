@@ -14,7 +14,7 @@ let highlighterPromise: Promise<
 /**
  * Initialize Shiki highlighter with GitHub themes
  */
-export const initHighlighter = async () => {
+const initHighlighter = async () => {
   if (highlighter) {
     return highlighter
   }

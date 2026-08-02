@@ -19,9 +19,10 @@ bun run build
 bun run preview
 
 # Linting & Formatting
-bun run lint             # Lint JS/TS with oxlint
+bun run lint             # Lint JS/TS with oxlint, then knip (dead code/deps)
 bun run lint:fix         # Lint and auto-fix
-bun run lint:ci          # CI check (oxlint --deny-warnings + oxfmt --check)
+bun run knip             # Find unused files, exports, dependencies
+bun run lint:ci          # CI check (oxlint --deny-warnings + oxfmt --check + knip)
 bun run stylelint        # Lint SCSS files
 bun run stylelint:fix    # Fix SCSS issues
 bun run format           # Format with oxfmt
@@ -57,7 +58,7 @@ bun run build.types
 - Blog posts live in `src/routes/blog/articles/{slug}/index.mdx`
 - Frontmatter parsed with `gray-matter`
 - Code highlighting via Shiki with custom rehype plugin (`src/utils/rehype-shiki.ts`)
-- Theme-aware syntax highlighting (light/dark mode observer in `highlight-client.ts`)
+- Theme-aware dual-theme syntax highlighting (light/dark via CSS in `src/utils/shiki.ts`)
 
 ### Styling
 - **Tailwind CSS 4** + **SCSS** hybrid approach

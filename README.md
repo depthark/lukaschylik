@@ -15,6 +15,7 @@ A modern personal portfolio website built with **Qwik** featuring server-side re
 - **[Autoprefixer](https://autoprefixer.github.io/)** - Automatic vendor prefixing for CSS
 - **[oxlint](https://oxc.rs/docs/guide/usage/linter)** - Rust-based linter for JavaScript/TypeScript
 - **[oxfmt](https://oxc.rs/docs/guide/usage/formatter)** - Rust-based formatter for JavaScript/TypeScript
+- **[Knip](https://knip.dev/)** - Detects unused files, exports, and dependencies
 - **[Stylelint](https://stylelint.io/)** - CSS/SCSS linter
 - **[SASS](https://sass-lang.com/)** - CSS preprocessor
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
@@ -120,6 +121,9 @@ bun run lint
 
 # Lint and auto-fix
 bun run lint:fix
+
+# Find unused files, exports and dependencies
+bun run knip
 
 # CI check (lint + format)
 bun run lint:ci
@@ -368,6 +372,7 @@ bun run format        # Format code with oxfmt
 bun run format:check  # Check formatting
 bun run lint          # Lint with oxlint
 bun run lint:fix      # Lint and auto-fix
+bun run knip          # Detect unused files/exports/deps
 bun run lint:ci       # CI check (lint + format)
 bun run stylelint     # Lint CSS/SCSS
 bun run stylelint:fix # Fix CSS/SCSS issues

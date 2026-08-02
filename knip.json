@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "src/root.tsx",
+    "src/entry.ssr.tsx",
+    "src/entry.preview.tsx",
+    "src/entry.dev.tsx",
+    "src/routes/**/*.{tsx,ts,mdx}"
+  ],
+  "project": ["src/**/*.{ts,tsx}", "scripts/**/*.ts", "adapters/**/*.ts"],
+  "ignoreDependencies": ["caniuse-lite"]
+}

@@ -24,5 +24,3 @@ export const SOCIAL_LINKS = [
     icon: 'github',
   },
 ] as const
-
-export type SocialLink = (typeof SOCIAL_LINKS)[number]

@@ -1,4 +1,4 @@
-import { tv, type VariantProps } from 'tailwind-variants'
+import { tv } from 'tailwind-variants'
 
 /**
  * Button component variants using tailwind-variants
@@ -73,5 +73,3 @@ export const buttonVariants = tv({
     iconOnly: false,
   },
 })
-
-export type ButtonVariants = VariantProps<typeof buttonVariants>

@@ -7,7 +7,7 @@ import type { BlogPost } from '~/utils/markdown.server'
 /**
  * Props for the BlogCard component
  */
-export interface BlogCardProps {
+interface BlogCardProps {
   /** Blog post data to display */
   post: BlogPost
 }
