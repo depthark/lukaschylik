@@ -16,7 +16,13 @@ const Reference = component$<ReferenceProps>(
           target="_blank"
           rel="noopener noreferrer"
           class="reference group grid grid-cols-[1fr_auto] items-center gap-4 py-2.5 no-underline w-full min-w-0">
-          <span class="relative z-10 min-w-0 grid gap-1">
+          <span
+            class={cls(
+              'relative z-10 min-w-0 grid gap-1 justify-self-start',
+              '-ms-3 px-3 py-1.5 rounded-xl',
+              'transition-colors duration-300',
+              'group-hover:bg-black/60 group-hover:backdrop-blur-md',
+            )}>
             <strong
               class={cls(
                 'relative overflow-hidden',
@@ -29,7 +35,7 @@ const Reference = component$<ReferenceProps>(
                 {title}
               </span>
             </strong>
-            <small class="font-mono text-[11px] md:text-xs text-gray-500 dark:text-gray-400 tracking-wider">
+            <small class="font-mono text-[11px] md:text-xs text-gray-500 dark:text-gray-400 tracking-wider transition-colors duration-300 group-hover:text-neutral-300">
               {website}
             </small>
           </span>
@@ -45,7 +51,7 @@ const Reference = component$<ReferenceProps>(
               class={cls(
                 'reference__preview',
                 'hidden lg:block',
-                'absolute -start-24 top-1/2 -translate-y-1/2',
+                'absolute end-[calc(100%-2rem)] top-1/2 -translate-y-1/2',
                 'w-[min(300px,22vw)] aspect-square rounded-full object-cover object-top',
                 'border-4 border-black dark:border-white',
                 'shadow-2xl',
