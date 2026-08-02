@@ -28,7 +28,7 @@ const ThemeSwitch = component$(() => {
   return (
     <Button
       type="button"
-      className="text-black dark:text-white p-0"
+      className="grid place-items-center leading-none text-black dark:text-white p-0"
       onClick$={handleToggle}
       variant="plain"
       ariaLabel={t.themeSwitch.label}
