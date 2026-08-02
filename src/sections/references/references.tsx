@@ -92,66 +92,77 @@ const References = component$(() => {
             <ul class="ref-list list-none p-0 m-0 min-w-0">
               <Reference
                 title="Vertice"
+                img="/images/references/vertice.webp"
                 webURL="https://vertice.one/"
                 website="vertice.one"
                 type={t.types.designSystem}
               />
               <Reference
                 title="VIGo"
+                img="/images/references/vigo.webp"
                 webURL="https://vig.cz/"
                 website="vig.cz"
                 type={t.types.designSystem}
               />
               <Reference
                 title="Riganti"
+                img="/images/references/riganti.webp"
                 webURL="https://www.riganti.cz/"
                 website="riganti.cz"
                 type={t.types.collaboration}
               />
               <Reference
                 title="Update Conference"
+                img="/images/references/update-conference.webp"
                 webURL="https://www.updateconference.net/"
                 website="updateconference.net"
                 type={t.types.collaboration}
               />
               <Reference
                 title="Update Days"
+                img="/images/references/update-days.webp"
                 webURL="https://www.updatedays.cz/"
                 website="updatedays.cz"
                 type={t.types.collaboration}
               />
               <Reference
                 title="Meetupdate"
+                img="/images/references/meetupdate.webp"
                 webURL="https://www.meetupdate.cz/"
                 website="meetupdate.cz"
                 type={t.types.collaboration}
               />
               <Reference
                 title="DotVVM"
+                img="/images/references/dotvvm.webp"
                 webURL="https://www.dotvvm.com/"
                 website="dotvvm.com"
                 type={t.types.collaboration}
               />
               <Reference
                 title="Brand DESIGN"
+                img="/images/references/brand-design.webp"
                 webURL="https://brand-design.cz/"
                 website="brand-design.cz"
                 type={t.types.web}
               />
               <Reference
                 title="Elendris"
+                img="/images/references/elendris.webp"
                 webURL="https://elendris.cz/"
                 website="elendris.cz"
                 type={t.types.web}
               />
               <Reference
                 title="Anew style"
+                img="/images/references/anewstyle.webp"
                 webURL="https://anewstyle.cz/"
                 website="anewstyle.cz"
                 type={t.types.web}
               />
               <Reference
                 title="thelucie.ink"
+                img="/images/references/thelucie.webp"
                 webURL="https://thelucie.ink/"
                 website="thelucie.ink"
                 type={t.types.web}

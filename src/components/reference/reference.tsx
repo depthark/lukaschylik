@@ -8,7 +8,7 @@ import type { ReferenceProps } from './reference.types'
  * website domain, a type badge and an external-link indicator.
  */
 const Reference = component$<ReferenceProps>(
-  ({ title, webURL, website, type }) => {
+  ({ title, webURL, website, type, img }) => {
     return (
       <li class="border-b border-black/30 dark:border-white/30 first:border-t isolate hover:z-10 relative">
         <a
@@ -33,6 +33,29 @@ const Reference = component$<ReferenceProps>(
               {website}
             </small>
           </span>
+          {img && (
+            <img
+              src={img}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+              width={1280}
+              height={900}
+              class={cls(
+                'reference__preview',
+                'hidden lg:block',
+                'absolute end-full me-8 top-1/2 -translate-y-1/2',
+                'w-[min(320px,24vw)] aspect-square rounded-full object-cover object-top',
+                'border-4 border-black dark:border-white',
+                'shadow-2xl',
+                'opacity-0 group-hover:opacity-100',
+                'motion-safe:scale-75 motion-safe:group-hover:scale-100',
+                'motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out',
+                'pointer-events-none select-none z-30',
+              )}
+            />
+          )}
           <span class="flex items-center gap-2 md:gap-3 shrink-0">
             <span
               class={cls(
