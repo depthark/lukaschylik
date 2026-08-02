@@ -1,0 +1,160 @@
+{
+  "sk": [
+    {
+      "slug": "css-view-transitions",
+      "title": "CSS View Transitions",
+      "subtitle": "Od základov v CSS až po element-scoped transitions",
+      "description": "View Transitions API prináša natívne animácie prechodov medzi stavmi stránky. Od CSS-only MPA prechodov po JavaScript riadené SPA animácie a nové element-scoped transitions v Chrome 147+.",
+      "date": "2026-04-07",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/2lvjOWYXTNpw2KrY0DEvDn?si=b2df5b3c94414cf0",
+      "cardImg": "/images/blog/view-transitions.avif",
+      "readingTime": 15
+    },
+    {
+      "slug": "figma-beyond-design",
+      "title": "Figma Beyond Design",
+      "subtitle": "Figma API, Variable Code Syntax, Code Connect a MCP server ako nástroje na automatizáciu design-to-code workflow.",
+      "description": "Ako využiť Figma API, Variable Code Syntax, Code Connect a MCP server na automatizáciu design tokenov a generovanie production-ready komponent.",
+      "date": "2026-02-05",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/053yvGxs7NSChv904gD951?si=3bb7734d0ba440ea",
+      "cardImg": "/images/blog/figma-beyound-design.avif",
+      "readingTime": 11
+    },
+    {
+      "slug": "css-specificita-cascade-layers-scope",
+      "title": "CSS Cascade Layers, @scope a moderné selektory",
+      "subtitle": "Ako vrstvy, scope a nové pseudo-classy menia pravidlá kaskády",
+      "description": "Specificita bola vždy základným kameňom CSS. Dnes k nej pribúdajú cascade layers, @scope a moderné selektory ako :has() či :where(), ktoré zásadne menia spôsob, akým skladáme štýly.",
+      "date": "2025-11-16",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/4QXPzTaXJUBxKbcaZ05VcY?si=UGKTjxpOSRqFXEta01yHTg",
+      "cardImg": "/images/blog/specificity.avif",
+      "readingTime": 7
+    },
+    {
+      "slug": "css-carousels",
+      "title": "CSS Carousel",
+      "subtitle": "Nové CSS pseudo-classy :scroll-button, :scroll-marker a :scroll-marker-group",
+      "description": "Scroll Spy navigácia či tabs komponenta bez JavaScriptu a prístupne? Zabudnite na komplexné JavaScript knižnice! CSS carousel je gamechanger.",
+      "date": "2025-10-05",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/4v3h6nMI3EvCCo7NVkuoCP?si=98844f163e7a482e",
+      "cardImg": "/images/blog/css-carousel.avif",
+      "readingTime": 9
+    },
+    {
+      "slug": "farby-na-webe-v-roku-2025",
+      "title": "Farby na webe v roku 2025",
+      "subtitle": "OKLCH, relative colors a CSS color-mix()",
+      "description": "Web design prešiel v roku 2025 revolúciou vo farbách. Zatiaľ čo tradičné RGB a HSL formáty stále dominujú, nové CSS funkcie ako OKLCH, relative colors a color-mix() prinášajú web developerom bezprecedentné možnosti práce s farbami.",
+      "date": "2025-08-07",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/3BIqlTa23zku7mOsLISrIr?si=992bb522c6644257",
+      "cardImg": "/images/blog/colors-2025.avif",
+      "readingTime": 5
+    },
+    {
+      "slug": "css-container-scroll-state-queries",
+      "title": "CSS container scroll-state queries",
+      "subtitle": "Nový spôsob ako reagovať na stav scrollovania v CSS",
+      "description": "Objavte, ako môžete pomocou CSS container scroll-state queries vytvárať interaktívne prvky reagujúce na scrollovanie bez použitia JavaScriptu.",
+      "date": "2025-07-14",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/7MCsBrsSFOBMTcQxNLdFTB?si=02T7dOEWS2WhRA5_3p0tbA",
+      "cardImg": "/images/blog/container-scroll-state.avif",
+      "readingTime": 6
+    },
+    {
+      "slug": "css-scroll-driven-animations",
+      "title": "CSS scroll-driven animácie",
+      "subtitle": "Revolúcia webových animácií bez JavaScriptu",
+      "description": "Zabudnite na knižnice ako ScrollReveal, AOS alebo Scroll Magic! Moderné CSS ich hravo strčí do vrecka.",
+      "date": "2025-04-28",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/084tRwRmMQYPGmMhW1Dekc?si=7kr_hZw3TrS6hOFsPg_4Fw",
+      "cardImg": "/images/blog/scroll-driven-animations.avif",
+      "readingTime": 7
+    }
+  ],
+  "en": [
+    {
+      "slug": "css-view-transitions",
+      "title": "CSS View Transitions",
+      "subtitle": "From CSS fundamentals to element-scoped transitions",
+      "description": "The View Transitions API brings native animated transitions between page states. From CSS-only MPA transitions to JavaScript-driven SPA animations and the new element-scoped transitions in Chrome 147+.",
+      "date": "2026-04-07",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/2lvjOWYXTNpw2KrY0DEvDn?si=b2df5b3c94414cf0",
+      "cardImg": "/images/blog/view-transitions.avif",
+      "readingTime": 18
+    },
+    {
+      "slug": "figma-beyond-design",
+      "title": "Figma Beyond Design",
+      "subtitle": "Figma API, Variable Code Syntax, Code Connect and MCP server as tools for automating the design-to-code workflow.",
+      "description": "How to use the Figma API, Variable Code Syntax, Code Connect and MCP server to automate design tokens and generate production-ready components.",
+      "date": "2026-02-05",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/053yvGxs7NSChv904gD951?si=3bb7734d0ba440ea",
+      "cardImg": "/images/blog/figma-beyound-design.avif",
+      "readingTime": 12
+    },
+    {
+      "slug": "css-specificita-cascade-layers-scope",
+      "title": "CSS Cascade Layers, @scope and Modern Selectors",
+      "subtitle": "How layers, scope and new pseudo-classes are changing the rules of the cascade",
+      "description": "Specificity has always been a cornerstone of CSS. Today it is joined by cascade layers, @scope and modern selectors like :has() and :where(), which fundamentally change the way we compose styles.",
+      "date": "2025-11-16",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/4QXPzTaXJUBxKbcaZ05VcY?si=UGKTjxpOSRqFXEta01yHTg",
+      "cardImg": "/images/blog/specificity.avif",
+      "readingTime": 8
+    },
+    {
+      "slug": "css-carousels",
+      "title": "CSS Carousel",
+      "subtitle": "New CSS pseudo-classes :scroll-button, :scroll-marker and :scroll-marker-group",
+      "description": "Scroll Spy navigation or a tabs component without JavaScript, and accessible? Forget complex JavaScript libraries! The CSS carousel is a gamechanger.",
+      "date": "2025-10-05",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/4v3h6nMI3EvCCo7NVkuoCP?si=98844f163e7a482e",
+      "cardImg": "/images/blog/css-carousel.avif",
+      "readingTime": 10
+    },
+    {
+      "slug": "farby-na-webe-v-roku-2025",
+      "title": "Colors on the Web in 2025",
+      "subtitle": "OKLCH, relative colors and CSS color-mix()",
+      "description": "Web design went through a color revolution in 2025. While traditional RGB and HSL formats still dominate, new CSS features like OKLCH, relative colors and color-mix() give web developers unprecedented ways to work with color.",
+      "date": "2025-08-07",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/3BIqlTa23zku7mOsLISrIr?si=992bb522c6644257",
+      "cardImg": "/images/blog/colors-2025.avif",
+      "readingTime": 5
+    },
+    {
+      "slug": "css-container-scroll-state-queries",
+      "title": "CSS container scroll-state queries",
+      "subtitle": "A new way to react to scroll state in CSS",
+      "description": "Discover how CSS container scroll-state queries let you build interactive elements that respond to scrolling without using JavaScript.",
+      "date": "2025-07-14",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/7MCsBrsSFOBMTcQxNLdFTB?si=02T7dOEWS2WhRA5_3p0tbA",
+      "cardImg": "/images/blog/container-scroll-state.avif",
+      "readingTime": 7
+    },
+    {
+      "slug": "css-scroll-driven-animations",
+      "title": "CSS scroll-driven animations",
+      "subtitle": "A revolution in web animations without JavaScript",
+      "description": "Forget libraries like ScrollReveal, AOS or Scroll Magic! Modern CSS puts them all to shame with ease.",
+      "date": "2025-04-28",
+      "author": "Lukáš Chylík",
+      "podcastUrl": "https://open.spotify.com/episode/084tRwRmMQYPGmMhW1Dekc?si=7kr_hZw3TrS6hOFsPg_4Fw",
+      "cardImg": "/images/blog/scroll-driven-animations.avif",
+      "readingTime": 8
+    }
+  ]
+}

@@ -1,43 +1,55 @@
 import { $, component$, Slot, useContext } from '@qwik.dev/core'
-import { type DocumentHead, Link } from '@qwik.dev/router'
+import { type DocumentHead, Link, useLocation } from '@qwik.dev/router'
 import { Icon } from '~/components'
 import { BlogProgress } from '~/components/blog/BlogProgress'
 import Container from '~/components/container/container'
 import Section from '~/components/section/section'
-import { type Locale, localizePath, useLocale } from '~/i18n'
+import {
+  getLocaleFromPathname,
+  localizePath,
+  stripLocale,
+  useLocale,
+} from '~/i18n'
 import Newsletter from '~/sections/newsletter/newsletter'
 import { AlertContext } from '~/utils'
-import type { BlogPost } from '~/utils/markdown.server'
+import { findPost } from '~/utils/posts'
 import i18n from './article-layout.i18n.json'
 
-interface ArticleLayoutProps {
-  /** Blog post resolved by the route loader, null when not found */
-  post: BlogPost | null
+/**
+ * Extracts the article slug from a (possibly locale-prefixed) article pathname.
+ * @param pathname - URL pathname such as `/en/blog/articles/foo/`
+ */
+const getSlugFromPathname = (pathname: string): string | null => {
+  const parts = stripLocale(pathname).split('/').filter(Boolean)
+
+  if (parts[0] !== 'blog' || parts[1] !== 'articles' || !parts[2]) {
+    return null
+  }
+
+  return parts[2]
 }
 
 /**
- * Estimate reading time in minutes based on content length (1.5x factor)
+ * Resolves the post for the given article URL from the build-time manifest.
+ * @param url - Current route URL
  */
-const getReadingTime = (content: string): number => {
-  const text = content
-    .replace(/```[\s\S]*?```/g, ' ') // remove fenced code
-    .replace(/<[^>]+>/g, ' ') // remove HTML tags
-    .replace(/[^\w\p{L}\s]+/gu, ' ') // remove punctuation
-    .trim()
-  const words = text ? text.split(/\s+/).length : 0
-  return Math.max(1, Math.ceil((words / 220) * 1.5))
+const resolvePost = (url: URL) => {
+  const slug = getSlugFromPathname(url.pathname)
+  if (!slug) {
+    return null
+  }
+
+  return findPost(getLocaleFromPathname(url.pathname), slug)
 }
 
 /**
- * Creates the document head for an article route in the given locale.
- * @param post - Resolved blog post (or null)
- * @param locale - Locale of the article route
+ * Creates the document head for an article route. Locale and slug are derived
+ * from the route URL, so a single head export serves both locales.
  */
-export const createArticleHead = (
-  post: BlogPost | null,
-  locale: Locale,
-): ReturnType<Extract<DocumentHead, (...args: never[]) => unknown>> => {
+export const head: DocumentHead = ({ url }) => {
+  const locale = getLocaleFromPathname(url.pathname)
   const t = i18n[locale]
+  const post = resolvePost(url)
   const site = 'https://lukaschylik.dev'
   const articlesBase = localizePath('/blog/articles/', locale)
   const canonicalUrl = post?.slug
@@ -50,7 +62,7 @@ export const createArticleHead = (
     : undefined
 
   return {
-    title: `${post?.title} | ${t.headTitleSuffix}`,
+    title: post ? `${post.title} | ${t.headTitleSuffix}` : t.headTitleSuffix,
     meta: [
       {
         name: 'description',
@@ -93,12 +105,15 @@ export const createArticleHead = (
 
 /**
  * Universal blog detail layout that wraps all blog article content.
- * Shared by the sk and en article routes; provides consistent styling,
- * scroll progress and heading copy-link handling.
+ * Shared by the sk and en article routes; the post is resolved from the
+ * build-time manifest instead of a route loader, which the Qwik 2 beta
+ * fails to resolve in layouts of production builds.
  */
-const ArticleLayout = component$<ArticleLayoutProps>(({ post }) => {
+const ArticleLayout = component$(() => {
+  const location = useLocation()
   const locale = useLocale()
   const t = i18n[locale]
+  const post = resolvePost(location.url)
   const alertContext = useContext(AlertContext)
 
   /**
@@ -199,9 +214,9 @@ const ArticleLayout = component$<ArticleLayoutProps>(({ post }) => {
                     <span class="text-yellow-500 text-2xl">•</span>
                     <span
                       class="flex items-center gap-2"
-                      title={`${t.readingTime}: ${getReadingTime(post.content)} ${t.minutes}`}>
+                      title={`${t.readingTime}: ${post.readingTime} ${t.minutes}`}>
                       <Icon name="book" cls="w-4 h-4 sm:w-5 sm:h-5" />
-                      {getReadingTime(post.content)} {t.minutes}
+                      {post.readingTime} {t.minutes}
                     </span>
                   </div>
                   {post.podcastUrl && (

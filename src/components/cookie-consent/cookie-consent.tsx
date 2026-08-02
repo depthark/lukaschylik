@@ -109,7 +109,7 @@ export default component$(() => {
   return (
     <>
       {showBanner.value && (
-        <div class="fixed inset-x-0 bottom-0 z-[300]">
+        <div class="fixed inset-x-0 bottom-0 z-[300] [color-scheme:dark]">
           <div class="relative bg-neutral-900/95 border-t border-neutral-800 text-neutral-100">
             <Container size="md" className="py-4">
               <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -119,12 +119,17 @@ export default component$(() => {
                   {t.banner.description}
                 </div>
                 <div class="flex gap-2 shrink-0">
-                  <Button size="sm" variant="primary" onClick$={denyAll}>
+                  <Button
+                    size="sm"
+                    variant="primary"
+                    title={t.banner.deny}
+                    onClick$={denyAll}>
                     {t.banner.deny}
                   </Button>
                   <Button
                     size="sm"
                     variant="secondary"
+                    title={t.banner.settings}
                     onClick$={() => {
                       const stored = readPrefs()
                       if (!stored) {
@@ -134,7 +139,11 @@ export default component$(() => {
                     }}>
                     {t.banner.settings}
                   </Button>
-                  <Button size="sm" variant="primary" onClick$={acceptAll}>
+                  <Button
+                    size="sm"
+                    variant="primary"
+                    title={t.banner.acceptAll}
+                    onClick$={acceptAll}>
                     {t.banner.acceptAll}
                   </Button>
                 </div>
@@ -146,7 +155,7 @@ export default component$(() => {
 
       <dialog
         ref={prefsDialogRef}
-        class="bg-neutral-900 text-neutral-100 w-[min(92vw,640px)] max-w-[92vw] md:max-w-[640px] rounded-xl border border-neutral-800 p-0 mx-auto my-auto">
+        class="[color-scheme:dark] bg-neutral-900 text-neutral-100 w-[min(92vw,640px)] max-w-[92vw] md:max-w-[640px] rounded-xl border border-neutral-800 p-0 mx-auto my-auto">
         <div class="p-5 md:p-6 border-b border-neutral-800">
           <h2 class="text-lg font-semibold">{t.dialog.title}</h2>
           <p class="mt-1 text-sm text-neutral-300">{t.dialog.description}</p>
@@ -190,13 +199,22 @@ export default component$(() => {
           <Button
             size="sm"
             variant="secondary"
+            title={t.dialog.close}
             onClick$={() => prefsDialogRef.value?.close()}>
             {t.dialog.close}
           </Button>
-          <Button size="sm" variant="primary" onClick$={denyAll}>
+          <Button
+            size="sm"
+            variant="primary"
+            title={t.dialog.denyAll}
+            onClick$={denyAll}>
             {t.dialog.denyAll}
           </Button>
-          <Button size="sm" variant="primary" onClick$={savePrefs}>
+          <Button
+            size="sm"
+            variant="primary"
+            title={t.dialog.save}
+            onClick$={savePrefs}>
             {t.dialog.save}
           </Button>
         </div>

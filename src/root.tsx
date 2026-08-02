@@ -28,7 +28,7 @@ export default component$(() => {
         <script
           id="theme-init"
           dangerouslySetInnerHTML={THEME_INIT_SCRIPT}></script>
-        <link rel="stylesheet" href="/src/styles/css/tailwind.css" />
+        {isDev && <link rel="stylesheet" href="/src/styles/css/tailwind.css" />}
         {!isDev && (
           <link
             rel="manifest"

@@ -5,37 +5,39 @@ import Container from '~/components/container/container'
 import Icon from '~/components/icon/icon'
 import Section from '~/components/section/section'
 import SectionTitle from '~/components/section/section.title'
-import { type Locale, useLocale } from '~/i18n'
+import { getLocaleFromPathname, useLocale } from '~/i18n'
 import Newsletter from '~/sections/newsletter/newsletter'
 import { cls } from '~/utils'
-import type { BlogPost } from '~/utils/markdown.server'
+import { getPosts } from '~/utils/posts'
 import i18n from './blog-listing.i18n.json'
 
-interface BlogListingProps {
-  /** Blog posts to render, already resolved for the active locale */
-  posts: BlogPost[]
+/**
+ * Document head for the blog listing routes; locale derived from the URL so a
+ * single export serves both /blog and /en/blog.
+ */
+export const head: DocumentHead = ({ url }) => {
+  const t = i18n[getLocaleFromPathname(url.pathname)]
+
+  return {
+    title: t.headTitle,
+    meta: [
+      {
+        name: 'description',
+        content: t.headDescription,
+      },
+    ],
+  }
 }
 
 /**
- * Creates the document head for a blog listing route in the given locale.
- * @param locale - Locale of the listing route
- */
-export const createBlogListingHead = (locale: Locale): DocumentHead => ({
-  title: i18n[locale].headTitle,
-  meta: [
-    {
-      name: 'description',
-      content: i18n[locale].headDescription,
-    },
-  ],
-})
-
-/**
  * Locale-aware blog listing with client-side title/subtitle search.
- * Shared by the sk (/blog) and en (/en/blog) routes.
+ * Shared by the sk (/blog) and en (/en/blog) routes; posts come from the
+ * build-time manifest.
  */
-const BlogListing = component$<BlogListingProps>(({ posts }) => {
-  const t = i18n[useLocale()]
+const BlogListing = component$(() => {
+  const locale = useLocale()
+  const t = i18n[locale]
+  const posts = getPosts(locale)
   const searchQuery = useSignal('')
 
   /**

@@ -29,10 +29,6 @@ export const RouterHead = component$(() => {
   )?.content
   const description = descriptionFromMeta || defaultDescription
 
-  // Check if title and description are already defined in route to avoid duplication
-  const hasTitle = !!head.title
-  const hasDescriptionMeta = head.meta.some((m) => m.name === 'description')
-
   // Default meta images (not overridable)
   const defaultOpenGraphImage = '/images/meta/meta-large.webp'
   const defaultTwitterImage = '/images/meta/meta-small.webp'
@@ -67,8 +63,7 @@ export const RouterHead = component$(() => {
 
   return (
     <>
-      {/* Only render title tag if not already defined in route */}
-      {!hasTitle && <title>{title}</title>}
+      <title>{title}</title>
 
       <link rel="canonical" href={loc.url.href} />
       <link rel="alternate" hreflang="sk" href={skUrl} />
@@ -98,8 +93,7 @@ export const RouterHead = component$(() => {
       <meta name="apple-mobile-web-app-title" content="Lukáš Chylík" />
       <link rel="manifest" href="/manifest.json" />
 
-      {/* Only render description meta tag if not already defined in route */}
-      {!hasDescriptionMeta && <meta name="description" content={description} />}
+      <meta name="description" content={description} />
       <meta http-equiv="Accept-CH" content="DPR, Viewport-Width, Width" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta http-equiv="Content-Language" content={locale} />

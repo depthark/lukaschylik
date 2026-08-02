@@ -3,7 +3,7 @@ import { Link } from '@qwik.dev/router'
 import Icon from '~/components/icon/icon'
 import { localizePath, useLocale } from '~/i18n'
 import { cls } from '~/utils'
-import type { BlogPost } from '~/utils/markdown.server'
+import type { PostMeta } from '~/utils/posts.types'
 import i18n from './blog-card.i18n.json'
 
 /**
@@ -11,21 +11,7 @@ import i18n from './blog-card.i18n.json'
  */
 interface BlogCardProps {
   /** Blog post data to display */
-  post: BlogPost
-}
-
-/**
- * Estimate reading time in minutes based on content length
- */
-const getReadingTime = (content: string): number => {
-  const text = content
-    .replace(/```[\s\S]*?```/g, ' ') // remove fenced code blocks
-    .replace(/<[^>]+>/g, ' ') // remove HTML tags
-    .replace(/[^\w\p{L}\s]+/gu, ' ') // remove punctuation
-    .trim()
-  const words = text ? text.split(/\s+/).length : 0
-  // Multiply baseline reading time by 1.5x to better reflect real reading pace
-  return Math.max(1, Math.ceil((words / 220) * 1.5))
+  post: PostMeta
 }
 
 /**
@@ -34,7 +20,7 @@ const getReadingTime = (content: string): number => {
 const BlogCard = component$(({ post }: BlogCardProps) => {
   const locale = useLocale()
   const t = i18n[locale]
-  const minutes = getReadingTime(post.content)
+  const minutes = post.readingTime
 
   return (
     <Link

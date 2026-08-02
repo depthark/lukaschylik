@@ -70,7 +70,6 @@ const Navigation = component$<NavigationProps>(({ links }) => {
       aria-label="Main navigation">
       <a
         href={localizePath('/', locale)}
-        role="menuitem"
         class={cls(
           'nav__logo',
           'relative',
@@ -109,7 +108,6 @@ const Navigation = component$<NavigationProps>(({ links }) => {
             <li key={href || link.text}>
               {isHashLink ? (
                 <a
-                  role="menuitem"
                   href={href}
                   title={link.text}
                   onClick$={closeMenuOnMobile}
@@ -127,7 +125,6 @@ const Navigation = component$<NavigationProps>(({ links }) => {
                 </a>
               ) : (
                 <Link
-                  role="menuitem"
                   href={href}
                   title={link.text}
                   rel="internal"

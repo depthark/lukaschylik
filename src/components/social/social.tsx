@@ -55,7 +55,8 @@ const Social = component$(() => {
       <ul
         id="socialMenu"
         class="absolute inset-0 m-0 p-0 list-none z-10"
-        aria-hidden={!isOpen.value}>
+        aria-hidden={!isOpen.value}
+        inert={!isOpen.value}>
         {SOCIAL_LINKS.map((item) => (
           <SocialItem key={item.icon} {...item} label={t.links[item.icon]} />
         ))}
