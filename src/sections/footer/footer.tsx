@@ -1,7 +1,7 @@
 import { component$ } from '@qwik.dev/core'
 import { Container, Icon } from '~/components'
 import { localizePath, useLocale } from '~/i18n'
-import Logo from '~/images/logos/logo-footer.svg?jsx'
+import { LogoFooter as Logo } from '~/components/logo/logo'
 import { cls } from '~/utils'
 import i18n from './footer.i18n.json'
 

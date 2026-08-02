@@ -9,7 +9,7 @@ import {
 import { Link, useLocation } from '@qwik.dev/router'
 import { getLocaleFromPathname, localizePath, stripLocale } from '~/i18n'
 import ui from '~/i18n/ui.json'
-import Logo from '~/images/logos/logo.svg?jsx'
+import { Logo } from '../logo/logo'
 import { cls, DialogContext } from '~/utils'
 import { Button } from '../button'
 import { Icon } from '../icon'
