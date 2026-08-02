@@ -59,7 +59,7 @@ const References = component$(() => {
           <div>
             <SectionTitle text={t.title} />
           </div>
-          <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-5 lg:gap-10 items-start">
+          <div class="grid grid-cols-1 lg:grid-cols-[34fr_21fr] gap-5 lg:gap-10 items-start">
             <div class="mb-8 xl:mb-0">
               <div>
                 <p class="text-sm lg:text-base 3xl:text-lg leading-relaxed font-light mb-4 md:mb-8 text-gray-800 dark:text-gray-300 font-mono">
@@ -89,7 +89,7 @@ const References = component$(() => {
                 </Button>
               </div>
             </div>
-            <ul class="ref-list list-none p-0 m-0 min-w-0 lg:columns-2 lg:gap-x-10 lg:border-t lg:border-black/30 dark:lg:border-white/30">
+            <ul class="ref-list list-none p-0 m-0 min-w-0">
               <Reference
                 title="Vertice"
                 webURL="https://vertice.one/"
