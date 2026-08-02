@@ -13,7 +13,6 @@
   "bracketSpacing": true,
   "ignorePatterns": [
     ".github",
-    ".windsurf",
     ".claude",
     "dist",
     "server",
