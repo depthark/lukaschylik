@@ -1,0 +1,30 @@
+{
+  "sk": {
+    "logoLabel": "Lukáš Chylík Logo",
+    "tagline": "Frontend developer s presahom do UX/UI. Design Systémy a AI vo vývoji.",
+    "address": {
+      "name": "Lukáš Chylík",
+      "street": "Hybešova 308/61, 602 00 Brno",
+      "country": "Česká republika",
+      "companyIdLabel": "IČO:",
+      "emailLabel": "Email:"
+    },
+    "cookieSettings": "Nastavenia cookies",
+    "gdprLink": "Ochrana osobných údajov",
+    "copyright": "Všetky práva vyhradené."
+  },
+  "en": {
+    "logoLabel": "Lukáš Chylík Logo",
+    "tagline": "Frontend developer with an overlap into UX/UI. Design Systems and AI in development.",
+    "address": {
+      "name": "Lukáš Chylík",
+      "street": "Hybešova 308/61, 602 00 Brno",
+      "country": "Czech Republic",
+      "companyIdLabel": "Company ID:",
+      "emailLabel": "Email:"
+    },
+    "cookieSettings": "Cookie settings",
+    "gdprLink": "Privacy policy",
+    "copyright": "All rights reserved."
+  }
+}

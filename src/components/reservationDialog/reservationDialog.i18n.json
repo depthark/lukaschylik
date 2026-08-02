@@ -1,0 +1,12 @@
+{
+  "sk": {
+    "close": "Zatvoriť rezerváciu",
+    "title": "Rezervácia",
+    "description": "Pre rezerváciu 60 minútnej konzultácie kliknite na kalendar a vyberte dátum a čas."
+  },
+  "en": {
+    "close": "Close booking",
+    "title": "Booking",
+    "description": "To book a 60-minute consultation, click the calendar and choose a date and time."
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "sk": {
+    "banner": {
+      "title": "Súbory cookie",
+      "description": "Používam iba analytické cookies (Google Analytics) na meranie návštevnosti a zlepšenie webu. Môžete prijať všetky, odmietnuť alebo upraviť nastavenia.",
+      "deny": "Odmietnuť",
+      "settings": "Nastavenia",
+      "acceptAll": "Prijať všetko"
+    },
+    "dialog": {
+      "title": "Nastavenia súborov cookie",
+      "description": "Vyberte, ktoré typy cookies chcete povoliť. Nevyhnutné cookies sú vždy povolené.",
+      "necessaryLabel": "Nevyhnutné",
+      "necessaryDescription": "Potrebné na správne fungovanie webu. Nemožno vypnúť.",
+      "analyticsLabel": "Analytické (Google Analytics)",
+      "analyticsDescription": "Pomáhajú pochopiť, ako je web používaný. Bez reklamných cookies.",
+      "close": "Zatvoriť",
+      "denyAll": "Odmietnuť všetko",
+      "save": "Uložiť nastavenia"
+    }
+  },
+  "en": {
+    "banner": {
+      "title": "Cookies",
+      "description": "I only use analytics cookies (Google Analytics) to measure traffic and improve the site. You can accept all, decline, or adjust your settings.",
+      "deny": "Decline",
+      "settings": "Settings",
+      "acceptAll": "Accept all"
+    },
+    "dialog": {
+      "title": "Cookie settings",
+      "description": "Choose which types of cookies you want to allow. Necessary cookies are always enabled.",
+      "necessaryLabel": "Necessary",
+      "necessaryDescription": "Required for the site to work properly. Cannot be turned off.",
+      "analyticsLabel": "Analytics (Google Analytics)",
+      "analyticsDescription": "Help me understand how the site is used. No advertising cookies.",
+      "close": "Close",
+      "denyAll": "Decline all",
+      "save": "Save settings"
+    }
+  }
+}

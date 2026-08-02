@@ -1,0 +1,14 @@
+{
+  "sk": {
+    "customPrice": "Na mieru",
+    "priceFormat": "{price} Kč",
+    "interested": "Mám záujem",
+    "unavailable": "Nedostupné"
+  },
+  "en": {
+    "customPrice": "Custom quote",
+    "priceFormat": "{price} CZK",
+    "interested": "I'm interested",
+    "unavailable": "Unavailable"
+  }
+}

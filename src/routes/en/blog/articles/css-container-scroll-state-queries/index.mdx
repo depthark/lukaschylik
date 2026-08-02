@@ -1,0 +1,300 @@
+---
+title: CSS container scroll-state queries
+subtitle: A new way to react to scroll state in CSS
+description: Discover how CSS container scroll-state queries let you build interactive elements that respond to scrolling without using JavaScript.
+date: 2025-07-14
+author: Lukáš Chylík
+podcastUrl: https://open.spotify.com/episode/7MCsBrsSFOBMTcQxNLdFTB?si=02T7dOEWS2WhRA5_3p0tbA
+cardImg: /images/blog/container-scroll-state.avif
+---
+
+## What are container scroll-state queries?
+
+Have you ever wondered whether we would one day be able to track an element's scroll state with CSS alone? **CSS container scroll-state queries are a game changer!**
+
+Container scroll-state queries are a new addition to the container queries family that lets us selectively apply styles to a container's descendants based on its scroll state. And that's not all! They can also identify whether an element is stuck via `position: sticky` or snapped based on the `scroll-snap` property.
+
+## Syntax
+
+Just like with container queries, before you can start detecting scroll state you first need to establish an element as a scroll-state query container using the `container-type` property with the value `scroll-state`. Optionally, you can also set a `container-name` so you can target a specific container:
+
+```css
+.container {
+  container-type: scroll-state;
+  container-name: my-container;
+}
+```
+
+You can then define individual `@container` queries. They specify the rules that get applied to the container's descendants whenever the query matches. In practice, it's the same approach we know from classic container queries.
+
+```css
+@container my-container scroll-state(scrollable: top) {
+  /* CSS rules here */
+}
+```
+
+**Note:** To distinguish scroll-state queries from other container queries, the scroll-state descriptors and values are placed inside parentheses preceded by `scroll-state` (scroll-state( ... )). These constructs look like functions, but they are not functions.
+
+## Types of container scroll-state queries
+
+Container scroll-state queries offer three main types of state detection:
+
+### Overview of the key types:
+
+- **`scrollable`** - detects whether scrolling is possible in a given direction
+- **`snapped`** - identifies snapping within a scroll snap container  
+- **`stuck`** - tracks the state of stuck (sticky) elements
+
+## scrollable: Detecting whether scrolling is possible
+
+The `scrollable` query tests whether the container can be scrolled in a given direction via user-initiated scrolling. In other words, is there overflowing content in that direction that can be scrolled to? This makes it easy to identify whether the user is at the start, at the end, or somewhere in the middle of scrolling.
+
+You can put this to clever use, for example, in a popover menu: when scrolling is possible, you render an overlay hinting to the user that more content is available. A pretty useful UX feature that comes practically for free.
+
+### Possible values
+
+```css
+/* No scrolling */
+scrollable: none          /* no scrolling is possible */
+
+/* Physical directions */
+scrollable: top           /* can scroll upwards */
+scrollable: right         /* can scroll to the right */
+scrollable: bottom        /* can scroll downwards */
+scrollable: left          /* can scroll to the left */
+
+/* Logical directions */
+scrollable: block-start   /* can scroll towards the block start */
+scrollable: inline-start  /* can scroll towards the inline start */
+scrollable: block-end     /* can scroll towards the block end */
+scrollable: inline-end    /* can scroll towards the inline end */
+```
+
+### Showcase
+
+In this example, we have a scrollable container full of content and a handy little link for scrolling back to the top. We'll use the scrollable query to show the link only once the user has started scrolling down through the content.
+
+```html
+<div class="scroll-container">
+  <div class="content">
+    <!-- Lots of content here -->
+  </div>
+  <a href="#top" class="scroll-to-top">Späť nahor</a>
+</div>
+```
+
+```css
+.scroll-container {
+  container-type: scroll-state;
+  container-name: scroll-box;
+  block-size: 18.75rem;
+  overflow-y: auto;
+}
+
+.scroll-to-top {
+  position: sticky;
+  inset-block-end: 1.25rem;
+  inset-inline-end: 1.25rem;
+  display: none;
+}
+
+@container scroll-box scroll-state(scrollable: top) {
+  .scroll-to-top {
+    display: block;
+  }
+}
+```
+
+In this example, the back-to-top link appears only when it's possible to scroll upwards (meaning the user has already scrolled down).
+
+## snapped: Detecting snapping in scroll snap
+
+The `snapped` query tests whether the container is snapped to a scroll snap container. This query only activates in combination with the CSS `scroll-snap-type` property. We can identify snapping along different axes and directions.
+
+It's particularly handy in CSS-only carousels, where you can highlight the currently snapped element or reveal some of its previously hidden parts, for example with a nice fade effect.
+
+### Possible values
+
+```css
+/* No snapping */
+snapped: none       /* the element is not snapped */
+
+/* Physical axes */
+snapped: x          /* the element is snapped horizontally */
+snapped: y          /* the element is snapped vertically */
+
+/* Logical axes */
+snapped: block      /* the element is snapped in the block axis */
+snapped: inline     /* the element is snapped in the inline axis */
+```
+
+### Showcase
+
+In this example, we have a horizontal carousel with items that snap to the center thanks to the `scroll-snap-align: center` property. We'll use the snapped query to highlight the currently snapped item.
+
+```html
+<div class="carousel">
+  <div class="carousel-item">Položka 1</div>
+  <div class="carousel-item">Položka 2</div>
+  <div class="carousel-item">Položka 3</div>
+</div>
+```
+
+```css
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.carousel-item {
+  container-type: scroll-state;
+  container-name: carousel-item;
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  padding: 1.25rem;
+  border: 0.125rem solid oklch(0.8 0.02 180);
+}
+
+@container carousel-item scroll-state(snapped: x) {
+  .carousel-item {
+    border-color: oklch(0.65 0.25 25);
+    scale: 1.05;
+  }
+}
+```
+
+In this example, the currently snapped carousel item gets highlighted with a different border color and a slight scale-up.
+
+## stuck: Detecting a stuck sticky element
+
+The `stuck` query tests whether a container with `position: sticky` is stuck to an edge of its parent. We can identify sticking on different sides of the container.
+
+A really nice example is recoloring a navigation bar, where you can change its appearance once it's stuck to the top of the page. Typically it has a transparent background that switches to a solid one when it sticks.
+
+### Possible values
+
+```css
+/* No sticking */
+stuck: none         /* the element is not stuck anywhere */
+
+/* Physical directions */
+stuck: top          /* the element sticks to the top */
+stuck: right        /* the element sticks to the right */
+stuck: bottom       /* the element sticks to the bottom */
+stuck: left         /* the element sticks to the left */
+
+/* Logical directions */
+stuck: block-start  /* the element sticks to the block start */
+stuck: inline-start /* the element sticks to the inline start */
+stuck: block-end    /* the element sticks to the block end */
+stuck: inline-end   /* the element sticks to the inline end */
+```
+
+### Showcase
+
+In this example, we have a navigation bar that sticks to the top of the page while scrolling. We'll use the stuck query to change its appearance once it's stuck.
+
+```html
+<header class="site-header">
+  <nav class="main-nav">
+    <a href="#">Domov</a>
+    <a href="#">O nás</a>
+    <a href="#">Služby</a>
+    <a href="#">Kontakt</a>
+  </nav>
+</header>
+<main>
+  <!-- Page content -->
+</main>
+```
+
+```css
+.site-header {
+  container-type: scroll-state;
+  container-name: header;
+}
+
+.main-nav {
+  position: sticky;
+  inset-block-start: 0;
+  background-color: oklch(1 0 0);
+  padding: 1.25rem;
+  box-shadow: none;
+  transition: all 0.3s ease;
+}
+
+@container header scroll-state(stuck: top) {
+  .main-nav {
+    background-color: oklch(1 0 0 / 0.9);
+    box-shadow: 0 0.125rem 0.625rem oklch(0 0 0 / 0.1);
+    padding: 0.625rem 1.25rem;
+  }
+}
+```
+
+In this example, the navigation bar changes once it's stuck to the top of the page - it gets a semi-transparent background, a shadow, and smaller padding.
+
+## Container query units
+
+Just like with classic container queries, the same special length units apply here as well:
+
+- **`cqw`** - 1% of the query container's width
+- **`cqh`** - 1% of the query container's height  
+- **`cqi`** - 1% of the query container's inline size
+- **`cqb`** - 1% of the query container's block size
+- **`cqmin`** - 1% of the container's smaller dimension
+- **`cqmax`** - 1% of the container's larger dimension
+
+## Browser support
+
+CSS container scroll-state queries are a relatively new feature, and browser support is still evolving:
+
+- Chrome: Supported since version 127
+- Firefox: Not supported yet
+- Safari: Not supported yet
+
+For production use, it's a good idea to implement a fallback so that your site keeps working in browsers that don't support this feature.
+
+## Fallback solution
+
+For browsers that don't support container scroll-state queries, you can implement a fallback using the `@supports` rule:
+
+```css
+/* Base styles for all browsers */
+.scroll-to-top {
+  position: sticky;
+  inset-block-end: 1.25rem;
+  inset-inline-end: 1.25rem;
+  display: none;
+}
+
+/* Styles for browsers that support container scroll-state queries */
+@supports (container-type: scroll-state) {
+  .scroll-container {
+    container-type: scroll-state;
+    container-name: scroll-box;
+  }
+  
+  @container scroll-box scroll-state(scrollable: top) {
+    .scroll-to-top {
+      display: block;
+    }
+  }
+}
+
+/* Fallback for browsers that don't support container scroll-state queries */
+@supports not (container-type: scroll-state) {
+  .scroll-container:not(:scroll-position(0% 0%)) .scroll-to-top {
+    display: block;
+  }
+}
+```
+
+## Conclusion
+
+CSS container scroll-state queries represent another step in the evolution of CSS, allowing us to build more interactive and dynamic websites without the need for JavaScript. With the ability to react to a container's scroll state, we can create more sophisticated user interfaces that adapt to user interaction.
+
+Even though browser support is still limited, it's worth starting to experiment with this feature and preparing for its wider adoption in the future. With a fallback solution in place, you can start using container scroll-state queries today and deliver an enhanced experience to users of modern browsers, while everyone else still gets the core functionality.
+
+Give container scroll-state queries a try in your projects and discover the new possibilities they bring!

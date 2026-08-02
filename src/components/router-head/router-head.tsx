@@ -1,5 +1,7 @@
 import { component$ } from '@qwik.dev/core'
 import { useDocumentHead, useLocation } from '@qwik.dev/router'
+import { getLocaleFromPathname, localizePath, stripLocale } from '~/i18n'
+import ui from '~/i18n/ui.json'
 
 /**
  * RouterHead component for managing document head metadata
@@ -9,9 +11,14 @@ export const RouterHead = component$(() => {
   const head = useDocumentHead()
   const loc = useLocation()
 
-  const defaultTitle = 'Lukáš Chylík | Frontend, UX/UI, AI workshopy'
-  const defaultDescription =
-    'Frontend developer s presahom do UX/UI, zameraný na Design Systémy a AI vo vývoji.'
+  const locale = getLocaleFromPathname(loc.url.pathname)
+  const t = ui[locale].siteMeta
+  const basePath = stripLocale(loc.url.pathname)
+  const skUrl = new URL(localizePath(basePath, 'sk'), loc.url.origin).href
+  const enUrl = new URL(localizePath(basePath, 'en'), loc.url.origin).href
+
+  const defaultTitle = t.defaultTitle
+  const defaultDescription = t.defaultDescription
 
   // Custom override mechanism - handle title and description from routes
   const title = head.title || defaultTitle
@@ -64,6 +71,9 @@ export const RouterHead = component$(() => {
       {!hasTitle && <title>{title}</title>}
 
       <link rel="canonical" href={loc.url.href} />
+      <link rel="alternate" hreflang="sk" href={skUrl} />
+      <link rel="alternate" hreflang="en" href={enUrl} />
+      <link rel="alternate" hreflang="x-default" href={skUrl} />
       <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=3, viewport-fit=cover"
@@ -92,14 +102,11 @@ export const RouterHead = component$(() => {
       {!hasDescriptionMeta && <meta name="description" content={description} />}
       <meta http-equiv="Accept-CH" content="DPR, Viewport-Width, Width" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta http-equiv="Content-Language" content="sk" />
+      <meta http-equiv="Content-Language" content={locale} />
       <meta name="format-detection" content="telephone=no" />
       <meta name="theme-color" content="#000"></meta>
       <meta name="robots" content="index, follow" />
-      <meta
-        name="keywords"
-        content="frontend developer, UX/UI, dizajnové systémy, AI vo vývoji, AI workshopy, AI školenia, spec‑driven development, custom agenti, AI workflow, Lukáš Chylík, Brno"
-      />
+      <meta name="keywords" content={t.keywords} />
       <meta name="author" content="Lukáš Chylík" />
       <meta name="publisher" content="Lukáš Chylík" />
 
@@ -114,6 +121,14 @@ export const RouterHead = component$(() => {
       <meta property="og:url" content={loc.url.href} />
       {!hasOgImage && <meta property="og:image" content={ogImage} />}
       {!hasOgType && <meta property="og:type" content="website" />}
+      <meta
+        property="og:locale"
+        content={locale === 'sk' ? 'sk_SK' : 'en_US'}
+      />
+      <meta
+        property="og:locale:alternate"
+        content={locale === 'sk' ? 'en_US' : 'sk_SK'}
+      />
 
       {/* Twitter Card meta tags */}
       {!hasTwitterCard && <meta name="twitter:card" content="summary" />}

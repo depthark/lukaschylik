@@ -1,8 +1,15 @@
 import { $, component$, useOn } from '@qwik.dev/core'
 import { Button, Container } from '~/components'
+import { useLocale } from '~/i18n'
 import { cls } from '~/utils'
+import i18n from './header.i18n.json'
 
+/**
+ * Intro header with the glitch name title, subtitle and CTA button.
+ */
 const Header = component$(() => {
+  const t = i18n[useLocale()]
+
   useOn(
     'qvisible',
     $(() => {
@@ -45,13 +52,12 @@ const Header = component$(() => {
               'font-extrabold uppercase leading-none tracking-widest',
               'relative z-10',
             )}
-            data-glitch="Lukáš
-Chylík"
+            data-glitch={t.name.join('\n')}
             data-height="200"
             data-width="800">
-            Lukáš
+            {t.name[0]}
             <br />
-            Chylík
+            {t.name[1]}
           </h1>
           <div class={cls('grid place-items-center content-center')}>
             <strong
@@ -63,16 +69,16 @@ Chylík"
                 'text-black bg-secondary rounded-lg',
                 'font-medium',
               )}>
-              Creative web developer
+              {t.subtitle}
             </strong>
             <div class="inline-flex gap-32 place-items-center content-center mt-16">
               <Button
                 href="#about-me"
                 variant="primary"
                 size="md"
-                title="Kto som?"
+                title={t.cta}
                 className="intro__btn">
-                Kto som?
+                {t.cta}
               </Button>
             </div>
           </div>

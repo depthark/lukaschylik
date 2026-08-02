@@ -7,10 +7,13 @@ import {
   useStore,
 } from '@qwik.dev/core'
 import { Link, useLocation } from '@qwik.dev/router'
+import { getLocaleFromPathname, localizePath, stripLocale } from '~/i18n'
+import ui from '~/i18n/ui.json'
 import Logo from '~/images/logos/logo.svg?jsx'
 import { cls, DialogContext } from '~/utils'
 import { Button } from '../button'
 import { Icon } from '../icon'
+import LanguageSwitch from '../languageSwitch/languageSwitch'
 import { ThemeSwitch } from '../themeSwitch'
 import type { NavigationLinkProps, NavigationProps } from './navigation.types'
 
@@ -23,6 +26,9 @@ const Navigation = component$<NavigationProps>(({ links }) => {
   const isHydrated = useSignal(false)
   const location = useLocation()
   const dialogContext = useContext(DialogContext)
+
+  const locale = getLocaleFromPathname(location.url.pathname)
+  const t = ui[locale].nav
 
   // Ensure proper hydration
   useOn(
@@ -45,7 +51,7 @@ const Navigation = component$<NavigationProps>(({ links }) => {
   // Scroll lock handled via CSS in _navigation.scss using :has(.nav--open)
 
   // Check if current path is blog or blog detail page
-  const isBlogPage = location.url.pathname.startsWith('/blog')
+  const isBlogPage = stripLocale(location.url.pathname).startsWith('/blog')
 
   return (
     <nav
@@ -63,7 +69,7 @@ const Navigation = component$<NavigationProps>(({ links }) => {
       )}
       aria-label="Main navigation">
       <a
-        href="/"
+        href={localizePath('/', locale)}
         role="menuitem"
         class={cls(
           'nav__logo',
@@ -77,7 +83,7 @@ const Navigation = component$<NavigationProps>(({ links }) => {
         <Logo
           class="w-full max-w-full"
           role="img"
-          aria-label="Lukáš Chylík Logo"
+          aria-label={t.logoLabel}
           width="140"
           height="60"
         />
@@ -95,8 +101,8 @@ const Navigation = component$<NavigationProps>(({ links }) => {
           state.isOpen ? 'grid' : 'hidden md:flex',
         )}>
         {links?.map((link: NavigationLinkProps) => {
-          const href = link.href ?? ''
-          const isActive = href === '/blog' && isBlogPage
+          const href = localizePath(link.href ?? '/', locale)
+          const isActive = link.href === '/blog/' && isBlogPage
           const isHashLink = href.includes('#')
 
           return (
@@ -122,7 +128,7 @@ const Navigation = component$<NavigationProps>(({ links }) => {
               ) : (
                 <Link
                   role="menuitem"
-                  href={href || '/'}
+                  href={href}
                   title={link.text}
                   rel="internal"
                   onClick$={closeMenuOnMobile}
@@ -144,14 +150,15 @@ const Navigation = component$<NavigationProps>(({ links }) => {
         })}
       </ul>
       <div class="flex gap-4 items-center">
+        <LanguageSwitch />
         <ThemeSwitch />
         <Button
           variant="secondary"
           size="sm"
-          title="Rezervácia"
+          title={t.reservation}
           className="relative"
           onClick$={dialogContext.showDialog}>
-          Rezervácia
+          {t.reservation}
         </Button>
         <button
           type="button"
@@ -161,10 +168,10 @@ const Navigation = component$<NavigationProps>(({ links }) => {
             'text-white cursor-pointer grid md:hidden',
             state.isOpen && 'nav__toggler--open',
           )}
-          aria-label={state.isOpen ? 'Zavrieť menu' : 'Otvoriť menu'}
+          aria-label={state.isOpen ? t.closeMenu : t.openMenu}
           aria-expanded={state.isOpen ? 'true' : 'false'}
           aria-controls="navigation-menu"
-          title={state.isOpen ? 'Zavrieť menu' : 'Otvoriť menu'}
+          title={state.isOpen ? t.closeMenu : t.openMenu}
           onClick$={toggleMenu}></button>
       </div>
     </nav>

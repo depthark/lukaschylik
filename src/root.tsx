@@ -36,7 +36,7 @@ export default component$(() => {
           />
         )}
       </head>
-      <body class="bg-black-900" lang="sk">
+      <body class="bg-black-900">
         <noscript
           dangerouslySetInnerHTML={
             '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQFH8PWL" height="0" width="0" title="Google Tag Manager" style="display:none;visibility:hidden"></iframe>'

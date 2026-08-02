@@ -2,7 +2,9 @@ import { $, component$, useStore } from '@qwik.dev/core'
 import { useNavigate } from '@qwik.dev/router'
 import { Button, Container, FormField, Section } from '~/components'
 import SectionTitle from '~/components/section/section.title'
+import { localizePath, useLocale } from '~/i18n'
 import { cls } from '~/utils'
+import i18n from './newsletter.i18n.json'
 
 const MAILCHIMP_FORM_URL =
   'https://lukaschylik.us6.list-manage.com/subscribe/post?u=e4c1b2f028f9fc3c28ad28630&id=90b3c6481a&f_id=00d309e3f0'
@@ -13,6 +15,8 @@ const MAILCHIMP_HONEYPOT_FIELD = 'b_e4c1b2f028f9fc3c28ad28630_90b3c6481a'
  * Handles subscribe with Mailchimp form submit
  */
 const Newsletter = component$(() => {
+  const locale = useLocale()
+  const t = i18n[locale]
   const nav = useNavigate()
   const state = useStore({
     email: '',
@@ -57,7 +61,7 @@ const Newsletter = component$(() => {
       await nav(`${url.pathname}?${url.searchParams.toString()}`)
     } catch (error) {
       console.error('Subscription error:', error)
-      state.error = 'Nepodarilo sa prihlásiť na odber. Skúste to prosím znova.'
+      state.error = t.form.error
     } finally {
       state.submitting = false
     }
@@ -67,7 +71,7 @@ const Newsletter = component$(() => {
     <Section id="newsletter" fullHeight={false}>
       <Container size="sm" className="relative z-10 isolate">
         <SectionTitle
-          text="Newsletter"
+          text={t.title}
           size="sm"
           className="text-black dark:text-white"
           center
@@ -77,7 +81,7 @@ const Newsletter = component$(() => {
             'text-center mx-auto text-sm lg:text-base 3xl:text-lg leading-relaxed font-light mb-6 font-mono',
             'text-gray-800 dark:text-gray-300',
           )}>
-          Buďte informovaní o novinkách a článkoch!
+          {t.description}
         </p>
 
         <form
@@ -95,10 +99,10 @@ const Newsletter = component$(() => {
           </div>
           <FormField
             className="flex-1"
-            label="Váš email"
+            label={t.form.emailLabel}
             type="email"
             name="newsletter_email"
-            placeholder="john.doe@email.com"
+            placeholder={t.form.emailPlaceholder}
             value={state.email}
             inputClassName="text-black dark:text-white"
             onInput$={handleEmailInput}
@@ -107,10 +111,10 @@ const Newsletter = component$(() => {
           />
           <Button
             type="submit"
-            title="Odoberať"
+            title={t.form.submit}
             variant="secondary"
             disabled={state.submitting || !state.email}>
-            {state.submitting ? 'Odosielam...' : 'Odoberať'}
+            {state.submitting ? t.form.submitting : t.form.submit}
           </Button>
         </form>
         {state.error && (
@@ -124,13 +128,13 @@ const Newsletter = component$(() => {
             'mt-6 text-center block',
             'text-gray-500 dark:text-gray-400',
           )}>
-          Vaše údaje spracúvam v súlade s{' '}
+          {t.gdpr.before}{' '}
           <a
-            href="/gdpr/"
+            href={localizePath('/gdpr/', locale)}
             class="underline underline-offset-2 hover:text-gray-700 dark:hover:text-gray-300">
-            GDPR
+            {t.gdpr.link}
           </a>
-          .
+          {t.gdpr.after}
         </small>
       </Container>
     </Section>

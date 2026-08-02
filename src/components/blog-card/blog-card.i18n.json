@@ -1,0 +1,12 @@
+{
+  "sk": {
+    "coverAlt": "Ilustračný obrázok k článku: {title}",
+    "readingTimeTitle": "Čas pre prečítanie článku: {minutes} min",
+    "readingTimeUnit": "min"
+  },
+  "en": {
+    "coverAlt": "Illustrative image for the article: {title}",
+    "readingTimeTitle": "Estimated reading time: {minutes} min",
+    "readingTimeUnit": "min"
+  }
+}

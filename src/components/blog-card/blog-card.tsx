@@ -1,8 +1,10 @@
 import { component$ } from '@qwik.dev/core'
 import { Link } from '@qwik.dev/router'
 import Icon from '~/components/icon/icon'
+import { localizePath, useLocale } from '~/i18n'
 import { cls } from '~/utils'
 import type { BlogPost } from '~/utils/markdown.server'
+import i18n from './blog-card.i18n.json'
 
 /**
  * Props for the BlogCard component
@@ -30,11 +32,13 @@ const getReadingTime = (content: string): number => {
  * Blog card component that displays a blog post preview with themed gradient header
  */
 const BlogCard = component$(({ post }: BlogCardProps) => {
+  const locale = useLocale()
+  const t = i18n[locale]
   const minutes = getReadingTime(post.content)
 
   return (
     <Link
-      href={`/blog/articles/${post.slug}/`}
+      href={localizePath(`/blog/articles/${post.slug}/`, locale)}
       class={cls(
         'card overflow-clip',
         'group relative block',
@@ -54,7 +58,7 @@ const BlogCard = component$(({ post }: BlogCardProps) => {
         {post.cardImg && (
           <img
             src={post.cardImg}
-            alt={`Ilustračný obrázok k článku: ${post.title}`}
+            alt={t.coverAlt.replace('{title}', post.title)}
             loading="lazy"
             decoding="async"
             width={1600}
@@ -102,13 +106,15 @@ const BlogCard = component$(({ post }: BlogCardProps) => {
             'mt-auto',
           )}>
           <time dateTime={post.date}>
-            {new Date(post.date).toLocaleDateString('cs-CZ')}
+            {new Date(post.date).toLocaleDateString(
+              locale === 'sk' ? 'sk-SK' : 'en-GB',
+            )}
           </time>
           <span
             class={cls('flex items-center gap-2')}
-            title={`Čas pre prečítanie článku: ${minutes} min`}>
+            title={t.readingTimeTitle.replace('{minutes}', String(minutes))}>
             <Icon name="book" cls="w-4 h-4 sm:w-5 sm:h-5" />
-            {minutes} min
+            {minutes} {t.readingTimeUnit}
           </span>
         </div>
       </div>

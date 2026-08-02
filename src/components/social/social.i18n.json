@@ -1,0 +1,22 @@
+{
+  "sk": {
+    "openMenu": "Otvoriť sociálne siete",
+    "closeMenu": "Zavrieť sociálne siete",
+    "links": {
+      "linkedin": "Odkaz na môj LinkedIn",
+      "discord": "Odkaz na CSS CzechoSlovakia Discord",
+      "codepen": "Odkaz na môj CodePen",
+      "github": "Odkaz na môj GitHub"
+    }
+  },
+  "en": {
+    "openMenu": "Open social links",
+    "closeMenu": "Close social links",
+    "links": {
+      "linkedin": "Link to my LinkedIn",
+      "discord": "Link to the CSS CzechoSlovakia Discord",
+      "codepen": "Link to my CodePen",
+      "github": "Link to my GitHub"
+    }
+  }
+}

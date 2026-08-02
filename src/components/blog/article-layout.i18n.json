@@ -1,0 +1,24 @@
+{
+  "sk": {
+    "backToList": "← Späť na zoznam článkov",
+    "coverAlt": "Ilustračný obrázok k článku",
+    "readingTime": "Čas pre prečítanie článku",
+    "playPodcast": "Prehrať Podcast na Spotify",
+    "minutes": "min",
+    "copyUnsupported": "Kopírovanie odkazu nie je podporované.",
+    "copySuccess": "Odkaz na sekciu bol skopírovaný.",
+    "copyError": "Nepodarilo sa skopírovať odkaz na sekciu.",
+    "headTitleSuffix": "Blog | Lukáš Chylík"
+  },
+  "en": {
+    "backToList": "← Back to all articles",
+    "coverAlt": "Cover image for article",
+    "readingTime": "Estimated reading time",
+    "playPodcast": "Play the podcast on Spotify",
+    "minutes": "min",
+    "copyUnsupported": "Copying links is not supported.",
+    "copySuccess": "Section link copied.",
+    "copyError": "Failed to copy the section link.",
+    "headTitleSuffix": "Blog | Lukáš Chylík"
+  }
+}

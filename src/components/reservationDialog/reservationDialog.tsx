@@ -1,5 +1,7 @@
 import { $, component$, useOn, useSignal, useTask$ } from '@qwik.dev/core'
 import { Button, Icon } from '~/components'
+import { useLocale } from '~/i18n'
+import i18n from './reservationDialog.i18n.json'
 import type { ReservationDialogProps } from './reservationDialog.types'
 
 const loadCalcomScript = () => {
@@ -60,6 +62,7 @@ const loadCalcomScript = () => {
  */
 export const ReservationDialog = component$<ReservationDialogProps>(
   ({ dialogRef: externalDialogRef }) => {
+    const t = i18n[useLocale()]
     const internalDialogRef = useSignal<HTMLDialogElement>()
     const dialogRef = externalDialogRef || internalDialogRef
     const scriptRef = useSignal<HTMLScriptElement | null>(null)
@@ -91,17 +94,16 @@ export const ReservationDialog = component$<ReservationDialogProps>(
         <Button
           className="absolute top-4 right-4 text-gray-800 dark:text-white ldark:text-gray-300 p-0 scale-95 hover:scale-100 opacity-90 hover:opacity-100"
           variant="plain"
-          title="Zatvoriť rezerváciu"
+          title={t.close}
           onClick$={() => dialogRef.value?.close()}
-          aria-label="Zatvoriť rezerváciu">
+          aria-label={t.close}>
           <Icon name="close" size="1.5rem" aria-hidden="true" />
         </Button>
         <h3 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-center text-black dark:text-white">
-          Rezervácia
+          {t.title}
         </h3>
         <p class="text-sm lg:text-base 3xl:text-lg text-center leading-relaxed font-light mb-8 md:mb-16 mx-auto text-gray-800 dark:text-gray-300 font-mono content-fade-in content-fade-in--bottom text-pretty">
-          Pre rezerváciu 60 minútnej konzultácie kliknite na kalendar a vyberte
-          dátum a čas.
+          {t.description}
         </p>
         <div
           id="my-cal-inline"

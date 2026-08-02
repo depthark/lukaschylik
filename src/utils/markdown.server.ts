@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
+import { DEFAULT_LOCALE, type Locale } from '~/i18n/core'
 
 /**
  * Represents a blog post with metadata and content
@@ -26,13 +27,14 @@ export interface BlogPost {
   content: string
 }
 
-const postsDirectory = path.join(
-  process.cwd(),
-  'src',
-  'routes',
-  'blog',
-  'articles',
-)
+/**
+ * Resolves the articles directory for the given locale
+ * @param locale - Content locale (sk articles live at the routes root, en under routes/en)
+ */
+const getPostsDirectory = (locale: Locale): string =>
+  locale === DEFAULT_LOCALE
+    ? path.join(process.cwd(), 'src', 'routes', 'blog', 'articles')
+    : path.join(process.cwd(), 'src', 'routes', 'en', 'blog', 'articles')
 
 /**
  * Reads and parses a markdown file at the given path
@@ -78,7 +80,8 @@ const readMarkdownFile = (filePath: string, slug: string): BlogPost | null => {
  * @param {string} slug - The blog post slug
  * @returns {BlogPost | null} The blog post data or null if not found
  */
-const findPostBySlug = (slug: string): BlogPost | null => {
+const findPostBySlug = (slug: string, locale: Locale): BlogPost | null => {
+  const postsDirectory = getPostsDirectory(locale)
   const mdxPath = path.join(postsDirectory, slug, 'index.mdx')
   const mdxPost = readMarkdownFile(mdxPath, slug)
   if (mdxPost) {
@@ -93,15 +96,15 @@ const findPostBySlug = (slug: string): BlogPost | null => {
  * Gets all blog posts from the articles directory
  * @returns {BlogPost[]} Array of blog posts sorted by date (newest first)
  */
-export const getAllPosts = (): BlogPost[] => {
+export const getAllPosts = (locale: Locale = DEFAULT_LOCALE): BlogPost[] => {
   try {
     const slugs = fs
-      .readdirSync(postsDirectory, { withFileTypes: true })
+      .readdirSync(getPostsDirectory(locale), { withFileTypes: true })
       .filter((dirent) => dirent.isDirectory())
       .map((dirent) => dirent.name)
 
     const allPostsData = slugs
-      .map(findPostBySlug)
+      .map((slug) => findPostBySlug(slug, locale))
       .filter((post): post is BlogPost => post !== null)
 
     return allPostsData.toSorted(

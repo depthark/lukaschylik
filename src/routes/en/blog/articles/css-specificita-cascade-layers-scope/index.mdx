@@ -1,0 +1,338 @@
+---
+title: "CSS Cascade Layers, @scope and Modern Selectors"
+subtitle: "How layers, scope and new pseudo-classes are changing the rules of the cascade"
+description: "Specificity has always been a cornerstone of CSS. Today it is joined by cascade layers, @scope and modern selectors like :has() and :where(), which fundamentally change the way we compose styles."
+date: 2025-11-16
+author: Lukáš Chylík
+podcastUrl: https://open.spotify.com/episode/4QXPzTaXJUBxKbcaZ05VcY?si=UGKTjxpOSRqFXEta01yHTg
+cardImg: /images/blog/specificity.avif
+---
+
+
+For many years, CSS relied on a simple rule: **order first, then specificity**. Author versus user versus browser. Today, new mechanisms are being added to this axis, giving authors more control while reducing the need for "hacks".
+
+In this article, we will look at the historical layers of the cascade, modern CSS Cascade Layers, the new `@scope` rule, and selectors that open up new possibilities for working with specificity.
+
+## Layers have always been here
+
+CSS has always had three built-in layers:
+
+1. **User-agent (UA) styles** – the browser's native styles
+2. **User styles** – styles that the user can configure
+3. **Author styles** – styles written by page authors (that is, us)
+
+In practice, we mostly deal with two:
+
+### User-agent layer (UA styles)
+
+The bottom-most layer. It contains the default styles of HTML elements and the styles of internal Shadow DOM (form controls, `<video>`, and so on). Shadow DOM components are not a separate layer – they still belong to the UA layer.
+
+### Author layer (author styles)
+
+Everything we write ourselves:
+
+- external `.css` files
+- `<style>` in `<head>`
+- inline `style=""`
+
+Historically, this layer was one big blob. It was only **CSS Cascade Layers** that split it into logical sub-layers with a predictable order.
+
+## CSS Cascade Layers — order, meaning and behavior
+
+The key idea: **The layer decides first, and only then specificity.** Layers divide the author layer into smaller parts with a fixed order.
+
+### Example without an upfront layer declaration
+
+```css
+@layer base {
+  h1 { font-size: 2rem; }
+}
+
+@layer components {
+  .card { padding: 1rem; }
+}
+
+@layer utilities {
+  .text-center { text-align: center; }
+}
+```
+
+If we don't define the layers up front, the order is determined by the order in which the `@layer` blocks appear in the CSS. A layer that appears later has higher priority. So it's enough to move `@layer utilities` to the beginning and its priority drops.
+
+### Declaring all layers on a single line
+
+We can lock in the order at the beginning of the file:
+
+```css
+@layer base, components, utilities;
+
+@layer utilities {
+  .text-center { text-align: center; }
+}
+
+@layer base {
+  h1 { font-size: 2rem; }
+}
+
+@layer components {
+  .card { padding: 1rem; }
+}
+```
+
+It still holds that `utilities > components > base`, because the order is defined by the opening line regardless of the physical placement of the blocks.
+
+### Custom layers in practice
+
+A typical structure:
+
+```css
+@layer reset, defaults, layout, components, utilities, overrides;
+
+@layer reset {
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@layer components {
+  .btn { padding: .5rem 1rem; }
+}
+
+@layer overrides {
+  .btn { color: red; }
+}
+```
+
+- a clear structure
+- a predictable order
+- utilities have the final say (unless `overrides` steps in)
+
+### !important in layers
+
+`!important` ignores the layer order, but it still respects layering among important rules.
+
+```css
+@layer base {
+  .box { color: red !important; }
+}
+
+@layer components {
+  .box { color: blue; } /* won't win */
+}
+
+@layer utilities {
+  .box { color: black !important; } /* wins */
+}
+```
+
+### Layers within layers
+
+`@layer` can contain further sub-layers. This helps in larger systems where you want, for example, components split into "base" and "states" without mixing them with other layers.
+
+```css
+@layer components {
+  @layer base {
+    .btn { padding: 0.75rem 1rem; }
+  }
+
+  @layer states {
+    .btn:focus-visible { outline: 2px solid $color-yellow; }
+  }
+}
+```
+
+The order will be: `reset → defaults → layout → components(base → states) → utilities → overrides`. Nested layers respect the order within their parent, so you can control precedence in finer detail even inside a single higher-level layer.
+
+## @scope: local context without fighting specificity
+
+`@scope` is a new CSS rule that limits the scope of styles to a specific subtree. It has two selectors:
+
+- **root (required)** – where the scoped styles start to apply (the root and its children)
+- **limit (optional)** – where the scoped styles stop applying (whatever is beyond the limit remains untouched)
+
+### A contrast problem without `@scope`
+
+Globally overriding links via a class on the parent:
+
+```css
+@layer reset, layout;
+
+.light { background: #ccc; }
+.dark  { background: #333; }
+.light a { color: black; }
+.dark a { color: white; }
+```
+
+Links are affected everywhere, which can lead to contrast problems when mixing themes.
+
+<iframe height="550" style="width: 100%;" scrolling="no" title="Contrast issue without @scope" src="https://codepen.io/web-dot-dev/embed/eYbLpQw?default-tab=css%2Cresult" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/web-dot-dev/pen/eYbLpQw">
+  Contrast issue without @scope</a> on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+### The solution with `@scope` (root + limit)
+
+```css
+@layer reset, layout;
+
+@scope (.light) {
+  :scope { background: #ccc; }
+  a { color: black; }
+}
+
+@scope (.dark) {
+  :scope { background: #333; }
+  a { color: white; }
+}
+```
+
+- **root = `.light` / `.dark`** – the scoped styles apply only to the relevant block.
+- **limit is not used** – the scope ends at the end of the root's subtree.
+
+The scoped notation keeps specificity low and isolates theme colors to specific blocks without affecting the rest of the page.
+
+<iframe height="550" style="width: 100%;" scrolling="no" title="Contrast fix with @scope" src="https://codepen.io/web-dot-dev/embed/MWZqazx?default-tab=css%2Cresult" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/web-dot-dev/pen/MWZqazx">
+  Contrast fix with @scope</a> on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+### Relationship to specificity
+
+According to Chrome's documentation, `@scope` behaves as if it created a new level above specificity:
+
+- scoped rules with the same specificity win over global ones
+- it lets you handle overrides without artificially increasing specificity (by chaining class selectors or using an `id`)
+
+The result is cleaner, component-based CSS that relies less on hacks.
+
+## Modern selectors and their specificity
+
+Classic specificity:
+
+<table class="w-full border-collapse border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900 text-left">
+  <thead class="bg-gray-200 dark:bg-gray-800/70 border-b border-gray-200 dark:border-gray-800">
+    <tr>
+      <th class="px-4 py-3">Selector type</th>
+      <th class="px-4 py-3">Weight</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">ID</td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">1,0,0</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Class, pseudo-class</td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">0,1,0</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Element, pseudo-element</td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">0,0,1</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3">*</td>
+      <td class="px-4 py-3">0,0,0</td>
+    </tr>
+  </tbody>
+</table>
+
+Let's look at what the new selectors bring.
+
+### :is()
+
+It takes the highest specificity from the list inside:
+
+```css
+:is(header, .box, #id) { ... } /* specificity = 1,0,0 (because of #id) */
+```
+
+### :not()
+
+It behaves the same way as `:is()`:
+
+```css
+:not(.active, #hero) { ... } /* specificity = 1,0,0 */
+```
+
+### :where()
+
+Regardless of what it contains, it always has a specificity of `0,0,0`:
+
+```css
+:where(.nav .item .link) { ... } /* specificity = 0,0,0 */
+```
+
+Ideal for "soft" styles that we want to keep easy to override.
+
+### :has()
+
+The most powerful selector in CSS – both in terms of capabilities and specificity. It takes the highest specificity from its contents:
+
+```css
+.card:has(img) { ... }     /* 0,1,0 */
+section:has(#hero) { ... } /* 1,0,0 */
+```
+
+It allows you to target styles at elements based on their descendants or siblings without having to change the HTML.
+
+### Composition: when new selectors meet layers
+
+The most powerful results come when we use modern selectors within layers and scope:
+
+```css
+@layer components {
+  @scope (.hero) {
+    h2:where(:not(.muted)) {
+      color: oklch(55% 0.2 240);
+    }
+
+    .hero__cta:has(> .icon) {
+      padding-inline: clamp(1.25rem, 3svi, 1.5rem);
+    }
+  }
+}
+```
+
+`:where()` keeps specificity at zero, `:has()` adds logic without increasing the weight of the whole selector, and the `components` layer ensures that overrides remain predictable.
+
+## Practical approaches for layers and scope
+
+### Layer order for real-world projects
+
+- reset → defaults → layout → components → utilities → overrides – a proven skeleton that can be extended with `themes` or `experiments`
+- declare all layers on a single line in a core file so that imports and lazy loading don't disrupt the order
+- for third parties, use `@layer vendor` and place it before your own components
+
+### A typical `@scope` example for a component
+
+```css
+@layer components {
+  @scope (.card) to (.card__footer) {
+    h3 { font-size: 1.25rem; }
+    p { color: light-dark(var(--color-gray-700), var(--color-gray-200)); }
+    .btn {
+      margin-block-start: 0.5rem;
+      color: inherit;
+    }
+  }
+}
+```
+
+The `root` covers the card's title and content, while the `limit` closes the scope before the secondary elements after the footer (for example, "related" blocks). Specificity stays low, and overrides remain clean and readable.
+
+### Layered utilities vs. overrides
+
+- Utilities belong in a separate layer (`utilities`) so that they have a stable priority.
+- For one-off interventions, use the `overrides` layer instead of `!important` – it is more readable and respects the order.
+- If you need an "emergency" rule, combine `@scope` + the `overrides` layer, not `!important` right in the middle of a component.
+
+## Conclusion
+
+The modern cascade no longer rests on specificity alone. **Cascade Layers** bring order to author styles, **`@scope`** isolates components without overdoing specificity, and selectors like `:is()`, `:where()` and `:has()` offer finer-grained control. Combining these tools leads to cleaner, predictable CSS where overrides follow clear rules with fewer surprises.
+
+## Sources and further reading
+
+- [@scope – Chrome Developers](https://developer.chrome.com/docs/css-ui/at-scope)
+- [Cascade layers – MDN](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Cascade_layers)
+- [@scope – MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope)

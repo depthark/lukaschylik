@@ -1,0 +1,12 @@
+{
+  "sk": {
+    "formSubmitted": "Vaša správa bola úspešne odoslaná.",
+    "newsletterSubscribed": "Úspešne ste sa prihlásili na odber noviniek.",
+    "newsletterUnsubscribed": "Boli ste odhlásený z odberu noviniek."
+  },
+  "en": {
+    "formSubmitted": "Your message has been sent successfully.",
+    "newsletterSubscribed": "You have successfully subscribed to the newsletter.",
+    "newsletterUnsubscribed": "You have been unsubscribed from the newsletter."
+  }
+}

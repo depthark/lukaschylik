@@ -1,0 +1,577 @@
+---
+title: Figma Beyond Design
+subtitle: Figma API, Variable Code Syntax, Code Connect and MCP server as tools for automating the design-to-code workflow.
+description: How to use the Figma API, Variable Code Syntax, Code Connect and MCP server to automate design tokens and generate production-ready components.
+date: 2026-02-05
+author: Lukáš Chylík
+podcastUrl: https://open.spotify.com/episode/053yvGxs7NSChv904gD951?si=3bb7734d0ba440ea
+cardImg: /images/blog/figma-beyound-design.avif
+---
+
+If you have thought of Figma as just a tool for designers, I have good news for you – Figma is a full-fledged platform with an API, plugins and automation that can significantly streamline your design-to-code workflow! In this article we will look at how to automate the export of design tokens using the Figma API and Variable Code Syntax, how Code Connect links design with code, and how an MCP server together with AI can generate production-ready components.
+
+## Variable Code Syntax: The bridge between design and code
+
+Probably every frontend developer has some level of experience with Figma. Designers build a design system with variables like `color/primary/500`, `spacing/md` or `typography/heading/h1`. But by the time these variables reach developers, we use a completely different convention: `--colorPrimary500`, `--spacingMd` or `--typographyHeadingH1`.
+
+This is where **Variable Code Syntax** comes in – a native Figma feature that lets you define how variables are displayed in Figma Dev Mode for different platforms (Web, Android, iOS).
+
+### How does it work?
+
+The Figma API provides the `setVariableCodeSyntax()` method, which lets you define how a variable should appear in code:
+```javascript
+const collection = await figma.variables.getLocalVariableCollectionsAsync();
+
+collection.variableIds.forEach(async (id) => {
+  const variable = await figma.variables.getVariableByIdAsync(id);
+  
+  // Convert "color/primary/500" to "var(--colorPrimary500)"
+  variable.setVariableCodeSyntax(
+    "WEB",
+    `var(--${variable.name.replace(/\//g, "-").toLowerCase()})`
+  );
+});
+```
+
+### A practical example
+
+Imagine you have a variable `color/primary/500` in Figma with the value `#3B82F6`. Without Variable Code Syntax, a developer would see this in Figma Dev Mode:
+```
+color/primary/500
+```
+
+After setting up Variable Code Syntax, they will see:
+```css
+var(--color-primary-500)
+```
+
+And this is exactly what you can copy-paste straight into your code! No manual conversions, no mistakes in variable names.
+
+### Multi-platform support
+
+What is great is that Variable Code Syntax supports multiple platforms:
+```javascript
+// Web (CSS Custom Properties)
+variable.setVariableCodeSyntax("WEB", `var(--${cssName})`);
+
+// Android (XML Resources)
+variable.setVariableCodeSyntax("ANDROID", `@color/${androidName}`);
+
+// iOS (Swift)
+variable.setVariableCodeSyntax("iOS", `Color.${swiftName}`);
+```
+
+As a result, designers and developers speak the same language across the entire stack!
+
+## Exporting design tokens: From Figma to a Git repository
+
+Variable Code Syntax is a great first step, but what if we want to actually export design tokens into our codebase? This is where **automation using the Figma API** comes into play.
+
+### Loading variables via the API
+
+Figma provides a robust API for working with variables:
+```javascript
+// Load all collections
+const collections = await figma.variables.getLocalVariableCollectionsAsync();
+
+// Iterate over collections
+for (const collection of collections) {
+  // Load variables
+  for (const variableId of collection.variableIds) {
+    const variable = await figma.variables.getVariableByIdAsync(variableId);
+  }
+}
+```
+
+### Converting to CSS format
+
+The key part is converting Figma values to CSS syntax. Here are a few tips:
+
+**Colors – use the OKLCH color format!** The NPM package `colorizr` will help you with that:
+```javascript
+import Colorizr from "colorizr";
+
+function convertColorToOKLCH(rgbaValue) {
+  const r = Math.round(rgbaValue.r * 255);
+  const g = Math.round(rgbaValue.g * 255);
+  const b = Math.round(rgbaValue.b * 255);
+  const alpha = rgbaValue.a || 1;
+  
+  const color = new Colorizr({ r, g, b, alpha });
+  const oklch = color.oklch();
+  
+  // Format: oklch(l c h / a) with spaces, no commas
+  if (alpha < 1) {
+    return `oklch(${oklch.l} ${oklch.c} ${oklch.h} / ${alpha})`;
+  }
+  
+  return `oklch(${oklch.l} ${oklch.c} ${oklch.h})`;
+}
+```
+
+Why OKLCH? It has better perceptual uniformity than HSL – colors with the same lightness actually look equally bright!
+If you are interested in this topic, you can also read my older article: [Colors on the Web in 2025](https://lukaschylik.dev/en/blog/articles/farby-na-webe-v-roku-2025/).
+
+**Spacing and sizing –**
+The best practice when implementing for the web is to convert pixels to `rem` units, because the result is then much easier to scale in terms of content size.
+```javascript
+const BASE_FONT_SIZE = 16;
+
+function pxToRem(px) {
+  const rem = px / BASE_FONT_SIZE;
+  return `${rem}rem`;
+}
+
+// Example: 24px → 1.5rem
+const spacing = pxToRem(24); // "1.5rem"
+```
+
+### Multi-theme export
+
+Modern design systems often use multiple themes (light, dark, high-contrast). Figma supports this through **modes**:
+```javascript
+// Each collection can have multiple modes
+collection.modes.forEach(mode => {
+  // Generate a CSS file for this theme
+  generateCSSFile(mode.name, cssVariables);
+});
+```
+
+The resulting structure:
+```
+tokens/
+  ├── dark/
+  │   └── variables.css
+  ├── light/
+  │   └── variables.css
+  └── high-contrast/
+      └── variables.css
+```
+
+### Output format
+
+In this article I focus purely on raw CSS, but you can just as easily export tokens as SCSS variables, a Tailwind config or any CSS-in-JS solution. Which output format you choose is up to you, but always make sure it is well readable and clearly organized.
+Example CSS output:
+```css
+/*
+ * Design tokens exported from Figma
+ * Exported at: 2025-01-03T14:30:00.000Z
+ * Theme: dark
+ */
+:root {
+  /* Colors */
+  --colorPrimary: oklch(0.65 0.2 250);
+  --colorSurface: oklch(0.15 0.01 240 / 0.95);
+  
+  /* Fonts */
+  --fontFamilyBase: "Inter";
+  --fontWeightBold: 600;
+  --fontSizeH1: 2rem;
+  
+  /* Measures */
+  --spacing8: 0.5rem;
+  --spacing16: 1rem;
+  --radiusMd: 0.5rem;
+}
+```
+
+Notice:
+- ✅ Variables grouped by type
+- ✅ OKLCH for colors with modern syntax (spaces instead of commas)
+- ✅ Rem units for spacing
+- ✅ A clear timestamp for tracking changes
+
+## Custom Figma Plugin: One-click automation
+
+Now that we know how to load variables and convert them, we can build our **own Figma plugin** that automates the entire process and sends the result straight to a Git repository.
+
+### Manifest and configuration
+
+Every Figma plugin starts with a `manifest.json` file:
+```json
+{
+  "name": "CSS Variables Converter & Exporter",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "capabilities": ["codegen"],
+  "networkAccess": {
+    "allowedDomains": ["https://api.github.com"]
+  }
+}
+```
+
+### Core conversion
+
+The main conversion service orchestrates the whole process:
+```typescript
+export async function convertVariablesToCSS(): Promise<ConversionResult> {
+  const collections = await figma.variables.getLocalVariableCollectionsAsync();
+  const variablesByTheme: VariablesByTheme = {};
+  
+  // Process variables in batches (performance optimization)
+  for (const collection of collections) {
+    for (const variableId of collection.variableIds) {
+      const variable = await figma.variables.getVariableByIdAsync(variableId);
+      const cssName = generateCSSVariableName(variable.name);
+      const cssValue = await generateCSSValue(variable);
+      
+      // Add to the correct theme
+      variablesByTheme[themeName].push({
+        name: cssName,
+        value: cssValue,
+        type: detectVariableType(variable.name)
+      });
+    }
+  }
+  
+  return { variablesByTheme, themes: Object.keys(variablesByTheme) };
+}
+```
+
+### GitHub integration
+
+The plugin automatically pushes the results to a Git repository:
+```typescript
+export async function pushToGitHub(themeFiles: ThemeCssOutput) {
+  // 1. Create a feature branch with a timestamp
+  const branch = `feat/figma-variables-${timestamp}`;
+  await createBranch(branch, baseSha);
+  
+  // 2. Commit all theme files at once
+  const commitMessage = `feat(figma-variables): New version exported ${timestamp}`;
+  await createCommit(commitMessage, themeFiles);
+  
+  // 3. ✅ Done!
+}
+```
+
+### The resulting workflow
+
+1. A designer edits variables in Figma
+2. They click "Convert Variables" in the plugin
+3. The plugin converts the values to CSS format (OKLCH, rem units)
+4. They click "Export to GitHub"
+5. The plugin creates a feature branch and commits the CSS files
+6. ✅ The design tokens are in the repository!
+
+The whole process takes a few seconds and eliminates manual copy-paste errors.
+
+And this is exactly the plugin I built for the community – you can try it here 👉 **The plugin is available on:** [Figma Community](https://www.figma.com/community/plugin/1580865604483451262)
+Here is the link to the source code on GitHub: [figma-variables-converter-and-exporter](https://github.com/Luko248/figma-variables-converter-and-exporter)
+
+## Code Connect: Linking components to code
+
+Variable Code Syntax is great for design tokens, but what about complex components? This is where **Figma Code Connect** enters the game – an NPM package that connects Figma components with real code in your codebase.
+
+### What does it solve?
+
+Without Code Connect:
+- The designer does not know how the Button is used in code
+- The developer does not know which Figma component corresponds to their `Button.tsx`
+- Manual synchronization full of errors
+
+With Code Connect:
+- ✅ Automatic design ↔ code linking
+- ✅ The designer sees real-world usage examples
+- ✅ The developer has a clear mapping to Figma components
+
+### How does it work?
+
+Code Connect creates the link using a declarative mapping file:
+```typescript
+// Button.figma.tsx
+import figma from "@figma/code-connect";
+import { Button } from "./Button";
+
+figma.connect(
+  Button,
+  "https://www.figma.com/file/ABC123?node-id=1:2",
+  {
+    props: {
+      variant: figma.enum("Variant", {
+        Primary: "primary",
+        Secondary: "secondary",
+      }),
+      label: figma.string("Label")
+    },
+    example: (props) => (
+      <Button variant={props.variant}>
+        {props.label}
+      </Button>
+    )
+  }
+);
+```
+
+### Benefits
+
+**For designers:**
+- They see directly in Figma how a component is used in code
+- They have real-world usage examples
+- They know which props are available
+
+**For developers:**
+- Automatic linking between design and implementation
+- Documentation directly in Figma
+- A clear source of truth
+
+### Example: Card component
+```typescript
+figma.connect(Card, figmaUrl, {
+  props: {
+    title: figma.string("Title"),
+    description: figma.string("Description"),
+    image: figma.instance("Image"),
+    actions: figma.children("Actions")
+  },
+  example: (props) => (
+    <Card>
+      {props.image && <Card.Image src={props.image} />}
+      <Card.Content>
+        <Card.Title>{props.title}</Card.Title>
+        <Card.Description>{props.description}</Card.Description>
+      </Card.Content>
+      {props.actions && <Card.Actions>{props.actions}</Card.Actions>}
+    </Card>
+  )
+});
+```
+
+Code Connect is an excellent solution for **component documentation**, **onboarding new team members** and **keeping design in sync with code**. It is a bridge between the worlds of design and code that works in both directions!
+
+## MCP Server: AI-powered code generation
+
+What if AI could generate production-ready code directly from a Figma design? That is exactly the purpose of the **Figma MCP Server** (Model Context Protocol).
+
+### What is MCP?
+
+**Model Context Protocol** is an open-source standard by Anthropic that allows AI models (like Claude) to access external data sources. The Figma MCP Server exposes designs from Figma as context for AI, which means Claude can:
+
+- Read the structure of Figma files
+- Recognize components and their properties
+- Use Code Connect mappings
+- Generate code based on the design
+
+### Setup
+```bash
+# 1. Install the Figma MCP Server
+npm install -g @figma/mcp-server-figma
+
+# 2. Configure Claude Desktop
+# ~/Library/Application Support/Claude/claude_desktop_config.json
+{
+  "mcpServers": {
+    "figma": {
+      "command": "mcp-server-figma",
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "figd_xxxxxxxx"
+      }
+    }
+  }
+}
+```
+
+### Example: Generating a Button component
+
+**Prompt for Claude:**
+
+> Generate a React TypeScript component for this Figma Button:
+> https://figma.com/file/ABC123/Design-System?node-id=10:42
+> 
+> Use Tailwind CSS, include all variants.
+
+**The AI agent generates:**
+```typescript
+interface ButtonProps {
+  variant?: 'primary' | 'secondary' | 'destructive';
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+export function Button({
+  variant = 'primary',
+  size = 'md',
+  disabled = false,
+  children,
+  onClick
+}: ButtonProps) {
+  const variants = {
+    primary: 'bg-blue-600 text-white hover:bg-blue-700',
+    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
+    destructive: 'bg-red-600 text-white hover:bg-red-700'
+  };
+  
+  const sizes = {
+    sm: 'h-8 px-3 text-sm',
+    md: 'h-10 px-4',
+    lg: 'h-12 px-6 text-base'
+  };
+  
+  return (
+    <button
+      className={`inline-flex items-center justify-center rounded-lg font-medium transition-colors ${variants[variant]} ${sizes[size]}`}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+### MCP + Code Connect = Production-ready code
+
+By combining MCP with Code Connect you achieve true **automation**. If you have Code Connect mappings for all the components in your design system, the AI agent knows exactly which components to use!
+
+**Prompt:**
+
+> Create a Landing Page based on this Figma design:
+> https://figma.com/file/LANDING/Homepage?node-id=1:1
+> 
+> Use only components from our design system.
+
+**Claude generates code using the existing components:**
+```tsx
+import { Hero } from '@/components/Hero';
+import { FeatureGrid } from '@/components/FeatureGrid';
+import { CTASection } from '@/components/CTASection';
+
+export function HomePage() {
+  return (
+    <div className="min-h-screen">
+      <Hero
+        title="Build better products faster"
+        subtitle="Design-to-code automation powered by AI"
+        primaryAction={{ label: "Get Started", href: "/signup" }}
+      />
+      
+      <FeatureGrid
+        features={[
+          { icon: "Design", title: "Design System Integration" },
+          { icon: "Speed", title: "Lightning Fast" },
+          { icon: "Security", title: "Type Safe" }
+        ]}
+      />
+      
+      <CTASection
+        title="Ready to ship faster?"
+        action={{ label: "Start Free Trial", href: "/signup" }}
+      />
+    </div>
+  );
+}
+```
+
+### Why is this a gamechanger?
+
+**Without MCP + Code Connect:**
+- The designer sends a Figma link
+- The developer manually analyzes the design
+- Writes code for 30-60 minutes
+- Review and iteration
+
+**With MCP + Code Connect:**
+- The designer sends a Figma link
+- The developer pastes it to an AI agent
+- The AI agent generates code **using the correct components**
+- The developer reviews and tweaks it (5-10 minutes)
+- ✅ Done
+
+**The benefit:**
+- **5-10x faster development**
+- ✅ **Guaranteed consistency** with the Design System
+- **Production-ready code** from the start
+
+## Agent SKILLS for components
+
+If you want to **maximize the quality of AI output when generating applications**, it pays off to have Agent `SKILL.md` files in your design system for groups of components (for example form elements, panels, buttons). Such a skill is short but very practical: it describes the most common use cases, explains why some things behave the way they do (e.g. that something is a feature due to business logic), and also includes UX writing and typical UX behavior. The result? The AI has clear rules and behaves consistently with your product when generating code.
+
+What such a skill typically includes:
+1. The most common usage scenarios for the component.
+2. Exceptions and reasons for behavior (e.g. business logic, regulations, security).
+3. UX writing: copy, tone, exact wording and forbidden variants.
+4. UX behavior: position, timing, animations, interaction rules.
+5. Edge cases and fallbacks.
+
+An example of what an Agent `SKILL.md` for a group of components might look like (structure + placeholders):
+
+```
+---
+name: toast-crud
+description: Guide how to implement CRUD operations using the Toast component.
+---
+
+# Toast (CRUD)
+
+## Purpose
+Feedback after CRUD actions in the app (create, update, delete).
+
+## When to Use
+<!-- Add the most common scenarios -->
+...
+
+## When NOT to Use
+<!-- Add explicit exclusions -->
+...
+
+## Default Behavior
+<!-- Position, timing, queueing, interaction rules -->
+...
+
+## UX Writing
+<!-- Exact copy and forbidden variants -->
+...
+
+## Business Rules
+<!-- Business logic constraints -->
+...
+
+## Accessibility
+<!-- Roles, aria, keyboard behavior -->
+...
+
+## Do / Don't
+<!-- Short do/don't list -->
+...
+```
+
+This is extremely important especially for AI-generated screens and applications, where even small deviations in UX writing or component behavior can cause incompatibility with the product.
+
+## Conclusion
+
+The Figma API, Variable Code Syntax, Code Connect and the MCP Server together form a **complete design-to-code ecosystem** that significantly speeds up development and ensures consistency between design and implementation.
+
+**What we have learned:**
+
+✅ **Variable Code Syntax** – Connects Figma variables with production code
+
+✅ **Export Automation** – A plugin exports design tokens to a Git repository
+
+✅ **Code Connect** – Links Figma components with code in the codebase
+
+✅ **MCP Server** – AI generates production-ready code from the design
+
+**The future:**
+
+With the growing adoption of AI and automation, the design-to-code process will become even more efficient. Imagine a future where:
+
+- AI automatically detects design changes and generates pull requests
+- The design system continuously improves based on real usage in production
+- Developers can focus on business logic instead of styling
+
+**A gamechanger?** Absolutely! The combination of the Figma API, plugins and AI-powered tools opens up entirely new possibilities for the modern frontend workflow. And who knows, maybe in a year every project will have its own Figma → Git → Production pipeline running automatically.
+
+So do not wait – try building your first Figma plugin, configure Code Connect for your design system or experiment with an MCP server. You can also use my plugin as a starting point. Whether it is a simple token exporter or an AI-powered code generator – **the sky is the limit**!
+
+## Sources and further reading
+
+- [Figma Plugin API](https://www.figma.com/plugin-docs/) – Complete documentation
+- [Figma Variables API](https://www.figma.com/plugin-docs/api/variables/) – API for working with variables
+- [Code Connect Documentation](https://www.figma.com/developers/code-connect) – Framework guide
+- [Figma MCP Server](https://github.com/figma/mcp-server-figma) – Model Context Protocol
+- [Variable Code Syntax Tutorial](https://www.youtube.com/watch?v=...) – Video guide
+- [Figma CSS Variables Converter & Exporter](https://www.figma.com/community/plugin/1580865604483451262) – The plugin from this article
+- [Figma CSS Variables Converter & Exporter (GitHub)](https://github.com/Luko248/figma-variables-converter-and-exporter) – The plugin's source code

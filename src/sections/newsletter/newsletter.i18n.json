@@ -1,0 +1,34 @@
+{
+  "sk": {
+    "title": "Newsletter",
+    "description": "Buďte informovaní o novinkách a článkoch!",
+    "form": {
+      "emailLabel": "Váš email",
+      "emailPlaceholder": "john.doe@email.com",
+      "submit": "Odoberať",
+      "submitting": "Odosielam...",
+      "error": "Nepodarilo sa prihlásiť na odber. Skúste to prosím znova."
+    },
+    "gdpr": {
+      "before": "Vaše údaje spracúvam v súlade s",
+      "link": "GDPR",
+      "after": "."
+    }
+  },
+  "en": {
+    "title": "Newsletter",
+    "description": "Stay up to date with news and articles!",
+    "form": {
+      "emailLabel": "Your email",
+      "emailPlaceholder": "john.doe@email.com",
+      "submit": "Subscribe",
+      "submitting": "Sending...",
+      "error": "Failed to subscribe. Please try again."
+    },
+    "gdpr": {
+      "before": "Your data is processed in accordance with the",
+      "link": "GDPR",
+      "after": "."
+    }
+  }
+}

@@ -1,0 +1,404 @@
+---
+title: CSS Carousel
+subtitle: New CSS pseudo-classes :scroll-button, :scroll-marker and :scroll-marker-group
+description: Scroll Spy navigation or a tabs component without JavaScript, and accessible? Forget complex JavaScript libraries! The CSS carousel is a gamechanger.
+date: 2025-10-05
+author: Lukáš Chylík
+podcastUrl: https://open.spotify.com/episode/4v3h6nMI3EvCCo7NVkuoCP?si=98844f163e7a482e
+cardImg: /images/blog/css-carousel.avif
+---
+
+## A carousel without JavaScript?
+
+If you have thought until now that you need some fancy JS library to build a functional carousel, I have good news for you – not anymore! CSS has evolved enormously in recent years, and today we can build full-featured carousel components with buttons, dot navigation and animations, without a single line of JavaScript.
+
+Of course, the foundation of a CSS carousel is the `scroll-snap` property, which we have known for some time. But the real magic comes with new CSS pseudo-classes like `::scroll-button`, `::scroll-marker` and `::scroll-marker-group`. Combined with scroll snap properties, these newcomers create a true CSS carousel that can compete with JavaScript solutions.
+
+## Scroll Snap: The foundation of every carousel
+
+Before we look at the new pseudo-classes, it is important to understand the foundation – `scroll-snap`. This property lets you "snap" scrolling to defined points, creating the effect of moving between individual slides.
+
+### Key properties:
+
+- **`scroll-snap-type`**: Defines the type and axis of snapping
+- **`scroll-snap-align`**: Determines the alignment of snap points
+- **`scroll-snap-stop`**: Controls whether scrolling must stop at snap points
+
+### scroll-snap-type values:
+
+- **`x`**: Horizontal snapping
+- **`y`**: Vertical snapping  
+- **`inline`**: Snapping in the writing direction (logical axis)
+- **`block`**: Snapping perpendicular to the writing direction (logical axis)
+
+### scroll-snap-stop values:
+
+- **`normal`**: The default value - scrolling may skip snap points
+- **`always`**: Scrolling must stop at every snap point
+
+### Basic example:
+
+```css
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.carousel-item {
+  scroll-snap-align: start;
+  flex: 0 0 100%;
+}
+```
+
+**Vertical carousel:**
+
+```css
+.carousel {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  height: 25rem;
+}
+
+.carousel-item {
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  height: 100%;
+}
+```
+
+<iframe height="600" style="width: 100%;" scrolling="no" title="CSS Carousel - Scroll Snap" src="https://codepen.io/luko248/embed/mdqJjWG?default-tab=result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/luko248/pen/mdqJjWG">
+  CSS Carousel - Scroll Snap</a> by Lukáš Chylík (<a href="https://codepen.io/luko248">@luko248</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+But this is nothing new – scroll snap has been in CSS for a while. Let's take a look at the real news!
+
+## ::scroll-button: Automatic navigation buttons
+
+Here comes the first big novelty! The `::scroll-button` pseudo-class automatically creates navigation buttons for your carousel. You do not have to add anything to the HTML manually – CSS does it for you.
+
+### Available values:
+
+- **`*`**: Selects all scroll buttons (shared styles)
+- **`left`**: Button for scrolling left
+- **`right`**: Button for scrolling right
+- **`up`**: Button for scrolling up
+- **`down`**: Button for scrolling down
+- **`inline-start`**: Button for scrolling to the start of the inline axis
+- **`inline-end`**: Button for scrolling to the end of the inline axis
+- **`block-start`**: Button for scrolling to the start of the block axis
+- **`block-end`**: Button for scrolling to the end of the block axis
+
+### Usage example:
+
+```css
+.carousel {
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+}
+
+.carousel::scroll-button(left) {
+  content: "⬅" / "Scroll Left";
+}
+
+.carousel::scroll-button(right) {
+  content: "⮕" / "Scroll Right";
+}
+
+.carousel::scroll-button(*) {
+  padding: 1rem;
+  background: oklch(0% 0 0 / 0.5);
+  color: oklch(100% 0 0);
+  border: none;
+  border-radius: 50%;
+}
+
+.carousel::scroll-button(*):focus-visible {
+  outline: 0.125rem solid oklch(55% 0.25 264);
+  outline-offset: 0.3125rem;
+}
+
+.carousel::scroll-button(*):disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+```
+
+### What is great about ::scroll-button?
+
+- ✅ The buttons are automatically disabled when scrolling in that direction is no longer possible
+- ✅ They have a native focus state for accessibility
+- ✅ They behave like regular `<button>` elements
+- ✅ No extra HTML markup!
+
+**Note:** The specification also defines the `next` and `prev` values, but these are not yet supported in any browser.
+
+## ::scroll-marker: Automatic dot navigation
+
+The second mega useful pseudo-class! `::scroll-marker` automatically creates a clickable button for each slide in the carousel. You typically know this as the dot navigation below or above a carousel.
+
+### How does it work?
+
+CSS automatically detects the number of slides in the carousel and creates a marker (button) for each of them. When the user clicks a marker, the carousel moves to the corresponding slide.
+
+### Example:
+
+```css
+.carousel::scroll-marker {
+  content: "";
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: oklch(0% 0 0 / 0.3);
+  border: 0.125rem solid transparent;
+  cursor: pointer;
+}
+
+.carousel::scroll-marker:hover {
+  background: oklch(0% 0 0 / 0.5);
+}
+
+.carousel::scroll-marker:focus-visible {
+  outline: 0.125rem solid oklch(55% 0.25 264);
+  outline-offset: 0.1875rem;
+}
+```
+
+### :target-current – Active state of a marker
+
+Following up on `::scroll-marker`, here comes another great thing! We can of course style the active marker. The `:target-current` pseudo-class automatically applies the active state to the currently active marker (that is, the `slide` that is currently visible).
+
+```css
+.carousel::scroll-marker:target-current {
+  background: oklch(55% 0.25 264);
+  transform: scale(1.2);
+}
+```
+
+Without a single line of JS you have a working dot navigation with an active state! 🎉
+
+#### :target-before and :target-after
+
+**Brand new in Chrome 142 Beta!** These pseudo-classes let you style scroll markers based on their position relative to the active marker (the one with `:target-current`).
+
+- **`:target-before`**: Selects all scroll markers located **before** the active marker within the group
+- **`:target-after`**: Selects all scroll markers located **after** the active marker within the group
+
+```css
+.carousel::scroll-marker {
+  background: oklch(85% 0 0);
+  opacity: 0.5;
+}
+
+.carousel::scroll-marker:target-current {
+  background: oklch(55% 0.25 264);
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.carousel::scroll-marker:target-before {
+  opacity: 0.3;
+}
+
+.carousel::scroll-marker:target-after {
+  opacity: 0.3;
+}
+```
+
+This way you can create a visual effect where the active marker stands out while the markers before and after it are dimmed.
+
+**Availability:** For now only in <a href="https://developer.chrome.com/blog/chrome-142-beta?hl=en" target="_blank" rel="noopener noreferrer">Chrome 142 Beta</a> (experimental feature). Follow <a href="https://cr-status.appspot.com/feature/5120827674722304" target="_blank" rel="noopener noreferrer">Chrome Status</a> for the current support state.
+
+## ::scroll-marker-group: Styling the marker container
+
+The `::scroll-marker-group` pseudo-class lets you style the marker container itself. This pseudo-container behaves like a normal element, so you can use flexbox, grid, gap, padding and so on.
+
+Using the `scroll-marker-group` property you can specify where this container should appear – before the carousel (`before`), after it (`after`) or not at all (`none`).
+
+### Example:
+
+```css
+.carousel {
+  scroll-marker-group: after;
+}
+
+.carousel::scroll-marker-group {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 1rem 0;
+}
+```
+
+That is how easily you create a clean, aligned dot navigation!
+
+## Practical tips and tricks
+
+### 1. Custom marker content using attr()
+
+Just like with the `::before` and `::after` pseudo-elements, you can insert text into individual markers using the `attr()` function:
+
+```css
+.carousel-item {
+  --label: "Slide";
+}
+
+.carousel::scroll-marker {
+  content: attr(--label);
+  padding: 0.5rem 1rem;
+  background: oklch(85% 0 0);
+}
+```
+
+### 2. Slide numbers using counter-increment
+
+Want to display slide numbering? Use CSS counters!
+
+```css
+.carousel-item {
+  counter-increment: carousel-item;
+}
+
+.carousel-item::scroll-marker {
+  content: counter(carousel-item);
+}
+```
+
+## Container scroll-state queries: Animations on snap state change
+
+And what else is missing for the perfect carousel? Nice animations when the active slide comes into view! The best tool for this is CSS Scroll State Container Queries of type `snap`.
+
+These container queries react to snap state changes, which means that when scroll snap "snaps" an element, it automatically receives the `:target-current` pseudo-element and the snap state is captured as well.
+
+**If this new type of container queries interests you, check out our <a href="/en/blog/articles/css-scroll-driven-animations" target="_blank" rel="noopener noreferrer">earlier article on CSS scroll-driven animations</a>.**
+
+### Example animation on slide change:
+
+```css
+.carousel {
+  container-type: scroll-state;
+}
+
+.carousel-item {
+  opacity: 0.5;
+  transform: scale(0.9);
+  transition: all 0.3s ease;
+}
+
+@container scroll-state(snapped: inline) {
+  .carousel-item {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+```
+
+**TIP:** You can use different values for `scroll-state()`:
+
+- **`snapped: inline`** – The slide is snapped on the inline axis
+- **`snapped: block`** – The slide is snapped on the block axis
+- **`snapped: x`** – The slide is snapped horizontally
+- **`snapped: y`** – The slide is snapped vertically
+
+<iframe height="600" style="width: 100%;" scrolling="no" title="CSS Carousel - Scroll State Container Queries" src="https://codepen.io/luko248/embed/jEOQOGw?default-tab=css%2Cresult" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/luko248/pen/jEOQOGw">
+  CSS Carousel - Scroll State Container Queries</a> by Lukáš Chylík (<a href="https://codepen.io/luko248">@luko248</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+## Adam Argyle's carousel gallery
+
+A CSS carousel does not have to be just a classic image slideshow! Adam Argyle has built a comprehensive gallery of different carousel types that demonstrate what these new CSS features can do:
+
+- <a href="https://chrome.dev/carousel/vertical/scroll-spy/" target="_blank" rel="noopener noreferrer">Scroll Spy navigation</a> – Vertical navigation that automatically highlights the current section
+- <a href="https://chrome.dev/carousel/horizontal/tabs/" target="_blank" rel="noopener noreferrer">Tabs component</a> – Horizontal switching between tabs without JavaScript
+- <a href="https://chrome.dev/carousel/" target="_blank" rel="noopener noreferrer">Complete carousel gallery</a> – Many more examples and variations
+
+## Accessibility
+
+From an accessibility perspective, CSS carousels are in good shape in many respects: they can be controlled with both the keyboard and the mouse — the Tab key switches between controls, arrow keys move between slides, and a click lets you jump to a specific slide.
+
+For screen readers, however, some caution is warranted: pseudo-elements like `::scroll-button` and `::scroll-marker` do provide a basic "announcement" layer ("Scroll left", "Next slide" and so on), but you currently cannot add ARIA attributes to them.
+
+**The biggest problem:** Pseudo-elements cannot be individually described via ARIA, so complex custom accessibility (names, descriptions, states) is not yet possible with CSS alone. The keyboard and basic screen reader output work, but a deeper level of accessibility (for example, hidden labels visible only to a screen reader) cannot be handled without a fallback or a combination with HTML.
+
+### Reduced motion – prefers-reduced-motion
+
+Always respect the user's reduced motion preferences:
+
+```css
+@media (prefers-reduced-motion: no-preference) {
+  .carousel-item {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  @container scroll-state(snapped: inline) {
+    .carousel-item {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-item {
+    transition: none;
+  }
+}
+```
+
+## Browser support
+
+**Important note:** The CSS carousel pseudo-classes and properties are experimental and may still change over time!
+
+### Current support status:
+
+- **Chrome/Edge**: Since version 130+ (October 2024)
+- **Firefox**: Not yet supported
+- **Safari**: Not yet supported
+
+### Best practice: @supports
+
+Since these are experimental features, it is important to think about fallback solutions using `@supports`:
+
+```css
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+@supports (scroll-marker-group: after) {
+  .carousel {
+    scroll-marker-group: after;
+  }
+  
+  .carousel::scroll-button(left) {
+    content: "⬅" / "Previous";
+  }
+  
+  .carousel::scroll-button(right) {
+    content: "⮕" / "Next";
+  }
+}
+```
+
+## Conclusion
+
+The CSS carousel is an absolute gamechanger! Combining scroll snap properties with the new pseudo-classes `::scroll-button`, `::scroll-marker` and the `scroll-marker-group` property opens up entirely new possibilities for building interactive components without a single line of JavaScript.
+
+Although these are still experimental features with limited support, you can already try them out today in the latest versions of Chrome. And who knows – maybe in a year they will be a standard part of every project!
+
+So do not wait and try building your first CSS carousel. Whether it is a classic slideshow, scroll spy navigation, a tabs component or a steps component – the possibilities are endless. 🔥
+
+## Sources and further reading
+
+- [Carousels with CSS – Chrome Developers](https://developer.chrome.com/blog/carousels-with-css)
+- [::scroll-button – MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/::scroll-button)
+- [::scroll-marker – MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/::scroll-marker)
+- [::scroll-marker-group – MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/::scroll-marker-group)
+- [scroll-marker-group – MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-marker-group)

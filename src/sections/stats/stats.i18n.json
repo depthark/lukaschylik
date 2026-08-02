@@ -1,0 +1,41 @@
+{
+  "sk": {
+    "stats": [
+      { "value": 10, "suffix": "+", "label": "rokov praxe", "glowing": false },
+      {
+        "value": 100,
+        "suffix": "+",
+        "label": "úspešne dokončených projektov",
+        "glowing": true
+      },
+      {
+        "value": 50,
+        "suffix": "+",
+        "label": "spokojných zákazníkov",
+        "glowing": false
+      }
+    ]
+  },
+  "en": {
+    "stats": [
+      {
+        "value": 10,
+        "suffix": "+",
+        "label": "years of experience",
+        "glowing": false
+      },
+      {
+        "value": 100,
+        "suffix": "+",
+        "label": "successfully delivered projects",
+        "glowing": true
+      },
+      {
+        "value": 50,
+        "suffix": "+",
+        "label": "satisfied clients",
+        "glowing": false
+      }
+    ]
+  }
+}

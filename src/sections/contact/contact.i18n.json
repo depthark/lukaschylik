@@ -1,0 +1,36 @@
+{
+  "sk": {
+    "title": "Kontakt",
+    "intro": "Chcete vedieť o mne viac, potrebujete poradiť alebo chcete rovno naviazať spoluprácu?",
+    "introStrong": "Neváhajte ma kontaktovať.",
+    "form": {
+      "hiddenSubject": "Nová správa z kontaktného formulára",
+      "hiddenFromName": "Kontaktný formulár",
+      "honeypotLabel": "Nevypĺňajte toto pole",
+      "fullname": "Celé meno",
+      "email": "Email",
+      "subject": "Predmet",
+      "message": "Vaša správa",
+      "submit": "Odoslať",
+      "submitting": "Odosielam...",
+      "error": "Odoslanie správy zlyhalo. Skúste to znova, prosím."
+    }
+  },
+  "en": {
+    "title": "Contact",
+    "intro": "Want to know more about me, need advice, or ready to start a collaboration right away?",
+    "introStrong": "Don't hesitate to get in touch.",
+    "form": {
+      "hiddenSubject": "New message from the contact form",
+      "hiddenFromName": "Contact form",
+      "honeypotLabel": "Do not fill in this field",
+      "fullname": "Full name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Your message",
+      "submit": "Send",
+      "submitting": "Sending...",
+      "error": "Failed to send the message. Please try again."
+    }
+  }
+}

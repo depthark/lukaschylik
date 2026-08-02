@@ -44,6 +44,13 @@ bun run build.types
 - Custom 404 page in `src/routes/404.tsx` (emitted as `404.html` during SSG)
 - Linting/formatting: **oxlint** (`.oxlintrc.json`) + **oxfmt** (`.oxfmtrc.json`); SCSS via Stylelint
 
+### i18n
+- Two locales: Slovak (default, unprefixed URLs) and English (under `/en` prefix)
+- Locale utilities in `src/i18n/` (`useLocale()`, `localizePath()`, `getLocaleFromPathname()`); `src/i18n/core.ts` is Qwik-free for server scripts
+- ALL user-visible strings live in colocated `*.i18n.json` files (shape `{"sk": ..., "en": ...}`) or MDX — never hardcoded in TSX
+- English blog articles/GDPR are separate MDX files under `src/routes/en/` with the same slugs as Slovak
+- hreflang/canonical alternates emitted by `router-head.tsx`; sitemap emits `xhtml:link` alternates; `LanguageSwitch` (flag toggle) sits before `ThemeSwitch` in the navigation
+
 ### Directory Structure
 - `src/routes/` - File-based routing (Qwik City convention)
   - `layout.tsx` - Root layout with Navigation, Header, Footer, contexts

@@ -7,22 +7,17 @@ import {
   useTask$,
 } from '@qwik.dev/core'
 import { Container, Section } from '~/components'
+import { useLocale } from '~/i18n'
 import { cls } from '~/utils'
+import i18n from './stats.i18n.json'
 
-const STATS = [
-  { value: 10, suffix: '+', label: 'rokov praxe' },
-  {
-    value: 100,
-    suffix: '+',
-    label: 'úspešne dokončených projektov',
-    glowing: true,
-  },
-  { value: 50, suffix: '+', label: 'spokojných zákazníkov' },
-]
-
+/**
+ * Stats section with animated counters that start once the section is visible.
+ */
 const Stats = component$(() => {
+  const stats = i18n[useLocale()].stats
   const state = useStore({
-    values: STATS.map(() => 0),
+    values: stats.map(() => 0),
     hasAnimated: false,
   })
   const startAnimation = useSignal(false)
@@ -50,7 +45,7 @@ const Stats = component$(() => {
       state.hasAnimated = true
 
       if (prefersReduced) {
-        STATS.forEach((stat, index) => {
+        stats.forEach((stat, index) => {
           state.values[index] = stat.value
         })
         return
@@ -63,7 +58,7 @@ const Stats = component$(() => {
         const progress = Math.min((now - start) / durationMs, 1)
         const eased = 1 - (1 - progress) ** 3
 
-        STATS.forEach((stat, index) => {
+        stats.forEach((stat, index) => {
           state.values[index] = Math.round(stat.value * eased)
         })
 
@@ -100,7 +95,7 @@ const Stats = component$(() => {
     <Section id="stats" fullHeight={false}>
       <Container size="full" className="relative z-10 isolate">
         <div class="stats grid grid-cols-1 md:grid-cols-3 text-white gap-6 md:gap-12">
-          {STATS.map((stat, index) => (
+          {stats.map((stat, index) => (
             <div
               key={stat.label}
               class="content-fade-in content-fade-in--entry content-center ">

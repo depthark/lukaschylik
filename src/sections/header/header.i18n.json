@@ -1,0 +1,12 @@
+{
+  "sk": {
+    "name": ["Lukáš", "Chylík"],
+    "subtitle": "Creative web developer",
+    "cta": "Kto som?"
+  },
+  "en": {
+    "name": ["Lukáš", "Chylík"],
+    "subtitle": "Creative web developer",
+    "cta": "Who am I?"
+  }
+}

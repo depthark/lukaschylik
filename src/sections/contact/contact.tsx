@@ -3,14 +3,19 @@ import { useNavigate } from '@qwik.dev/router'
 import { Button, Container, FormField, Section } from '~/components'
 import Icon from '~/components/icon/icon'
 import SectionTitle from '~/components/section/section.title'
+import socialI18n from '~/components/social/social.i18n.json'
 import { SOCIAL_LINKS } from '~/constants/socialLinks'
+import { useLocale } from '~/i18n'
 import { cls } from '~/utils'
+import i18n from './contact.i18n.json'
 
 /**
  * Contact section component
  * Renders a contact form with validation and form submission handling
  */
 const Contact = component$(() => {
+  const locale = useLocale()
+  const t = i18n[locale]
   const state = useStore({
     fullname: '',
     email: '',
@@ -61,7 +66,7 @@ const Contact = component$(() => {
       await nav(`${url.pathname}?${url.searchParams.toString()}`)
     } catch (error) {
       console.error('Form submission error:', error)
-      alert('Odoslanie správy zlyhalo. Skúste to znova, prosím.')
+      alert(t.form.error)
     } finally {
       state.submitting = false
     }
@@ -105,7 +110,7 @@ const Contact = component$(() => {
   return (
     <Section id="contact" className="bg-black dark:bg-white">
       <Container size="full" className="relative z-10 isolate">
-        <SectionTitle text="Kontakt" dark={true} />
+        <SectionTitle text={t.title} dark={true} />
         <p
           class={cls(
             'text-sm lg:text-base 3xl:text-lg leading-relaxed font-light',
@@ -113,8 +118,7 @@ const Contact = component$(() => {
             'font-mono text-gray-800',
             'content-fade-in',
           )}>
-          Chcete vedieť o mne viac, potrebujete poradiť alebo chcete rovno
-          naviazať spoluprácu? <strong> Neváhajte ma kontaktovať.</strong>
+          {t.intro} <strong>{t.introStrong}</strong>
         </p>
 
         <div
@@ -129,8 +133,8 @@ const Contact = component$(() => {
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={link.label}
-              title={link.label}
+              aria-label={socialI18n[locale].links[link.icon]}
+              title={socialI18n[locale].links[link.icon]}
               class={cls(
                 'group flex items-center justify-center',
                 'w-10 h-10 rounded-full',
@@ -163,16 +167,12 @@ const Contact = component$(() => {
             name="access_key"
             value="fb75ad8a-4efe-4daf-9312-3ebd38d3c228"
           />
-          <input
-            type="hidden"
-            name="subject"
-            value="Nová správa z kontaktného formulára"
-          />
-          <input type="hidden" name="from_name" value="Kontaktný formulár" />
+          <input type="hidden" name="subject" value={t.form.hiddenSubject} />
+          <input type="hidden" name="from_name" value={t.form.hiddenFromName} />
           <div
             class="absolute -left-[9999px] opacity-0 pointer-events-none"
             aria-hidden="true">
-            <label for="botcheck">Nevypĺňajte toto pole</label>
+            <label for="botcheck">{t.form.honeypotLabel}</label>
             <input
               type="text"
               id="botcheck"
@@ -184,7 +184,7 @@ const Contact = component$(() => {
             />
           </div>
           <FormField
-            label="Celé meno"
+            label={t.form.fullname}
             type="text"
             name="fullname"
             value={state.fullname}
@@ -192,7 +192,7 @@ const Contact = component$(() => {
             required
           />
           <FormField
-            label="Email"
+            label={t.form.email}
             type="email"
             name="email"
             value={state.email}
@@ -200,7 +200,7 @@ const Contact = component$(() => {
             required
           />
           <FormField
-            label="Predmet"
+            label={t.form.subject}
             type="text"
             name="user_subject"
             value={state.subject}
@@ -208,7 +208,7 @@ const Contact = component$(() => {
             required
           />
           <FormField
-            label="Vaša správa"
+            label={t.form.message}
             type="textarea"
             name="message"
             value={state.message}
@@ -217,12 +217,12 @@ const Contact = component$(() => {
           />
           <Button
             type="submit"
-            title="Odoslať"
+            title={t.form.submit}
             variant="primary"
             className="!border-black"
             disabled={state.submitting}
             icon="send">
-            {state.submitting ? 'Odosielam...' : 'Odoslať'}
+            {state.submitting ? t.form.submitting : t.form.submit}
           </Button>
         </form>
       </Container>

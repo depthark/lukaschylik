@@ -1,6 +1,7 @@
 import type { Element, ElementContent, Root } from 'hast'
 import { visit } from 'unist-util-visit'
 import portfolioData from '../components/icon/portfolio.json'
+import headingAnchorI18n from './rehype-heading-anchor.i18n.json'
 
 /**
  * Supported heading tags that should receive a copy-link control.
@@ -41,10 +42,44 @@ interface PortfolioData {
 }
 
 /**
+ * Minimal shape of the vfile passed to a rehype transformer.
+ */
+interface RehypeVFile {
+  /** Absolute path of the processed file, when available. */
+  path?: string
+  /** History of file paths, first entry is the original path. */
+  history?: string[]
+}
+
+/**
+ * Resolves the localized copy-link label from the processed MDX file path.
+ * Paths containing an `/en/` segment resolve to English, everything else
+ * resolves to Slovak. Returns null when the vfile path is unavailable.
+ * @param file - vfile handed to the transformer by the rehype pipeline
+ */
+function resolveCopyLinkLabel(file?: RehypeVFile): string | null {
+  const filePath = file?.path ?? file?.history?.[0]
+
+  if (typeof filePath !== 'string' || filePath.length === 0) {
+    return null
+  }
+
+  const normalizedPath = filePath.replace(/\\/g, '/')
+  const locale = normalizedPath.includes('/en/') ? 'en' : 'sk'
+
+  return headingAnchorI18n[locale].copyLink
+}
+
+/**
  * Rehype plugin that appends a copy-link control to copyable headings.
+ * The copy-link title/aria-label locale is detected from the vfile path of
+ * the processed MDX file; when no path is available on the vfile, the anchor
+ * is emitted without title and aria-label attributes.
  */
 export function rehypeHeadingAnchor() {
-  return (tree: Root) => {
+  return (tree: Root, file?: RehypeVFile) => {
+    const copyLinkLabel = resolveCopyLinkLabel(file)
+
     visit(tree, 'element', (node: Element) => {
       if (!isCopyableHeading(node)) {
         return
@@ -60,7 +95,7 @@ export function rehypeHeadingAnchor() {
       node.properties = appendClassName(node.properties, 'heading-with-anchor')
       node.children = [
         createHeadingTextNode(headingChildren),
-        createHeadingCopyAnchor(headingId),
+        createHeadingCopyAnchor(headingId, copyLinkLabel),
       ]
     })
   }
@@ -126,8 +161,13 @@ function createHeadingTextNode(children: ElementContent[]): Element {
 
 /**
  * Creates the copy-link anchor that is appended to each heading.
+ * @param headingId - Target heading ID
+ * @param copyLinkLabel - Localized label, or null to omit title/aria-label
  */
-function createHeadingCopyAnchor(headingId: string): Element {
+function createHeadingCopyAnchor(
+  headingId: string,
+  copyLinkLabel: string | null,
+): Element {
   return {
     type: 'element',
     tagName: 'a',
@@ -135,8 +175,9 @@ function createHeadingCopyAnchor(headingId: string): Element {
       href: `#${headingId}`,
       className: ['heading-anchor-copy'],
       dataCopyHeading: headingId,
-      title: 'Skopírovať odkaz na sekciu',
-      ariaLabel: 'Skopírovať odkaz na sekciu',
+      ...(copyLinkLabel
+        ? { title: copyLinkLabel, ariaLabel: copyLinkLabel }
+        : {}),
     },
     children: [createHeadingCopyIcon()],
   }

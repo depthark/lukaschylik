@@ -1,0 +1,817 @@
+---
+title: CSS View Transitions
+subtitle: From CSS fundamentals to element-scoped transitions
+description: The View Transitions API brings native animated transitions between page states. From CSS-only MPA transitions to JavaScript-driven SPA animations and the new element-scoped transitions in Chrome 147+.
+date: 2026-04-07
+author: Lukáš Chylík
+podcastUrl: https://open.spotify.com/episode/2lvjOWYXTNpw2KrY0DEvDn?si=b2df5b3c94414cf0
+cardImg: /images/blog/view-transitions.avif
+---
+
+## Transitions between page states natively in the browser
+
+For many years, animated transitions between pages or application states were the domain of JavaScript frameworks. Whether it was Barba.js, Swup, or custom solutions built on GSAP — it always meant extra code, complex logic, and accessibility problems. The CSS View Transitions API changes this fundamentally.
+
+The browser can now capture the old state (snapshot) on its own, apply the DOM changes, and animate the transition to the new state. This works either purely in CSS when navigating between pages (MPA), or with minimal JavaScript for changes within a single page (SPA). Let's break it down from the ground up.
+
+## How View Transitions work under the hood
+
+The whole mechanism is based on the concept of **snapshots**:
+
+1. The browser captures the **old state** (old snapshot) — a visual image of the elements' current state
+2. The DOM change is performed (navigation or mutation)
+3. The browser captures the **new state** (new snapshot)
+4. Both snapshots are rendered as pseudo-elements and the browser animates the transition between them
+
+During the animation, the snapshots are placed in a **view transition overlay** that sits above the entire page content. The user sees a smooth transition even though a complete DOM change is happening underneath.
+
+## Pseudo-elements: The view transition tree
+
+The View Transitions API generates a special tree of pseudo-elements that we can style with CSS:
+
+```
+::view-transition
+└── ::view-transition-group(name)
+    └── ::view-transition-image-pair(name)
+        ├── ::view-transition-old(name)
+        └── ::view-transition-new(name)
+```
+
+### Selector syntax
+
+All pseudo-elements (except `::view-transition`) accept a parameter identifying the target transition:
+
+```css
+::view-transition-group(hero-image) { }       /* By view-transition-name */
+::view-transition-group(*.card) { }            /* By view-transition-class (dot before the name) */
+::view-transition-group(hero-image.featured) { } /* Combination of name + class */
+::view-transition-group(*) { }                 /* Wildcard — all named transitions */
+::view-transition-group(root) { }              /* Default root group (the whole document) */
+```
+
+### ::view-transition
+
+The root container of the entire view transition overlay. It covers the whole viewport and is fixed-positioned via `inset: 0`. All other pseudo-elements are its children. We can style it, for example by adding a semi-transparent background:
+
+```css
+::view-transition {
+  background-color: oklch(0% 0 0 / 0.25);
+}
+```
+
+### ::view-transition-group()
+
+Imagine you have a hero image on the page — a small thumbnail in a list and a large one on the detail page. `::view-transition-group()` is the pseudo-element responsible for making that image smoothly **move and resize** from one position to the other. The browser automatically calculates the differences in `width`, `height`, and position between the old and new states and generates the animation. The default `animation-duration` is `0.25s`, but you can override it however you like.
+
+### ::view-transition-image-pair()
+
+Inside each `group` sits an `image-pair` — a container that holds the old and new snapshots next to each other and handles cross-fading between them. The key detail is the default `mix-blend-mode: plus-lighter`. Why? With regular alpha blending (as the old image fades out and the new one fades in), a visible darkening occurs in the middle of the animation — both are semi-transparent and their colors get "lost". The `plus-lighter` mode instead adds their light values together, so the cross-fade looks visually correct without a dark intermediate phase.
+
+```css
+/* If you want standard blending (e.g. for special effects): */
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+```
+
+### ::view-transition-old() and ::view-transition-new()
+
+These are the visual snapshots themselves — `old` is a static screenshot of what was on the page before the transition (as if you had taken a screen capture), and `new` is a live representation of the new DOM state that updates in real time. Both behave as **replaced elements** (similar to `<img>`), so you can apply `object-fit` and `object-position` to them — useful when the snapshot size differs from the size of the target pseudo-element.
+
+The default animations are simple: `old` gradually disappears (fade-out, opacity 1 → 0) and `new` gradually appears (fade-in, opacity 0 → 1). You can completely replace these animations with your own `@keyframes`.
+
+```css
+::view-transition-old(hero),
+::view-transition-new(hero) {
+  /* Content fills the entire pseudo-element and gets cropped */
+  object-fit: cover;
+}
+```
+
+### Styling example:
+
+```css
+/* Shared settings for all transitions */
+::view-transition-group(*) {
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
+}
+
+/* The old state scrolls out upward */
+::view-transition-old(root) {
+  animation: slide-out-up 0.4s ease-in-out forwards;
+}
+
+/* The new state scrolls in from the bottom */
+::view-transition-new(root) {
+  animation: slide-in-up 0.4s ease-in-out forwards;
+}
+
+@keyframes slide-out-up {
+  to { translate: 0 -100%; opacity: 0; }
+}
+
+@keyframes slide-in-up {
+  from { translate: 0 100%; opacity: 0; }
+}
+```
+
+## CSS properties for View Transitions
+
+### view-transition-name
+
+The most important property. It assigns an identifier to an element, which is how the browser knows the old and new elements belong together and should have a transition animated between them.
+
+```css
+view-transition-name: none;            /* Default value — the element does not participate */
+view-transition-name: hero-image;      /* Custom identifier (<custom-ident>) */
+view-transition-name: match-element;   /* Special value — automatic pairing */
+```
+
+**Important rule:** Within a single scope, every `view-transition-name` with a `<custom-ident>` value must be unique! If two elements share the same name, the `ViewTransition.ready` promise rejects and the transition is skipped.
+
+**Side effects:** An element with a non-none `view-transition-name` value automatically creates a **stacking context** and is **flattened in 3D transforms**. These effects are always active, not just during a transition.
+
+#### The `match-element` value
+
+The special value `match-element` automatically pairs elements between the old and new states based on DOM node identity, not on a textual name. It is ideal for lists where item positions change:
+
+```css
+.list-item {
+  view-transition-name: match-element;
+}
+```
+
+**Limitation:** `match-element` only works with same-document (SPA) transitions, not with cross-document navigation, because DOM node identity is not preserved between pages.
+
+### view-transition-class
+
+Lets us group multiple named transitions under a single class so we can give them shared animations. Without this property, we would have to write rules for each `view-transition-name` separately.
+
+**Important:** The element still needs its own unique `view-transition-name`. The class serves only as a **styling hook** in pseudo-element selectors (using dot notation):
+
+```css
+.card {
+  view-transition-name: card-1;
+  view-transition-class: card;
+}
+
+.card:nth-child(2) {
+  view-transition-name: card-2;
+  view-transition-class: card;
+}
+
+/* Shared animation for all cards — dot before the class name */
+::view-transition-group(*.card) {
+  animation-duration: 0.3s;
+}
+
+::view-transition-old(*.card) {
+  animation: shrink-out 0.3s ease-out both;
+}
+
+::view-transition-new(*.card) {
+  animation: grow-in 0.3s ease-out both;
+}
+```
+
+An element can also have multiple classes:
+
+```css
+.product {
+  view-transition-name: product-1;
+  view-transition-class: card featured;
+}
+```
+
+### view-transition-group
+
+Controls where the `::view-transition-group()` pseudo-element is placed within the pseudo-element tree. By default, all groups are direct children of `::view-transition`. This property enables **hierarchical nesting**:
+
+```css
+view-transition-group: normal;          /* Default — direct child of ::view-transition */
+view-transition-group: nearest;         /* Nests into the ::view-transition-group-children() of the nearest parent */
+view-transition-group: contain;         /* The element becomes a container — its children
+                                           will be contained within its scope */
+view-transition-group: hero-container;  /* Nests into a specific parent with the given view-transition-name */
+```
+
+#### Hierarchical nesting example:
+
+```css
+.container {
+  view-transition-name: container;
+  view-transition-group: contain; /* Enables nesting of children */
+}
+
+.container .item {
+  view-transition-name: item-1;
+  view-transition-group: nearest; /* Nests into the container */
+}
+```
+
+The resulting pseudo-element tree:
+
+```
+::view-transition
+└── ::view-transition-group(container)
+    ├── ::view-transition-image-pair(container)
+    │   ├── ::view-transition-old(container)
+    │   └── ::view-transition-new(container)
+    └── ::view-transition-group-children(container)
+        └── ::view-transition-group(item-1)
+            └── ::view-transition-image-pair(item-1)
+                ├── ::view-transition-old(item-1)
+                └── ::view-transition-new(item-1)
+```
+
+This is particularly useful when you want child elements to animate **relative to the parent container**, not relative to the entire viewport.
+
+### view-transition-scope
+
+Controls the visibility of an element's `view-transition-name` within the tree. This property is key for element-scoped transitions (more below):
+
+```css
+view-transition-scope: none;  /* Default value — normal behavior */
+view-transition-scope: all;   /* The name is isolated — outer transitions skip it */
+```
+
+## CSS-only View Transitions: @view-transition (MPA)
+
+Here we get to the most interesting part for those who want animated transitions **without a single line of JavaScript**. The `@view-transition` rule enables view transitions during navigation between pages (cross-document navigation).
+
+### Syntax
+
+```css
+@view-transition {
+  navigation: auto;
+}
+```
+
+This is all you need on both pages (source and destination) for the browser to automatically animate the transition on navigation. The default animation is a cross-fade.
+
+### The `navigation` descriptor
+
+The most practical value is `auto`:
+
+```css
+@view-transition {
+  navigation: auto;
+}
+```
+
+However, this does not mean the transition fires on every navigation. The browser activates it only when the following conditions are met:
+
+- The navigation must be **same-origin**: both pages are on the same origin and there is no cross-origin redirect between them.
+- The navigation type must be one of these:
+  - `traverse` = moving through history (back/forward)
+  - `push` = adding a new entry to history (e.g. clicking a link)
+  - `replace` = replacing the current entry without adding a new one
+- For `push` and `replace`, the navigation must be initiated by the user (click, Enter, tap). If a background script changes the URL without user interaction, the transition does not fire.
+
+### The `types` descriptor
+
+The `types` descriptor works as a set of labels for a particular kind of transition. Thanks to them, you can assign `slide` to one navigation and `fade` to another, and then write a different animation for each type:
+
+```css
+@view-transition {
+  navigation: auto;
+  types: slide, fade;
+}
+```
+
+The `types` themselves do not enable the transition. They only tell CSS which animation variant should be used.
+
+The types can then be targeted using the `:active-view-transition-type()` pseudo-class:
+
+```css
+/* Animation only for the "slide" type */
+:active-view-transition-type(slide) {
+  &::view-transition-old(root) {
+    animation: slide-out 0.4s ease-in-out both;
+  }
+
+  &::view-transition-new(root) {
+    animation: slide-in 0.4s ease-in-out both;
+  }
+}
+```
+
+### The `:active-view-transition` pseudo-class
+
+Targets the document root element during an active transition:
+
+```css
+/* Applied during any active transition */
+:active-view-transition {
+  overflow: hidden; /* e.g. hide the scrollbar during the transition */
+}
+
+/* Applied only for a specific type */
+:active-view-transition-type(slide) {
+  /* ... */
+}
+```
+
+### Complete MPA example (pure CSS)
+
+```css
+/* === Both pages === */
+@view-transition {
+  navigation: auto;
+}
+
+/* Source page */
+.hero-image { view-transition-name: hero; }
+.page-title { view-transition-name: title; }
+
+/* Destination page */
+.detail-image { view-transition-name: hero; }
+.detail-title { view-transition-name: title; }
+
+/* Shared animations */
+::view-transition-old(root) {
+  animation: fade-out 0.3s ease-out both;
+}
+
+::view-transition-new(root) {
+  animation: fade-in 0.3s ease-out both;
+}
+
+::view-transition-group(hero) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+```
+
+In this example, on navigation the entire page automatically goes through a smooth cross-fade animation, the hero image moves and resizes, and the title does the same. **No JavaScript. No library. Pure CSS.**
+
+## When is CSS enough and when do you need JavaScript?
+
+This is the key question. The View Transitions API is designed so that CSS covers as many cases as possible:
+
+### CSS is enough (MPA transitions) when:
+
+- You animate transitions during **classic navigation** between pages
+- You use the **default animations** (cross-fade) or custom `@keyframes`
+- You need **paired transitions** (hero image, titles) between pages
+- You want **different animation types** based on the navigation context (via `types`)
+
+### JavaScript is required when:
+
+- You change the DOM **within a single page** (SPA) — filtering, sorting, switching tabs
+- You need to **programmatically skip** the transition (`skipTransition()`)
+- You want to **react to transition phases** (when the snapshot is done, when the animation is ready)
+- You want to run **multiple independent transitions** at the same time (element-scoped)
+- You need to **customize an MPA transition** on the destination page via the `pagereveal` event
+
+## JavaScript API: document.startViewTransition() (SPA)
+
+For changes within a single page, we need JavaScript. The `document.startViewTransition()` method wraps the DOM mutation and the browser takes care of the animation:
+
+```javascript
+const transition = document.startViewTransition(() => {
+  updateContent()
+})
+```
+
+### The ViewTransition object
+
+The method returns a `ViewTransition` object with three promise properties representing the transition lifecycle:
+
+```javascript
+const transition = document.startViewTransition(() => updateDOM())
+
+// 1. DOM mutation finished, snapshots are being captured
+transition.updateCallbackDone.then(() => console.log('DOM update hotový'))
+
+// 2. Pseudo-elements created, animation ready to start
+transition.ready.then(() => console.log('Animácia pripravená'))
+
+// 3. The whole transition (including the animation) finished
+transition.finished.then(() => console.log('Prechod kompletne dokončený'))
+```
+
+### Skipping the transition
+
+Useful for example with `prefers-reduced-motion`:
+
+```javascript
+const transition = document.startViewTransition(() => updateDOM())
+
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  transition.skipTransition()
+}
+```
+
+### Custom animations via the Web Animations API
+
+The `ready` promise lets you replace the default CSS animations with your own via JavaScript:
+
+```javascript
+const transition = document.startViewTransition(() => toggleDarkMode())
+
+transition.ready.then(() => {
+  // Circular animation from the click position
+  document.documentElement.animate(
+    {
+      clipPath: [
+        `circle(0% at ${x}px ${y}px)`,
+        `circle(150% at ${x}px ${y}px)`,
+      ],
+    },
+    {
+      duration: 500,
+      easing: 'ease-in-out',
+      pseudoElement: '::view-transition-new(root)',
+    }
+  )
+})
+```
+
+### SPA example: Filtering a list
+
+```html
+<ul class="items-grid" id="grid">
+  <li class="item" data-category="design" style="view-transition-name: item-1">Dizajn systém</li>
+  <li class="item" data-category="dev" style="view-transition-name: item-2">API architektúra</li>
+</ul>
+```
+
+```javascript
+function filterItems(category) {
+  document.startViewTransition(() => {
+    document.querySelectorAll('.item').forEach(item => {
+      item.style.display =
+        category === 'all' || item.dataset.category === category ? '' : 'none'
+    })
+  })
+}
+```
+
+```css
+.item { view-transition-class: grid-item; }
+
+::view-transition-group(*.grid-item) {
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+```
+
+## MPA events: pageswap and pagereveal
+
+For cross-document navigation there are two special events that let you customize the transition with JavaScript:
+
+### pageswap (source page)
+
+Fires on the page you are navigating away from. It lets you adjust the transition before leaving the page:
+
+```javascript
+window.addEventListener('pageswap', (event) => {
+  if (event.viewTransition) {
+    console.log('Navigácia s prechodom prebieha')
+  }
+})
+```
+
+### pagereveal (destination page)
+
+Fires on the page being navigated to. It lets you dynamically customize the animation on the destination page:
+
+```javascript
+window.addEventListener('pagereveal', (event) => {
+  if (event.viewTransition) {
+    event.viewTransition.ready.then(() => {
+      // Customize the animation based on context
+    })
+  }
+})
+```
+
+### Types at runtime (ViewTransitionTypeSet)
+
+Transition types can also be changed dynamically via JavaScript:
+
+```javascript
+window.addEventListener('pagereveal', (event) => {
+  if (event.viewTransition) {
+    const fromUrl = new URL(navigation.activation.from)
+    const toUrl = new URL(navigation.activation.entry.url)
+
+    // Dynamically set the type based on the navigation direction
+    if (isForwardNavigation(fromUrl, toUrl)) {
+      event.viewTransition.types.add('slide-forward')
+    } else {
+      event.viewTransition.types.add('slide-backward')
+    }
+  }
+})
+```
+
+## Element-Scoped View Transitions (Chrome 147+)
+
+And now we get to the newest and most significant piece of functionality — **element-scoped view transitions**.
+
+### The problem with document-scoped transitions
+
+The existing `document.startViewTransition()` has fundamental limitations: only one transition at a time, the page is non-interactive during the transition, and problems with `position: fixed` due to the new stacking context.
+
+### The solution: Element.startViewTransition()
+
+A new `startViewTransition()` method on any DOM element:
+
+```javascript
+element.startViewTransition({
+  callback: () => {
+    // DOM mutations limited to this element's subtree
+  }
+})
+```
+
+The element becomes a **scope root** — only its subtree is snapshotted and the rest of the page stays fully interactive.
+
+### Concurrent transitions
+
+Multiple non-overlapping DOM subtrees can each have their own view transition **at the same time**:
+
+```javascript
+// The sidebar filters independently
+sidebar.startViewTransition({ callback: () => updateFilters() })
+
+// The grid reorders independently
+grid.startViewTransition({ callback: () => reorderItems() })
+
+// The detail panel updates independently
+detailPanel.startViewTransition({ callback: () => showDetail(itemId) })
+```
+
+All three animations run simultaneously and none blocks the others.
+
+### Reusing view-transition-name across scopes
+
+This is a huge ergonomic improvement. Previously, every `view-transition-name` had to be globally unique within the entire document. Now the same name can exist in multiple scopes without conflict:
+
+```css
+/* Both lists can use the same transition name! */
+#list-a li {
+  view-transition-name: match-element;
+  view-transition-class: album;
+}
+
+#list-b li {
+  view-transition-name: match-element;
+  view-transition-class: album;
+}
+```
+
+### Automatic scope root behavior
+
+When an element-scoped transition starts, the browser automatically applies several rules to the scope root. In practice, this means:
+
+<table class="w-full border-collapse border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900 text-left">
+  <thead class="bg-gray-200 dark:bg-gray-800/70 border-b border-gray-200 dark:border-gray-800">
+    <tr>
+      <th class="px-4 py-3">Automatically applied rule</th>
+      <th class="px-4 py-3">Practical effect</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800"><code>contain: layout</code></td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Layout isolation — internal changes do not affect the rest of the page</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800"><code>view-transition-scope: all</code></td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Prevents name collisions across concurrent scopes</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800"><code>view-transition-name: root</code></td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">The scope root automatically participates in its own transition</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3"><code>view-transition-group: contain</code></td>
+      <td class="px-4 py-3">Nested groups are automatically contained within the scope</td>
+    </tr>
+  </tbody>
+</table>
+
+### A new pseudo-element: ::view-transition-group-children()
+
+Element-scoped transitions introduce a new pseudo-element in the tree. Instead of a tree diagram, you can picture it like this:
+
+<table class="w-full border-collapse border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900 text-left">
+  <thead class="bg-gray-200 dark:bg-gray-800/70 border-b border-gray-200 dark:border-gray-800">
+    <tr>
+      <th class="px-4 py-3">Layer</th>
+      <th class="px-4 py-3">Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800"><code>element</code> (scope root)</td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">The root of the scope from which the snapshot is created</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800"><code>::view-transition</code></td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">The main container for the entire transition</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800"><code>::view-transition-group(root)</code></td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">The group for the scope root</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800"><code>::view-transition-group-children(root)</code></td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">The container for nested named groups within the scope</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800"><code>::view-transition-image-pair(root)</code></td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">The pair of snapshots of the scope root</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800"><code>::view-transition-old(root)</code></td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">The original state of the scope root before the change</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3"><code>::view-transition-new(root)</code></td>
+      <td class="px-4 py-3">The new state of the scope root after the change</td>
+    </tr>
+  </tbody>
+</table>
+
+ `::view-transition-group-children()` serves as a container for nested transition groups. It automatically **clips overflow** if the scope root has `overflow: hidden`, `scroll`, or `clip` set.
+
+### Practical example: Moving items between lists
+
+```css
+.column ul li {
+  view-transition-name: match-element;
+  view-transition-class: task-card;
+}
+
+::view-transition-group(*.task-card) {
+  animation-duration: 0.35s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+```
+
+```javascript
+function moveTask(taskElement, targetColumnId) {
+  const sourceColumn = taskElement.closest('.column')
+  const targetColumn = document.getElementById(targetColumnId)
+
+  // Both columns animate simultaneously
+  sourceColumn.querySelector('ul').startViewTransition({
+    callback: () => taskElement.remove()
+  })
+
+  targetColumn.querySelector('ul').startViewTransition({
+    callback: () => targetColumn.querySelector('ul').appendChild(taskElement)
+  })
+}
+```
+
+## Differences between ::view-transition-old and ::view-transition-new
+
+It is important to understand that these two pseudo-elements have a different nature:
+
+<table class="w-full border-collapse border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900 text-left">
+  <thead class="bg-gray-200 dark:bg-gray-800/70 border-b border-gray-200 dark:border-gray-800">
+    <tr>
+      <th class="px-4 py-3">Property</th>
+      <th class="px-4 py-3"><code>::view-transition-old()</code></th>
+      <th class="px-4 py-3"><code>::view-transition-new()</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Content type</td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Static screenshot</td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Live representation</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Updates</td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Never changes</td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Reflects the current DOM</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Replaced element</td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Yes (<code>object-fit</code>, <code>object-position</code>)</td>
+      <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">Yes (<code>object-fit</code>, <code>object-position</code>)</td>
+    </tr>
+    <tr class="odd:bg-gray-50 dark:odd:bg-gray-900 even:bg-gray-100 dark:even:bg-gray-800/70">
+      <td class="px-4 py-3">Default animation</td>
+      <td class="px-4 py-3">Fade-out (opacity 1 → 0)</td>
+      <td class="px-4 py-3">Fade-in (opacity 0 → 1)</td>
+    </tr>
+  </tbody>
+</table>
+
+The default animation between them is a cross-fade with `mix-blend-mode: plus-lighter`, which ensures a visually correct transition without darkening. At the same time, `::view-transition-group()` interpolates position and size.
+
+```css
+/* Custom animation instead of the cross-fade */
+::view-transition-old(figure-caption) {
+  animation: 0.25s linear both shrink-x;
+  transform-origin: right center;
+}
+
+::view-transition-new(figure-caption) {
+  animation: 0.25s 0.25s linear both grow-x;
+  transform-origin: right center;
+}
+
+@keyframes shrink-x { from { scale: 1 1; } to { scale: 0 1; } }
+@keyframes grow-x { from { scale: 0 1; } to { scale: 1 1; } }
+```
+
+## Accessibility and prefers-reduced-motion
+
+The View Transitions API respects user preferences. It is always a good idea to add a fallback:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.01ms !important;
+  }
+}
+```
+
+Alternatively in JavaScript:
+
+```javascript
+function safeStartTransition(callback) {
+  if (
+    !document.startViewTransition ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ) {
+    callback()
+    return
+  }
+
+  document.startViewTransition(callback)
+}
+```
+
+## Performance and Core Web Vitals
+
+Do view transitions hurt page performance? The short answer — no, if you use them correctly.
+
+### CLS (Cumulative Layout Shift)
+
+View transitions **do not affect CLS**. The transition pseudo-elements are rendered in a top-layer overlay, completely separate from the document flow. The DOM change itself happens while rendering is suppressed — the layout shift is invisible both to the user and to CLS measurement.
+
+### LCP (Largest Contentful Paint)
+
+Real-world tests across 120,000 mobile navigations showed that view transitions add approximately **70 ms to LCP on mobile devices**. On desktop with a fast CPU the overhead is negligible (~5 ms). The slower the processor, the bigger the impact — low-end Android devices are the main area of concern.
+
+Combining view transitions with the **Speculation Rules API** (prerendering destination pages) eliminates the LCP overhead entirely, because the destination page is already rendered when the transition begins.
+
+### INP (Interaction to Next Paint)
+
+View transitions **do not directly affect INP**. The transition runs as a CSS animation on composited layers. However, if the callback performs heavy DOM mutations, that work runs on the main thread and can indirectly increase INP. The solution: keep the update callback as light as possible.
+
+### GPU acceleration
+
+The default cross-fade animation uses `transform` and `opacity` — two CSS properties that are fully compositable and GPU-accelerated, bypassing both layout and paint. Chrome takes the snapshot data directly from the compositor layer without additional layout or repaint steps. Custom animations preserve this advantage as long as you stick to `transform` and `opacity`.
+
+### Main performance risks
+
+- **`blocking="render"`** — with cross-document transitions it delays both FCP and LCP. Use it only when you are actively measuring the impact on real users.
+- **Heavy DOM mutations** in the transition callback — move heavy work outside the callback.
+
+### Recommendation
+
+Always wrap your `@view-transition` rules in a `prefers-reduced-motion: no-preference` media query. You respect accessibility and at the same time remove the LCP penalty for users who have animations turned off.
+
+```css
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+```
+
+## Browser support
+
+Basic SPA view transitions (`document.startViewTransition()`) are supported in Chrome 111+, Firefox 132+, and Safari 18+. Cross-document MPA transitions (`@view-transition`) work in Chrome 126+ and Safari 18.2+. Element-scoped transitions are so far only in Chrome 147+.
+
+View Transitions are designed for progressive enhancement — if the browser does not support the API, the DOM change is applied immediately without animation:
+
+```javascript
+if (document.startViewTransition) {
+  document.startViewTransition(() => updateDOM())
+} else {
+  updateDOM()
+}
+```
+
+## Conclusion
+
+The View Transitions API is one of the most significant CSS/JS additions of recent years. CSS-only MPA transitions via `@view-transition` let developers add smooth animations between pages without any JavaScript at all. For SPA applications, `document.startViewTransition()` provides an elegant solution with minimal code. And the new element-scoped transitions in Chrome 147+ push the possibilities even further — multiple concurrent animations, reusable names, and full page interactivity during transitions.
+
+Most importantly, the entire API is designed for progressive enhancement. If the browser does not support view transitions, the page works completely normally — just without animations. No errors, no broken layouts. So there is no reason to wait — you can start using view transitions today.

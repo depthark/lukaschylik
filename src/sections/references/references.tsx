@@ -4,8 +4,21 @@ import Container from '~/components/container/container'
 import Reference from '~/components/reference/reference'
 import Section from '~/components/section/section'
 import SectionTitle from '~/components/section/section.title'
+import { useLocale } from '~/i18n'
+import i18n from './references.i18n.json'
+
+const VIDEO_SOURCES = [
+  'https://www.youtube.com/embed/MCVuRMBOXUU?si=MC5Ah5u53jbdbfYZ',
+  'https://www.youtube.com/embed/FAbaIpGWmR4?si=0_zKp6MHe_-_n6P8',
+  'https://www.youtube.com/embed/eTjXcx5DUqM?si=P3ea1dfnwKqxrzyC',
+  'https://www.youtube.com/embed/ITDfqStMym0?si=sWTLYIfZVc-OusDf',
+  'https://www.youtube.com/embed/hwhuSdO5fU0?si=ZckQ-cJlCGZpJExv',
+  'https://www.youtube.com/embed/p8sQyt4YFdk?si=WDxTC4029EeFecKk',
+]
 
 const References = component$(() => {
+  const t = i18n[useLocale()]
+
   const openPiP = $((event: MouseEvent) => {
     const button = (event.target as HTMLElement).closest('button[data-pip]')
     if (!button) return
@@ -29,7 +42,7 @@ const References = component$(() => {
         placeholder.className = iframe.className
         placeholder.style.cssText =
           'display:flex;align-items:center;justify-content:center;color:#888;font-size:14px;font-family:monospace'
-        placeholder.textContent = 'Video sa prehráva v Picture-in-Picture'
+        placeholder.textContent = t.pipPlaceholder
         wrapper.insertBefore(placeholder, iframe)
 
         pipWindow.document.body.append(iframe)
@@ -44,41 +57,35 @@ const References = component$(() => {
       <Container size="full">
         <div class="relative grid gap-5 isolate">
           <div>
-            <SectionTitle text="Referencie" />
+            <SectionTitle text={t.title} />
           </div>
           <div class="grid grid-cols-1 lg:grid-cols-[34fr_21fr] gap-5 items-start">
             <div class="mb-8 xl:mb-0">
               <div>
                 <p class="text-sm lg:text-base 3xl:text-lg leading-relaxed font-light mb-4 md:mb-8 text-gray-800 dark:text-gray-300 font-mono">
-                  Od roku 2016 som sa venoval tvorbe webových stránok pre
-                  klientov ako Elendris alebo Anew Style.
+                  {t.paragraph1}
                 </p>
                 <p class="text-sm lg:text-base 3xl:text-lg leading-relaxed font-light mb-4 md:mb-8 text-gray-800 dark:text-gray-300 font-mono">
-                  V spolupráci so spoločnosťou Riganti som sa podieľal na
-                  realizácii viacerých webových projektov. Pre Update Conference
-                  som pripravil viacero webových stránok a prispel k vývoju UI
-                  kitu pre framework DotVVM.
+                  {t.paragraph2}
                 </p>
 
                 <p class="text-sm lg:text-base 3xl:text-lg leading-relaxed font-light mb-8 md:mb-16 text-gray-800 dark:text-gray-300 font-mono">
-                  Okrem vývoja sa venujem aj prednášaniu na rôznych meetupoch a
-                  konferenciách. Zároveň sa podieľam na spoluorganizácii
-                  meetupov pod záštitou spolku&nbsp;
+                  {t.paragraph3Before}&nbsp;
                   <a
                     class="underline"
                     href="https://www.frontendisti.cz/"
                     target="_blank"
                     rel="noopener noreferrer">
-                    Frontendisti
+                    {t.paragraph3Link}
                   </a>
-                  .
+                  {t.paragraph3After}
                 </p>
                 <Button
                   variant="secondary"
-                  ariaLabel="Služby a spoupráca"
-                  title="Služby a spoupráca"
+                  ariaLabel={t.servicesButton}
+                  title={t.servicesButton}
                   href="#services">
-                  Služby a spoupráca
+                  {t.servicesButton}
                 </Button>
                 <div
                   class="video-carousel relative
@@ -88,192 +95,39 @@ const References = component$(() => {
                     snap-x snap-mandatory [scroll-padding-inline:1rem]
                     [scrollbar-width:none] [-ms-overflow-style:'none'] [&::-webkit-scrollbar]:hidden
                     [&>*]:min-w-0 [&>*]:snap-center [&>*]:snap-always">
-                  <div class="relative group" onClick$={openPiP}>
-                    <iframe
-                      class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
-                      loading="lazy"
-                      width="560"
-                      src="https://www.youtube.com/embed/MCVuRMBOXUU?si=MC5Ah5u53jbdbfYZ"
-                      title="YouTube video Lukáš Chylík - Figma Beyond Design: Automatizácia design-to-code workflow"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen></iframe>
-                    <button
-                      type="button"
-                      data-pip
-                      aria-label="Picture-in-Picture"
-                      title="Picture-in-Picture"
-                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" />
-                        <rect x="11" y="9" width="10" height="7" rx="1" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="relative group" onClick$={openPiP}>
-                    <iframe
-                      class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
-                      loading="lazy"
-                      width="560"
-                      src="https://www.youtube.com/embed/FAbaIpGWmR4?si=0_zKp6MHe_-_n6P8"
-                      title="YouTube video Lukáš Chylík - Konzistentné AI agentic workflow naprieč vývojovými tímami"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen></iframe>
-                    <button
-                      type="button"
-                      data-pip
-                      aria-label="Picture-in-Picture"
-                      title="Picture-in-Picture"
-                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" />
-                        <rect x="11" y="9" width="10" height="7" rx="1" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="relative group" onClick$={openPiP}>
-                    <iframe
-                      class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
-                      loading="lazy"
-                      width="560"
-                      src="https://www.youtube.com/embed/eTjXcx5DUqM?si=P3ea1dfnwKqxrzyC"
-                      title="YouTube video Lukáš Chylík - CSS scroll-state container queries"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen></iframe>
-                    <button
-                      type="button"
-                      data-pip
-                      aria-label="Picture-in-Picture"
-                      title="Picture-in-Picture"
-                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" />
-                        <rect x="11" y="9" width="10" height="7" rx="1" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="relative group" onClick$={openPiP}>
-                    <iframe
-                      class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
-                      loading="lazy"
-                      width="560"
-                      src="https://www.youtube.com/embed/ITDfqStMym0?si=sWTLYIfZVc-OusDf"
-                      title="YouTube video Lukáš Chylík - CSS scroll driven animations"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen></iframe>
-                    <button
-                      type="button"
-                      data-pip
-                      aria-label="Picture-in-Picture"
-                      title="Picture-in-Picture"
-                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" />
-                        <rect x="11" y="9" width="10" height="7" rx="1" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="relative group" onClick$={openPiP}>
-                    <iframe
-                      class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
-                      loading="lazy"
-                      width="560"
-                      src="https://www.youtube.com/embed/hwhuSdO5fU0?si=ZckQ-cJlCGZpJExv"
-                      title="YouTube video Lukáš Chylík - Frontendové novinky Máj 2025"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen></iframe>
-                    <button
-                      type="button"
-                      data-pip
-                      aria-label="Picture-in-Picture"
-                      title="Picture-in-Picture"
-                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" />
-                        <rect x="11" y="9" width="10" height="7" rx="1" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="relative group" onClick$={openPiP}>
-                    <iframe
-                      class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
-                      loading="lazy"
-                      width="560"
-                      src="https://www.youtube.com/embed/p8sQyt4YFdk?si=WDxTC4029EeFecKk"
-                      title="YouTube video Lukáš Chylík - CSS anchor positioning"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullscreen></iframe>
-                    <button
-                      type="button"
-                      data-pip
-                      aria-label="Picture-in-Picture"
-                      title="Picture-in-Picture"
-                      class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" />
-                        <rect x="11" y="9" width="10" height="7" rx="1" />
-                      </svg>
-                    </button>
-                  </div>
+                  {VIDEO_SOURCES.map((src, index) => (
+                    <div key={src} class="relative group" onClick$={openPiP}>
+                      <iframe
+                        class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
+                        loading="lazy"
+                        width="560"
+                        src={src}
+                        title={t.videoTitles[index]}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullscreen></iframe>
+                      <button
+                        type="button"
+                        data-pip
+                        aria-label={t.pipButton}
+                        title={t.pipButton}
+                        class="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 bg-black/70 hover:bg-black/90 text-white rounded-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round">
+                          <rect x="2" y="3" width="20" height="14" rx="2" />
+                          <rect x="11" y="9" width="10" height="7" rx="1" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -282,67 +136,67 @@ const References = component$(() => {
                 title="Vertice"
                 webURL="https://vertice.one/"
                 website="vertice.one"
-                type="Design System"
+                type={t.types.designSystem}
               />
               <Reference
                 title="VIGo"
                 webURL="https://vig.cz/"
                 website="vig.cz"
-                type="Design System"
+                type={t.types.designSystem}
               />
               <Reference
                 title="Riganti"
                 webURL="https://www.riganti.cz/"
                 website="riganti.cz"
-                type="Spolupráca"
+                type={t.types.collaboration}
               />
               <Reference
                 title="Update Conference"
                 webURL="https://www.updateconference.net/"
                 website="updateconference.net"
-                type="Spolupráca"
+                type={t.types.collaboration}
               />
               <Reference
                 title="Update Days"
                 webURL="https://www.updatedays.cz/"
                 website="updatedays.cz"
-                type="Spolupráca"
+                type={t.types.collaboration}
               />
               <Reference
                 title="Meetupdate"
                 webURL="https://www.meetupdate.cz/"
                 website="meetupdate.cz"
-                type="Spolupráca"
+                type={t.types.collaboration}
               />
               <Reference
                 title="DotVVM"
                 webURL="https://www.dotvvm.com/"
                 website="dotvvm.com"
-                type="Spolupráca"
+                type={t.types.collaboration}
               />
               <Reference
                 title="Brand DESIGN"
                 webURL="https://brand-design.cz/"
                 website="brand-design.cz"
-                type="Web"
+                type={t.types.web}
               />
               <Reference
                 title="Elendris"
                 webURL="https://elendris.cz/"
                 website="elendris.cz"
-                type="Web"
+                type={t.types.web}
               />
               <Reference
                 title="Anew style"
                 webURL="https://anewstyle.cz/"
                 website="anewstyle.cz"
-                type="Web"
+                type={t.types.web}
               />
               <Reference
                 title="thelucie.ink"
                 webURL="https://thelucie.ink/"
                 website="thelucie.ink"
-                type="Web"
+                type={t.types.web}
               />
               {/* <Reference
               title="Krossbau s.r.o."

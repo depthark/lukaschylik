@@ -1,0 +1,181 @@
+{
+  "sk": {
+    "title": "Služby",
+    "intro": [
+      {
+        "text": "Zistenie, že ste pre váš projekt zvolili ",
+        "strong": false
+      },
+      { "text": "nesprávne technológie", "strong": true },
+      { "text": " v pokročilom štádiu vývoja, ", "strong": false },
+      { "text": "vždy zabolí", "strong": true },
+      {
+        "text": ". Takémuto problému a mnohým ďalším Vám pomôžem predísť. Ušetríte ",
+        "strong": false
+      },
+      { "text": "čas", "strong": true },
+      { "text": ", ", "strong": false },
+      { "text": "peniaze", "strong": true },
+      {
+        "text": ", a ako bonus budete mať Vy aj Váš tým kľudný spánok.",
+        "strong": false
+      }
+    ],
+    "cards": {
+      "consulting": {
+        "title": "Konzultácie a Mentoring",
+        "priceNote": "Cena za 1 hod",
+        "description": [
+          { "text": "Riešim ", "strong": false },
+          { "text": "konkrétne technické problémy", "strong": true },
+          {
+            "text": ", posúvam developerov vpred prostredníctvom ",
+            "strong": false
+          },
+          { "text": "personalizovaného mentoringu", "strong": true },
+          { "text": " a robím ", "strong": false },
+          { "text": "technologický audit", "strong": true },
+          { "text": " kódu.", "strong": false }
+        ],
+        "items": [
+          { "text": "Riešenie konkrétnych frontend problémov", "marker": "" },
+          {
+            "text": "Code review a architektonické poradenstvo",
+            "marker": ""
+          },
+          { "text": "Audit kódu a architektúry", "marker": "" },
+          { "text": "Online aj osobné stretnutia", "marker": "☝🏽" }
+        ]
+      },
+      "workshops": {
+        "title": "AI workshopy a školenia",
+        "priceLabel": "Dohodou",
+        "description": [
+          {
+            "text": "AI workshopy a školenia zamerané na prax a produktivitu.",
+            "strong": false
+          }
+        ],
+        "items": [
+          { "text": "Spec driven development", "marker": "" },
+          { "text": "Custom AI agenti", "marker": "" },
+          {
+            "text": "Tvorba Agent SKILLS a automatizácia procesov",
+            "marker": ""
+          },
+          { "text": "AI frontend workflow", "marker": "" },
+          { "text": "Skupinové aj individuálne formáty", "marker": "☝🏽" }
+        ]
+      },
+      "speaking": {
+        "title": "Keynote Speaker",
+        "priceLabel": "Free",
+        "description": [
+          {
+            "text": "Prednášam na meetupoch a konferenciách o Design systémoch, CSS, AI a frontend workflows.",
+            "strong": false
+          }
+        ],
+        "items": [
+          {
+            "text": "Prednáška na mieru podľa témy na meetupe či konferencii",
+            "marker": ""
+          },
+          { "text": "Praktické ukážky z reálnych projektov", "marker": "" },
+          { "text": "Q&A a diskusia po prednáške", "marker": "" }
+        ]
+      }
+    }
+  },
+  "en": {
+    "title": "Services",
+    "intro": [
+      {
+        "text": "Finding out that you picked the ",
+        "strong": false
+      },
+      { "text": "wrong technologies", "strong": true },
+      {
+        "text": " for your project at an advanced stage of development ",
+        "strong": false
+      },
+      { "text": "always hurts", "strong": true },
+      {
+        "text": ". I'll help you avoid this problem and many others. You'll save ",
+        "strong": false
+      },
+      { "text": "time", "strong": true },
+      { "text": " and ", "strong": false },
+      { "text": "money", "strong": true },
+      {
+        "text": ", and as a bonus, both you and your team will sleep soundly.",
+        "strong": false
+      }
+    ],
+    "cards": {
+      "consulting": {
+        "title": "Consulting & Mentoring",
+        "priceNote": "Price per hour",
+        "description": [
+          { "text": "I solve ", "strong": false },
+          { "text": "specific technical problems", "strong": true },
+          {
+            "text": ", help developers grow through ",
+            "strong": false
+          },
+          { "text": "personalized mentoring", "strong": true },
+          { "text": " and perform ", "strong": false },
+          { "text": "technology audits", "strong": true },
+          { "text": " of code.", "strong": false }
+        ],
+        "items": [
+          { "text": "Solving specific frontend problems", "marker": "" },
+          {
+            "text": "Code reviews and architecture consulting",
+            "marker": ""
+          },
+          { "text": "Code and architecture audits", "marker": "" },
+          { "text": "Online and in-person sessions", "marker": "☝🏽" }
+        ]
+      },
+      "workshops": {
+        "title": "AI Workshops & Training",
+        "priceLabel": "Negotiable",
+        "description": [
+          {
+            "text": "AI workshops and training focused on practice and productivity.",
+            "strong": false
+          }
+        ],
+        "items": [
+          { "text": "Spec driven development", "marker": "" },
+          { "text": "Custom AI agents", "marker": "" },
+          {
+            "text": "Building Agent SKILLS and automating processes",
+            "marker": ""
+          },
+          { "text": "AI frontend workflow", "marker": "" },
+          { "text": "Group and individual formats", "marker": "☝🏽" }
+        ]
+      },
+      "speaking": {
+        "title": "Keynote Speaker",
+        "priceLabel": "Free",
+        "description": [
+          {
+            "text": "I speak at meetups and conferences about design systems, CSS, AI and frontend workflows.",
+            "strong": false
+          }
+        ],
+        "items": [
+          {
+            "text": "A talk tailored to the topic of your meetup or conference",
+            "marker": ""
+          },
+          { "text": "Practical examples from real projects", "marker": "" },
+          { "text": "Q&A and discussion after the talk", "marker": "" }
+        ]
+      }
+    }
+  }
+}

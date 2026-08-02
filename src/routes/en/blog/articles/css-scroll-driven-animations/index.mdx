@@ -1,0 +1,268 @@
+---
+title: CSS scroll-driven animations
+subtitle: A revolution in web animations without JavaScript
+description: Forget libraries like ScrollReveal, AOS or Scroll Magic! Modern CSS puts them all to shame with ease.
+date: 2025-04-28
+author: Lukáš Chylík
+podcastUrl: https://open.spotify.com/episode/084tRwRmMQYPGmMhW1Dekc?si=7kr_hZw3TrS6hOFsPg_4Fw
+cardImg: /images/blog/scroll-driven-animations.avif
+---
+
+## CSS is going through a major transformation
+
+The tool that for many years served merely for "colors, fonts, spacing and layout" on our websites and applications is gradually transforming into a full-fledged language for building visual logic. The idea that we would be able to create things like dynamic layouts, CSS layers, convert colors into arbitrary formats, or trigger web animations based on interaction and scrolling was science fiction until recently. And it is precisely these "scroll-driven" animations that we will talk about today.
+
+The Web Animations API, which we know mainly through properties like `transition`, `animation` and the `@keyframes` rules, received a major update last year. As far as CSS is concerned, it gained new properties that allow us to create scroll-driven animations directly in CSS.
+
+### Overview of the key properties:
+
+- **`scroll-timeline`**
+- **`view-timeline`**
+- **`animation-timeline`**
+- **`animation-range`**
+- **`view-timeline-inset`**
+- **`timeline-scope`**
+
+## scroll-timeline: Defining a scroll timeline
+
+The `scroll-timeline` property is used to define a so-called "scroll timeline". This timeline tracks the scroll progress of an element (called the scroller) from its top edge to the bottom, or from its left edge to the right.
+
+`scroll-timeline` is a shorthand for `scroll-timeline-name` and `scroll-timeline-axis`.
+
+**Important:** `scroll-timeline` will not start an animation on its own. It can only be used in combination with `animation-timeline`!
+
+### Sub-properties:
+
+- `scroll-timeline-name`: The name of the timeline. We use the so-called `dashed-ident` notation (starting with `--`), which we know from CSS custom properties. It is a string that serves as an identifier.
+- `scroll-timeline-axis`: The scroll axis (`x`, `y`, `inline`, `block`). `inline` and `block` are logical axes that respect the writing direction.
+
+### Example:
+
+```css
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.container {
+  scroll-timeline: --my-scroll-timeline y; /* Shorthand */
+}
+
+.animated-element {
+  opacity: 0;
+  animation: fadeIn linear; /* Animation definition */
+  animation-timeline: --my-scroll-timeline; /* Timeline assignment */
+}
+```
+
+**Equivalent notation (without the shorthand):**
+
+```css
+.container {
+  scroll-timeline-name: --my-scroll-timeline;
+  scroll-timeline-axis: y;
+}
+```
+
+## view-timeline: Tracking element visibility
+
+The `view-timeline` property is used to define a so-called "view timeline". This timeline tracks the change in visibility of an element (subject) inside a scrollable container (scroller).
+
+`view-timeline` is a shorthand for `view-timeline-name` and `view-timeline-axis`.
+
+Just like with `scroll-timeline`: `view-timeline` does nothing on its own. It needs `animation-timeline`!
+
+### Sub-properties:
+
+- `view-timeline-name`: The name of the timeline (we use `dashed-ident`).
+- `view-timeline-axis`: The visibility tracking axis (`x`, `y`, `inline`, `block`).
+
+### Example:
+
+```css
+@keyframes slideIn {
+  from {
+    translate: -100% 0;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+.animated-element {
+  translate: -100% 0; /* Initial position off-screen */
+  view-timeline: --my-view-timeline block; /* Shorthand */
+  animation: slideIn ease-out;
+  animation-timeline: --my-view-timeline;
+}
+```
+
+**Equivalent notation (without the shorthand):**
+
+```css
+.animated-element {
+  view-timeline-name: --my-view-timeline;
+  view-timeline-axis: block;
+}
+```
+
+## animation-timeline: Responsible for starting the animation
+
+You have surely noticed that the `animation-timeline` property was present in every previous code example. That is because without it, scroll-driven animations simply would not work! This property connects an animation to a defined timeline (scroll or view).
+
+### Options:
+
+- Named timeline: We use the name defined in `scroll-timeline-name` or `view-timeline-name`. The name must be in the `dashed-ident` format (starting with `--`).
+- Anonymous timeline: We use the `scroll()` or `view()` functions.
+
+### The difference between a named and an anonymous timeline:
+
+- Named timeline: Suitable for more complex animations where we need to reuse the same timeline repeatedly.
+- Anonymous timeline: A quick solution for simple animations where we do not need to share the timeline.
+
+### Example:
+
+```css
+.element {
+  animation-timeline: --my-scroll-timeline; /* Named scroll timeline */
+  animation-timeline: view(); /* Anonymous view timeline */
+}
+```
+
+### The `scroll()` and `view()` functions:
+
+These functions allow you to attach an animation directly to scrolling or visibility without having to define a named timeline.
+
+### Example:
+
+```css
+.element {
+  animation-timeline: scroll(y); /* Animation driven by vertical scrolling */
+  animation-timeline: view(
+    inline
+  ); /* Animation driven by visibility (inline axis) */
+}
+```
+
+## animation-range: Setting the animation playback boundaries
+
+`animation-range` lets you specify the range of the timeline in which the animation should play. This means you can precisely define when the animation starts and ends relative to the scroll progress or the element's visibility.
+
+`animation-range` is a shorthand for:
+
+- `animation-range-start`
+- `animation-range-end`
+
+Key values for `animation-range-start` and `animation-range-end`:
+
+- `normal`: The default value; the animation plays from the beginning to the end of the timeline.
+- `entry`: The animation starts when the element enters the viewport.
+- `exit`: The animation ends when the element leaves the viewport.
+- `contain`: The animation plays only while the element is fully inside the viewport.
+- `cover`: The animation plays only while the element covers the entire viewport.
+- numeric values: Exact timeline values, which can be defined in percentages (`0%`, `50%`, `100%`), viewport units (`10svw`, `50svb`) or static units (`10rem`, `20px`).
+
+### Example:
+
+```css
+.element {
+  animation-timeline: view();
+  animation-range: entry contain;
+}
+
+.element {
+  animation-timeline: scroll(y);
+  animation-range: 20% 80%;
+}
+
+.element {
+  animation-timeline: scroll(y);
+  animation-range: 10rem 50vh;
+}
+```
+
+## view-timeline-inset: Setting the view timeline offset
+
+`view-timeline-inset` allows you to adjust the boundaries at which an element is considered visible. This way you can achieve smoother transitions and animations that react to the element approaching the viewport even before it is physically visible. In other words, you can set an offset by which the start and end of the animation playback are shifted.
+
+`view-timeline-inset` supports one or two values:
+
+- one value: Sets the offset on both sides.
+- two values: Sets the offset for the start and end of the view timeline.
+
+### Combining with `animation-range`:
+
+`view-timeline-inset` can be combined with `animation-range` for even greater control over the animation. This lets you set the visibility detection offset while also defining the exact point at which the animation should start.
+
+### Example:
+
+```css
+.element {
+  view-timeline: --my-view-timeline block;
+  view-timeline-inset: -50px; /* The animation starts 50px before the element becomes visible */
+  animation-timeline: --my-view-timeline;
+  animation-range-start: entry;
+}
+
+.element {
+  view-timeline: --my-view-timeline block;
+  view-timeline-inset: 10px 20px; /* 10px at the start, 20px at the end */
+  animation-timeline: --my-view-timeline;
+}
+```
+
+### The difference between `animation-range` and `view-timeline-inset`:
+
+- `animation-range` defines _the range of the timeline in which the animation should play_. It is as if you set the beginning and end of a movie.
+- `view-timeline-inset` defines _when the element is considered visible, which affects the entire view timeline_. It is as if you moved the camera to see the element sooner or later.
+
+## timeline-scope: Sharing timelines
+
+`timeline-scope` makes it possible to share a timeline between elements. This property opens up new possibilities for creating complex and synchronized animations. Imagine, for example, a situation where you want to animate the properties of a parent element based on how its descendant is being scrolled. With `timeline-scope`, it is possible!
+
+### How does it work?
+
+1. You define a timeline (for example `scroll-timeline`) on the descendant.
+2. You use `timeline-scope` on the parent element and assign it the name of the descendant's timeline.
+3. Now you can animate the parent element's properties using the descendant's timeline!
+
+### Example:
+
+```css
+.parent {
+  timeline-scope: --scroll-timeline-child; /* The parent shares the descendant's timeline */
+  animation: scaleUp linear;
+  animation-timeline: --scroll-timeline-child;
+}
+
+.child {
+  scroll-timeline: --scroll-timeline-child y; /* The descendant defines the timeline */
+}
+
+@keyframes scaleUp {
+  to {
+    scale: 1.2;
+  }
+}
+```
+
+In this example, the parent element grows (the scaleUp animation) based on how the descendant is being scrolled.
+
+### When to use `timeline-scope`?
+
+- If you want to animate the properties of a parent element based on activity in a descendant (for example scrolling, visibility).
+- If you want to create complex and synchronized animations between multiple elements.
+- When building layouts where animations need to be synchronized between different parts of the page.
+
+## Conclusion
+
+CSS scroll-driven animations are a powerful tool for building modern and interactive websites. With new properties such as `scroll-timeline`, `view-timeline`, `animation-range` and `timeline-scope`, you can create stunning animations without having to use JavaScript. Try them out and take your web projects to the next level!
+
+#### A note for Firefox users
+
+For scroll-driven animations to work correctly, you currently need to add the `animation-duration` property with a value such as `1ms` to the animated element's definition. Otherwise the animations may not work properly.
+
+#### A note for Safari users
+
+Not supported yet.

@@ -1,0 +1,20 @@
+{
+  "sk": {
+    "title": "Blog",
+    "intro": "Články zamerané na moderné CSS, frontend architektúru a AI vo vývoji. Nájdete v nich praktické poznatky, experimenty aj konkrétne postupy z reálnych projektov.",
+    "searchPlaceholder": "Vyhľadať článok...",
+    "emptySearch": "Žiadne články sa nenašli.",
+    "emptyList": "Žiadne články zatiaľ nie sú k dispozícii.",
+    "headTitle": "Blog | Lukáš Chylík",
+    "headDescription": "Prečítajte si moje najnovšie články o webovom vývoji, dizajne a technológiách."
+  },
+  "en": {
+    "title": "Blog",
+    "intro": "Articles focused on modern CSS, frontend architecture and AI in development. You will find practical insights, experiments and concrete workflows from real projects.",
+    "searchPlaceholder": "Search articles...",
+    "emptySearch": "No articles found.",
+    "emptyList": "No articles are available yet.",
+    "headTitle": "Blog | Lukáš Chylík",
+    "headDescription": "Read my latest articles about web development, design and technology."
+  }
+}

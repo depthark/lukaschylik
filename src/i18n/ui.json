@@ -1,0 +1,68 @@
+{
+  "sk": {
+    "nav": {
+      "about": "O mne",
+      "references": "Referencie",
+      "services": "Služby",
+      "contact": "Kontakt",
+      "blog": "Blog",
+      "reservation": "Rezervácia",
+      "openMenu": "Otvoriť menu",
+      "closeMenu": "Zavrieť menu",
+      "logoLabel": "Lukáš Chylík Logo"
+    },
+    "languageSwitch": {
+      "label": "Switch to English",
+      "targetLanguage": "English"
+    },
+    "themeSwitch": {
+      "label": "Prepnutie témy"
+    },
+    "siteMeta": {
+      "defaultTitle": "Lukáš Chylík | Frontend, UX/UI, AI workshopy",
+      "defaultDescription": "Frontend developer s presahom do UX/UI, zameraný na Design Systémy a AI vo vývoji.",
+      "keywords": "frontend developer, UX/UI, dizajnové systémy, AI vo vývoji, AI workshopy, AI školenia, spec‑driven development, custom agenti, AI workflow, Lukáš Chylík, Brno"
+    },
+    "notFound": {
+      "title": "Stránka sa nenašla",
+      "message": "Stránka, ktorú hľadáte, neexistuje alebo bola presunutá. Skúste sa vrátiť na úvodnú stránku alebo si prezrite blog.",
+      "backHome": "Späť na úvod",
+      "goToBlog": "Prejsť na blog",
+      "headTitle": "404 – Stránka sa nenašla | Lukáš Chylík",
+      "headDescription": "Požadovaná stránka neexistuje alebo bola presunutá."
+    }
+  },
+  "en": {
+    "nav": {
+      "about": "About me",
+      "references": "References",
+      "services": "Services",
+      "contact": "Contact",
+      "blog": "Blog",
+      "reservation": "Book a call",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "logoLabel": "Lukáš Chylík Logo"
+    },
+    "languageSwitch": {
+      "label": "Prepnúť do slovenčiny",
+      "targetLanguage": "Slovenčina"
+    },
+    "themeSwitch": {
+      "label": "Toggle theme"
+    },
+    "siteMeta": {
+      "defaultTitle": "Lukáš Chylík | Frontend, UX/UI, AI workshops",
+      "defaultDescription": "Frontend developer with an overlap into UX/UI, focused on Design Systems and AI in development.",
+      "keywords": "frontend developer, UX/UI, design systems, AI in development, AI workshops, AI training, spec-driven development, custom agents, AI workflow, Lukáš Chylík, Brno"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "message": "The page you are looking for does not exist or has been moved. Try going back to the homepage or browse the blog.",
+      "backHome": "Back to homepage",
+      "goToBlog": "Go to blog",
+      "headTitle": "404 – Page not found | Lukáš Chylík",
+      "headDescription": "The requested page does not exist or has been moved."
+    }
+  }
+}

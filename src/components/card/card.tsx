@@ -1,6 +1,8 @@
 import { component$, Slot } from '@qwik.dev/core'
+import { useLocale } from '~/i18n'
 import { cls } from '~/utils'
 import { Button } from '../button'
+import i18n from './card.i18n.json'
 import type { CardProps } from './card.types'
 
 const formatPrice = (price: number) => {
@@ -21,6 +23,7 @@ const Card = component$(
     available = true,
     onClick$,
   }: CardProps) => {
+    const t = i18n[useLocale()]
     const CardContent = (
       <>
         <h3
@@ -64,8 +67,8 @@ const Card = component$(
             {priceLabel
               ? priceLabel
               : price != null
-                ? `${formatPrice(price)} Kč`
-                : 'Na mieru'}
+                ? t.priceFormat.replace('{price}', formatPrice(price))
+                : t.customPrice}
             {priceNote && (
               <small class="block text-xs sm:text-sm font-light opacity-80">
                 {priceNote}
@@ -75,11 +78,11 @@ const Card = component$(
           <Button
             variant="secondary"
             className="whitespace-nowrap"
-            ariaLabel={available ? `Mám záujem` : 'Nedostupné'}
-            title={available ? `Mám záujem` : 'Nedostupné'}
+            ariaLabel={available ? t.interested : t.unavailable}
+            title={available ? t.interested : t.unavailable}
             disabled={!available}
             onClick$={onClick$}>
-            {available ? `Mám záujem` : 'Nedostupné'}
+            {available ? t.interested : t.unavailable}
           </Button>
         </div>
       </>

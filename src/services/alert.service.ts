@@ -1,4 +1,6 @@
 import type { QRL } from '@qwik.dev/core'
+import { getLocaleFromPathname } from '~/i18n'
+import i18n from './alert.i18n.json'
 
 /**
  * Checks URL parameters for form submission flags and shows appropriate alerts
@@ -15,6 +17,7 @@ export const checkUrlForAlerts = (
   location: URL,
   showAlert: QRL<(message: string) => void> | ((message: string) => void),
 ): void => {
+  const t = i18n[getLocaleFromPathname(location.pathname)]
   const trigger = (message: string) => {
     const anyFn = showAlert as any
     if (anyFn && typeof anyFn.invoke === 'function') {
@@ -26,7 +29,7 @@ export const checkUrlForAlerts = (
   }
   // Contact form submission (preferred flag)
   if (location.searchParams.has('formSubmitted')) {
-    trigger('Vaša správa bola úspešne odoslaná.')
+    trigger(t.formSubmitted)
 
     // Clean URL parameters
     const url = new URL(window.location.href)
@@ -41,7 +44,7 @@ export const checkUrlForAlerts = (
     location.searchParams.has('subject') &&
     location.searchParams.has('message')
   if (hasLegacyContactParams) {
-    trigger('Vaša správa bola úspešne odoslaná.')
+    trigger(t.formSubmitted)
 
     // Clean all known contact params from URL and preserve hash
     const url = new URL(window.location.href)
@@ -68,7 +71,7 @@ export const checkUrlForAlerts = (
 
   // Newsletter subscription
   if (location.searchParams.has('newsletterSubscribed')) {
-    trigger('Úspešne ste sa prihlásili na odber noviniek.')
+    trigger(t.newsletterSubscribed)
 
     const url = new URL(window.location.href)
     url.searchParams.delete('newsletterSubscribed')
@@ -77,7 +80,7 @@ export const checkUrlForAlerts = (
 
   // Newsletter unsubscription
   if (location.searchParams.has('newsletterUnsubscribed')) {
-    trigger('Boli ste odhlásený z odberu noviniek.')
+    trigger(t.newsletterUnsubscribed)
 
     const url = new URL(window.location.href)
     url.searchParams.delete('newsletterUnsubscribed')

@@ -1,5 +1,7 @@
 import { $, component$, useOnDocument, useSignal } from '@qwik.dev/core'
 import { Button, Container } from '~/components'
+import { useLocale } from '~/i18n'
+import i18n from './cookie-consent.i18n.json'
 
 type ConsentPrefs = {
   analytics: boolean
@@ -33,6 +35,7 @@ const persistPrefs = (prefs: ConsentPrefs) => {
 }
 
 export default component$(() => {
+  const t = i18n[useLocale()]
   const showBanner = useSignal(false)
   const prefsDialogRef = useSignal<HTMLDialogElement>()
   const analytics = useSignal(false)
@@ -111,15 +114,13 @@ export default component$(() => {
             <Container size="md" className="py-4">
               <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div class="text-sm leading-relaxed text-neutral-300">
-                  <strong class="text-neutral-100">Súbory cookie</strong>
+                  <strong class="text-neutral-100">{t.banner.title}</strong>
                   <span class="mx-2">—</span>
-                  Používam iba analytické cookies (Google Analytics) na meranie
-                  návštevnosti a zlepšenie webu. Môžete prijať všetky, odmietnuť
-                  alebo upraviť nastavenia.
+                  {t.banner.description}
                 </div>
                 <div class="flex gap-2 shrink-0">
                   <Button size="sm" variant="primary" onClick$={denyAll}>
-                    Odmietnuť
+                    {t.banner.deny}
                   </Button>
                   <Button
                     size="sm"
@@ -131,10 +132,10 @@ export default component$(() => {
                       }
                       prefsDialogRef.value?.showModal()
                     }}>
-                    Nastavenia
+                    {t.banner.settings}
                   </Button>
                   <Button size="sm" variant="primary" onClick$={acceptAll}>
-                    Prijať všetko
+                    {t.banner.acceptAll}
                   </Button>
                 </div>
               </div>
@@ -147,11 +148,8 @@ export default component$(() => {
         ref={prefsDialogRef}
         class="bg-neutral-900 text-neutral-100 w-[min(92vw,640px)] max-w-[92vw] md:max-w-[640px] rounded-xl border border-neutral-800 p-0 mx-auto my-auto">
         <div class="p-5 md:p-6 border-b border-neutral-800">
-          <h2 class="text-lg font-semibold">Nastavenia súborov cookie</h2>
-          <p class="mt-1 text-sm text-neutral-300">
-            Vyberte, ktoré typy cookies chcete povoliť. Nevyhnutné cookies sú
-            vždy povolené.
-          </p>
+          <h2 class="text-lg font-semibold">{t.dialog.title}</h2>
+          <p class="mt-1 text-sm text-neutral-300">{t.dialog.description}</p>
         </div>
         <div class="p-5 md:p-6 flex flex-col gap-4">
           <div class="flex items-start gap-3">
@@ -164,11 +162,9 @@ export default component$(() => {
             />
             <div class="text-sm">
               <label for="necessary" class="font-medium text-neutral-100">
-                Nevyhnutné
+                {t.dialog.necessaryLabel}
               </label>
-              <p class="text-neutral-300">
-                Potrebné na správne fungovanie webu. Nemožno vypnúť.
-              </p>
+              <p class="text-neutral-300">{t.dialog.necessaryDescription}</p>
             </div>
           </div>
 
@@ -184,11 +180,9 @@ export default component$(() => {
             />
             <div class="text-sm">
               <label for="analytics" class="font-medium text-neutral-100">
-                Analytické (Google Analytics)
+                {t.dialog.analyticsLabel}
               </label>
-              <p class="text-neutral-300">
-                Pomáhajú pochopiť, ako je web používaný. Bez reklamných cookies.
-              </p>
+              <p class="text-neutral-300">{t.dialog.analyticsDescription}</p>
             </div>
           </div>
         </div>
@@ -197,13 +191,13 @@ export default component$(() => {
             size="sm"
             variant="secondary"
             onClick$={() => prefsDialogRef.value?.close()}>
-            Zatvoriť
+            {t.dialog.close}
           </Button>
           <Button size="sm" variant="primary" onClick$={denyAll}>
-            Odmietnuť všetko
+            {t.dialog.denyAll}
           </Button>
           <Button size="sm" variant="primary" onClick$={savePrefs}>
-            Uložiť nastavenia
+            {t.dialog.save}
           </Button>
         </div>
       </dialog>

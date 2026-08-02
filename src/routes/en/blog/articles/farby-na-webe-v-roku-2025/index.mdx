@@ -1,0 +1,224 @@
+---
+title: Colors on the Web in 2025
+subtitle: OKLCH, relative colors and CSS color-mix()
+description: Web design went through a color revolution in 2025. While traditional RGB and HSL formats still dominate, new CSS features like OKLCH, relative colors and color-mix() give web developers unprecedented ways to work with color.
+date: 2025-08-07
+author: Lukáš Chylík
+podcastUrl: https://open.spotify.com/episode/3BIqlTa23zku7mOsLISrIr?si=992bb522c6644257
+cardImg: /images/blog/colors-2025.avif
+---
+
+## Web design and web development went through a color revolution in 2024/2025
+
+While traditional RGB and HSL formats still dominate, new CSS features like OKLCH, relative colors and color-mix() give web developers unprecedented ways to work with color. These technologies are not just new tools – they represent a paradigm shift in how we think about color on the web.
+
+## Color trends of 2025: From Mocha Mousse to Cherry Red
+
+The year 2025 is characterized by warm, earthy tones combined with bold accents. Pantone declared **Mocha Mousse** (PANTONE 17-1230) the color of the year – a rich, brown shade that evokes comfort and stability. Pinterest identified **Cherry Red** as the most prominent trend, while **Butter Yellow** and **Aura Indigo** round out the palette of the modern web.
+
+Current trends point to a duality in design – on one side we see a rise of soft pastels for comfort and accessibility, on the other bold, saturated colors for dynamic and energetic experiences.
+
+## OKLCH: A new era of color precision
+
+OKLCH (Oklab Lightness, Chroma, Hue) represents a revolutionary approach to defining colors in CSS. Unlike RGB or HSL, OKLCH is designed to correspond to human color perception.
+
+### Why OKLCH?
+
+**Predictable lightness:** Changes to the L (lightness) parameter apply consistently across all hues, which is not possible with HSL.
+
+**Wider color gamut:** OKLCH supports P3 colors, which means 30% more visible colors compared to traditional sRGB.
+
+**Wide-gamut** is a broader color range than sRGB (e.g. Display P3) that makes it possible to display more vivid colors and finer gradients. For the dev and UX community, this means more precise palettes, more stable contrast, and fewer rendering surprises across devices and browsers.
+
+**Better accessibility:** Thanks to perceptual lightness, it is easier to maintain consistent contrast.
+
+```css
+/* Traditional approach with HSL */
+.button {
+  background: hsl(210, 50%, 50%);
+}
+.button:hover {
+  background: hsl(210, 50%, 60%); /* Unpredictable change in brightness */
+}
+
+/* Modern approach with OKLCH */
+.button {
+  background: oklch(60% 0.15 250);
+}
+.button:hover {
+  background: oklch(70% 0.15 250); /* Predictable lightening by 10% */
+}
+```
+
+## Relative Colors: Deriving colors dynamically
+
+CSS relative colors let you create new colors based on existing ones using the `from` keyword. This feature eliminates the need to manually calculate color variants.
+
+<p class="codepen" data-height="551" data-default-tab="css,result" data-slug-hash="RwzOwWV" data-pen-title="CSS Relative colors showcase" data-user="luko248" style="height: 551px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;"><span>See the Pen <a href="https://codepen.io/luko248/pen/RwzOwWV">CSS Relative colors showcase</a> by Lukáš Chylík (<a href="https://codepen.io/luko248">@luko248</a>)on <a href="https://codepen.io">CodePen</a>.</span></p>
+
+### What we no longer need JS for
+
+**Basic conversions between formats:**
+```css
+/* Instead of a JS HEX → HSL converter */
+.element {
+  color: hsl(from #ff6b35 h s l);
+}
+
+/* RGB → OKLCH with a lightness adjustment */
+background: oklch(from rgb(255, 107, 53) calc(l * 0.8) c h);
+```
+
+**Color manipulations:**
+```css
+/* Instead of polyfill libraries for lighten/darken */
+--lighter: oklch(from var(--primary) calc(l + 0.15) c h);
+--darker: oklch(from var(--primary) calc(l - 0.15) c h);
+--desaturated: oklch(from var(--primary) l calc(c * 0.5) h);
+```
+
+**Where JS converters still make sense:**
+
+- Generating static color palettes
+- Analyzing contrast ratios
+- Validating accessibility before deployment
+
+### Working with CSS custom properties and color keywords
+
+You can also use relative colors with CSS custom properties and color keywords like `red`, `blue` or `white`. This opens up new possibilities for building themes and components dynamically:
+
+```css
+:root {
+  --_color-orange: lab(76 27.53 79.12);
+}
+
+.component {
+  /* Combining with the calc() function */
+  &.info {
+    --block_bg-color: hsl(from blue h 75% calc(l + 10%));
+  }
+  
+  /* Using color keywords */
+  &.success {
+    --block_bg-color: hwb(from green h 15% 40%);
+  }
+  
+  /* Using a CSS custom property */
+  &.warn {
+    --block_bg-color: rgb(from var(--_color-orange) r 175 42);
+  }
+  
+  /* Combining with SCSS variables */
+  $color-red: #ff0000;
+  
+  &.error {
+    --block_bg-color: oklch(from #{$color-red} .6 .2 h);
+  }
+  
+  /* Adding an alpha channel */
+  &.disabled {
+    --block_bg-color: hsl(from white h s l / .5);
+  }
+  
+  /* Duplicating channels: using r r g from orange */
+  &.remap {
+    --block_bg-color: rgb(from orange r r g);
+  }
+}
+```
+
+This approach enables **swapping channels** between color spaces and **reusing the same channels** across all attributes, which provides remarkable flexibility when building color schemes.
+
+## Color-mix(): Mixing colors like in Photoshop
+
+The `color-mix()` function brings the ability to mix two colors in a specified color space to CSS. It is similar to the color-mixing tools in visual editors, but directly in CSS.
+
+<p class="codepen" data-height="550" data-default-tab="css,result" data-slug-hash="MWzGMWO" data-pen-title="css color-mix()" data-user="luko248" style="height: 550px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;"><span>See the Pen <a href="https://codepen.io/luko248/pen/MWzGMWO">css color-mix()</a> by Lukáš Chylík (<a href="https://codepen.io/luko248">@luko248</a>)on <a href="https://codepen.io">CodePen</a>.</span></p><script async src="https://public.codepenassets.com/embed/index.js"></script>
+
+```css
+:root {
+  --green: oklch(65% 0.15 140);
+  --red: oklch(55% 0.22 20);
+}
+
+/* Creating a smooth gradient */
+.gradient {
+  background: linear-gradient(
+    to right,
+    var(--green),
+    color-mix(in oklch, var(--green) 75%, var(--red) 25%),
+    color-mix(in oklch, var(--green) 50%, var(--red) 50%),
+    color-mix(in oklch, var(--green) 25%, var(--red) 75%),
+    var(--red)
+  );
+}
+
+/* Dynamic theme creation */
+.theme-variations {
+  --base-color: oklch(60% 0.15 200);
+  
+  background: var(--base-color);
+  border: 2px solid color-mix(in oklch, var(--base-color) 70%, black 30%);
+  color: color-mix(in oklch, var(--base-color) 20%, white 80%);
+}
+```
+
+## Practical implementation: From theory to practice
+
+### Browser support in 2025
+
+OKLCH is supported in all modern browsers:
+
+- **Chrome 111+** (March 2023)
+- **Firefox 113+** (May 2023)
+- **Safari 15.4+** (March 2022)
+- **Edge 111+** (March 2023)
+
+Overall support reaches **90.2%** globally, which makes OKLCH usable for production projects with fallback solutions.
+
+### Progressive enhancement
+
+```css
+/* Fallback */
+.demo-btn {
+  --primary: #4a90e2;
+  background: var(--primary);
+  color: #fff;
+}
+
+/* 1) OKLCH */
+@supports (background: oklch(60% 0.15 250)) {
+  .demo-btn {
+    --primary: oklch(60% 0.15 250);
+    background: var(--primary);
+  }
+}
+
+/* 2) color-mix() */
+@supports (color: color-mix(in oklch, white 50%, black 50%)) {
+  .demo-btn.is-tinted {
+    background: color-mix(in oklch, var(--primary) 85%, white 15%);
+  }
+}
+
+/* 3) Relative colors (from) */
+@supports (background: oklch(from oklch(60% 0.15 250) l c h)) {
+  .demo-btn:hover {
+    background: oklch(from var(--primary) calc(l + 0.1) c h);
+  }
+}
+```
+
+## Trends in web design communities in 2025
+
+The web developer community is gradually adopting these technologies. **Bold minimalism** combined with striking color accents is becoming the dominant trend, with OKLCH enabling more precise control over color palettes.
+
+Notable is the rise of AI-generated color palettes, where OKLCH delivers better results thanks to its perceptual nature.
+
+## The future of colors on the web
+
+CSS Color Module Level 5 brings further innovations including `contrast-color()` functions and extended gamut mapping capabilities. Wide-gamut displays are expected to be the standard by 2026, making the benefits of OKLCH even more pronounced.
+
+## Conclusion
+
+The year 2025 marks a breakthrough in the use of color on the web. OKLCH, relative colors and color-mix() are not just technical novelties – they are tools that fundamentally change the way we think about color in the digital environment. For the web development community, they represent an opportunity to create visually more sophisticated and more accessible web experiences.

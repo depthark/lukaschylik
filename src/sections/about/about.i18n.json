@@ -1,0 +1,76 @@
+{
+  "sk": {
+    "title": "Niečo o mne",
+    "paragraphs": [
+      [
+        { "text": "Som frontend developer s ", "strong": false },
+        { "text": "veľkým presahom do UX/UI", "strong": true },
+        {
+          "text": ". Za posledných 10 rokov som pracoval na projektoch od prezentačných webov po PWA a informačné systémy. ",
+          "strong": false
+        },
+        { "text": "Technické SEO a prístupnosť", "strong": true },
+        {
+          "text": " sú samozrejmosťou. Venujem sa implementácii ",
+          "strong": false
+        },
+        { "text": "dizajnových systémov", "strong": true },
+        { "text": " aj ", "strong": false },
+        { "text": "efektívnemu využívaniu AI vo vývoji", "strong": true },
+        { "text": ".", "strong": false }
+      ],
+      [
+        { "text": "Pomáham tímom ", "strong": false },
+        { "text": "efektívne využívať AI", "strong": true },
+        {
+          "text": " s dôrazom na produktivitu a kvalitu kódu. Skúsenosti odovzdávam cez konzultácie, workshopy a školenia.",
+          "strong": false
+        }
+      ],
+      [
+        {
+          "text": "Okrem vývoja sa venujem aj prednášaniu na rôznych meetupoch a konferenciách.",
+          "strong": false
+        }
+      ]
+    ],
+    "photoAlt": "Fotografia Lukáša Chylika"
+  },
+  "en": {
+    "title": "About me",
+    "paragraphs": [
+      [
+        { "text": "I'm a frontend developer with a ", "strong": false },
+        { "text": "strong overlap into UX/UI", "strong": true },
+        {
+          "text": ". Over the past 10 years I've worked on projects ranging from presentation websites to PWAs and information systems. ",
+          "strong": false
+        },
+        { "text": "Technical SEO and accessibility", "strong": true },
+        {
+          "text": " come as standard. I focus on implementing ",
+          "strong": false
+        },
+        { "text": "design systems", "strong": true },
+        { "text": " as well as ", "strong": false },
+        { "text": "using AI effectively in development", "strong": true },
+        { "text": ".", "strong": false }
+      ],
+      [
+        { "text": "I help teams ", "strong": false },
+        { "text": "use AI effectively", "strong": true },
+        {
+          "text": " with a focus on productivity and code quality. I share my experience through consulting, workshops, and training.",
+          "strong": false
+        }
+      ],
+      [
+        {
+          "text": "Beyond development, I also speak at various meetups and conferences.",
+          "strong": false
+        }
+      ]
+    ],
+    "photoAlt": "Photo of Lukáš Chylík"
+  }
+}

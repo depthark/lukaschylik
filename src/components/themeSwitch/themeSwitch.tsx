@@ -1,4 +1,6 @@
 import { $, component$ } from '@qwik.dev/core'
+import { useLocale } from '~/i18n'
+import ui from '~/i18n/ui.json'
 import { applyTheme, getDocumentTheme, storeTheme } from '~/utils'
 import { Button } from '../button'
 import { Icon } from '../icon'
@@ -8,6 +10,8 @@ import { Icon } from '../icon'
  * @returns JSX button element
  */
 const ThemeSwitch = component$(() => {
+  const t = ui[useLocale()]
+
   /**
    * Handles theme toggle on button click.
    */
@@ -27,8 +31,8 @@ const ThemeSwitch = component$(() => {
       className="text-black dark:text-white p-0"
       onClick$={handleToggle}
       variant="plain"
-      ariaLabel="Prepnutie témy"
-      title="Prepnutie témy">
+      ariaLabel={t.themeSwitch.label}
+      title={t.themeSwitch.label}>
       <span class="inline-flex dark:hidden" aria-hidden="true">
         <Icon name="sun" size="1.5rem" color="currentColor" />
       </span>
