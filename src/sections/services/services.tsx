@@ -3,6 +3,7 @@ import { Card, ListItem } from '~/components'
 import Container from '~/components/container/container'
 import Section from '~/components/section/section'
 import SectionTitle from '~/components/section/section.title'
+import { CONSULTING_HOURLY_RATE_CZK } from '~/constants/business'
 import { useLocale } from '~/i18n'
 import { DialogContext } from '~/utils'
 import i18n from './services.i18n.json'
@@ -64,7 +65,7 @@ const References = component$(() => {
         <div class="services grid text-white gap-2 md:gap-4 xl:gap-8">
           <Card
             title={t.cards.consulting.title}
-            price={1200}
+            price={CONSULTING_HOURLY_RATE_CZK}
             priceNote={t.cards.consulting.priceNote}
             onClick$={dialogContext.showDialog}>
             <p class="text-sm text-gray-800 dark:text-gray-300">

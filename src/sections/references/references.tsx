@@ -4,6 +4,7 @@ import Container from '~/components/container/container'
 import Reference from '~/components/reference/reference'
 import Section from '~/components/section/section'
 import SectionTitle from '~/components/section/section.title'
+import { REFERENCES } from '~/constants/references'
 import { localizePath, useLocale } from '~/i18n'
 import i18n from './references.i18n.json'
 
@@ -58,76 +59,16 @@ const References = component$(() => {
               </div>
             </div>
             <ul class="ref-list list-none p-0 m-0 min-w-0">
-              <Reference
-                title="Vertice"
-                img="/images/references/vertice.avif"
-                webURL="https://vertice.one/"
-                website="vertice.one"
-                type={t.types.designSystem}
-              />
-              <Reference
-                title="VIGo"
-                img="/images/references/vigo.avif"
-                webURL="https://vig.cz/"
-                website="vig.cz"
-                type={t.types.designSystem}
-              />
-              <Reference
-                title="Riganti"
-                img="/images/references/riganti.avif"
-                webURL="https://www.riganti.cz/"
-                website="riganti.cz"
-                type={t.types.collaboration}
-              />
-              <Reference
-                title="Update Conference"
-                img="/images/references/update-conference.avif"
-                webURL="https://www.updateconference.net/"
-                website="updateconference.net"
-                type={t.types.collaboration}
-              />
-              <Reference
-                title="Update Days"
-                img="/images/references/update-days.avif"
-                webURL="https://www.updatedays.cz/"
-                website="updatedays.cz"
-                type={t.types.collaboration}
-              />
-              <Reference
-                title="Meetupdate"
-                img="/images/references/meetupdate.avif"
-                webURL="https://www.meetupdate.cz/"
-                website="meetupdate.cz"
-                type={t.types.collaboration}
-              />
-              <Reference
-                title="DotVVM"
-                img="/images/references/dotvvm.avif"
-                webURL="https://www.dotvvm.com/"
-                website="dotvvm.com"
-                type={t.types.collaboration}
-              />
-              <Reference
-                title="Brand DESIGN"
-                img="/images/references/brand-design.avif"
-                webURL="https://brand-design.cz/"
-                website="brand-design.cz"
-                type={t.types.web}
-              />
-              <Reference
-                title="Elendris"
-                img="/images/references/elendris.avif"
-                webURL="https://elendris.cz/"
-                website="elendris.cz"
-                type={t.types.web}
-              />
-              <Reference
-                title="Anew style"
-                img="/images/references/anewstyle.avif"
-                webURL="https://anewstyle.cz/"
-                website="anewstyle.cz"
-                type={t.types.web}
-              />
+              {REFERENCES.map((reference) => (
+                <Reference
+                  key={reference.webURL}
+                  title={reference.title}
+                  img={reference.img}
+                  webURL={reference.webURL}
+                  website={reference.website}
+                  type={t.types[reference.type]}
+                />
+              ))}
               {/* <Reference
               title="Krossbau s.r.o."
               webURL="https://www.krossbau.cz/"

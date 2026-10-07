@@ -6,6 +6,7 @@ import SectionTitle from '~/components/section/section.title'
 import socialI18n from '~/components/social/social.i18n.json'
 import { SOCIAL_LINKS } from '~/constants/socialLinks'
 import { useLocale } from '~/i18n'
+import { sendContactMessage } from '~/services'
 import { cls } from '~/utils'
 import i18n from './contact.i18n.json'
 
@@ -41,19 +42,15 @@ const Contact = component$(() => {
     state.submitting = true
 
     try {
-      const formData = new FormData(event.target as HTMLFormElement)
-      formData.delete('botcheck')
-
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData,
-      })
-
-      const result = await response.json()
-
-      if (!result.success) {
-        throw new Error(result.message || 'Failed to submit form')
-      }
+      await sendContactMessage(
+        {
+          fullname: state.fullname,
+          email: state.email,
+          subject: state.subject,
+          message: state.message,
+        },
+        locale,
+      )
 
       state.fullname = ''
       state.email = ''
@@ -162,13 +159,6 @@ const Contact = component$(() => {
             'grid grid-cols-1 gap-4 md:gap-6',
             'content-fade-in content-fade-in--entry',
           )}>
-          <input
-            type="hidden"
-            name="access_key"
-            value="fb75ad8a-4efe-4daf-9312-3ebd38d3c228"
-          />
-          <input type="hidden" name="subject" value={t.form.hiddenSubject} />
-          <input type="hidden" name="from_name" value={t.form.hiddenFromName} />
           <div
             class="absolute -left-[9999px] opacity-0 pointer-events-none"
             aria-hidden="true">

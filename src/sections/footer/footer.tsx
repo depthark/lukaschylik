@@ -2,6 +2,7 @@ import { component$ } from '@qwik.dev/core'
 import { Container, Icon } from '~/components'
 import { LogoFooter as Logo } from '~/components/logo/logo'
 import socialI18n from '~/components/social/social.i18n.json'
+import { COMPANY_ID, CONTACT_EMAIL } from '~/constants/business'
 import { SOCIAL_LINKS } from '~/constants/socialLinks'
 import { localizePath, useLocale } from '~/i18n'
 import ui from '~/i18n/ui.json'
@@ -96,14 +97,14 @@ const Footer = component$(() => {
               <br />
               {t.address.country}
               <span class="block mt-3">
-                <strong>{t.address.companyIdLabel}</strong> 05483247
+                <strong>{t.address.companyIdLabel}</strong> {COMPANY_ID}
               </span>
               <span class="block">
                 <strong>{t.address.emailLabel}</strong>{' '}
                 <a
                   class="hover:underline underline-offset-4 decoration-yellow-500"
-                  href="mailto:chylik.lukas@gmail.com">
-                  chylik.lukas@gmail.com
+                  href={`mailto:${CONTACT_EMAIL}`}>
+                  {CONTACT_EMAIL}
                 </a>
               </span>
             </address>

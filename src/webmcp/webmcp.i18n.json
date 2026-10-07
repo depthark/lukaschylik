@@ -1,0 +1,10 @@
+{
+  "sk": {
+    "confirmContact": "AI asistent chce vo Vašom mene odoslať túto správu Lukášovi Chylíkovi:\n\nOd: {name} <{email}>\nPredmet: {subject}\n\n{message}\n\nChcete správu odoslať?",
+    "confirmNewsletter": "AI asistent chce prihlásiť e-mail {email} na odber noviniek. Súhlasíte so spracovaním e-mailu podľa zásad ochrany osobných údajov?"
+  },
+  "en": {
+    "confirmContact": "An AI assistant wants to send this message to Lukáš Chylík on your behalf:\n\nFrom: {name} <{email}>\nSubject: {subject}\n\n{message}\n\nDo you want to send it?",
+    "confirmNewsletter": "An AI assistant wants to subscribe {email} to the newsletter. Do you agree to the processing of this email under the privacy policy?"
+  }
+}

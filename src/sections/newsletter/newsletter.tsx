@@ -3,12 +3,9 @@ import { useNavigate } from '@qwik.dev/router'
 import { Button, Container, FormField, Section } from '~/components'
 import SectionTitle from '~/components/section/section.title'
 import { localizePath, useLocale } from '~/i18n'
+import { MAILCHIMP_HONEYPOT_FIELD, subscribeToNewsletter } from '~/services'
 import { cls } from '~/utils'
 import i18n from './newsletter.i18n.json'
-
-const MAILCHIMP_FORM_URL =
-  'https://lukaschylik.us6.list-manage.com/subscribe/post?u=e4c1b2f028f9fc3c28ad28630&id=90b3c6481a&f_id=00d309e3f0'
-const MAILCHIMP_HONEYPOT_FIELD = 'b_e4c1b2f028f9fc3c28ad28630_90b3c6481a'
 
 /**
  * Newsletter subscription component
@@ -43,16 +40,7 @@ const Newsletter = component$(() => {
     state.error = ''
 
     try {
-      const formData = new FormData()
-      formData.append('EMAIL', state.email)
-      // Bot trap required by Mailchimp.
-      formData.append(MAILCHIMP_HONEYPOT_FIELD, '')
-
-      await fetch(MAILCHIMP_FORM_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: formData,
-      })
+      await subscribeToNewsletter(state.email)
 
       state.email = ''
 

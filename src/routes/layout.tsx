@@ -10,15 +10,17 @@ import {
   useVisibleTask$,
 } from '@qwik.dev/core'
 import type { DocumentHead, RequestHandler } from '@qwik.dev/router'
-import { useLocation } from '@qwik.dev/router'
+import { useLocation, useNavigate } from '@qwik.dev/router'
 import { Alert, Navigation, ReservationDialog } from '~/components'
 import CookieConsent from '~/components/cookie-consent/cookie-consent'
 import Social from '~/components/social/social'
+import { CONTACT_EMAIL, CONTACT_PHONE } from '~/constants/business'
 import { getLocaleFromPathname, stripLocale, useLocale } from '~/i18n'
 import ui from '~/i18n/ui.json'
 import { Footer, Header } from '~/sections'
 import { checkUrlForAlerts } from '~/services'
 import { AlertContext, type AlertMessage, DialogContext } from '~/utils'
+import { useWebMcp } from '~/webmcp'
 
 export const onGet: RequestHandler = async ({ cacheControl, headers }) => {
   cacheControl({
@@ -71,8 +73,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               '@id': '#person',
               name: 'Lukáš Chylík',
               jobTitle: 'Frontend developer',
-              email: 'chylik.lukas@gmail.com',
-              telephone: '+421721459889',
+              email: CONTACT_EMAIL,
+              telephone: CONTACT_PHONE,
               image: './images/profile/me.webp',
               address: {
                 '@type': 'PostalAddress',
@@ -82,7 +84,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 addressCountry:
                   locale === 'sk' ? 'Česká republika' : 'Czech Republic',
               },
-              sameAs: ['mailto:chylik.lukas@gmail.com'],
+              sameAs: [`mailto:${CONTACT_EMAIL}`],
             },
             {
               '@type': 'WebSite',
@@ -148,6 +150,19 @@ export default component$(() => {
     }),
     hideDialog: $(() => {
       dialogRef.value?.close()
+    }),
+  })
+
+  const nav = useNavigate()
+
+  useWebMcp({
+    navigate: $((path: string) => nav(path)),
+    openBooking: $(() => {
+      dialogRef.value?.showModal()
+    }),
+    showAlert: $((message: string) => {
+      alertState.text = message
+      alertState.visible = true
     }),
   })
 

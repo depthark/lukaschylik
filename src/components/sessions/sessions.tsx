@@ -3,18 +3,10 @@ import type { DocumentHead } from '@qwik.dev/router'
 import Container from '~/components/container/container'
 import Section from '~/components/section/section'
 import SectionTitle from '~/components/section/section.title'
+import { SESSION_VIDEO_SOURCES } from '~/constants/sessions'
 import { getLocaleFromPathname, useLocale } from '~/i18n'
 import { cls } from '~/utils'
 import i18n from './sessions.i18n.json'
-
-const VIDEO_SOURCES = [
-  'https://www.youtube.com/embed/MCVuRMBOXUU?si=MC5Ah5u53jbdbfYZ',
-  'https://www.youtube.com/embed/FAbaIpGWmR4?si=0_zKp6MHe_-_n6P8',
-  'https://www.youtube.com/embed/eTjXcx5DUqM?si=P3ea1dfnwKqxrzyC',
-  'https://www.youtube.com/embed/ITDfqStMym0?si=sWTLYIfZVc-OusDf',
-  'https://www.youtube.com/embed/hwhuSdO5fU0?si=ZckQ-cJlCGZpJExv',
-  'https://www.youtube.com/embed/p8sQyt4YFdk?si=WDxTC4029EeFecKk',
-]
 
 /**
  * Document head for the sessions routes; locale derived from the URL so a
@@ -93,7 +85,7 @@ const Sessions = component$(() => {
           {t.intro}
         </p>
         <ul class="content-fade-in grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 list-none p-0 m-0">
-          {VIDEO_SOURCES.map((src, index) => (
+          {SESSION_VIDEO_SOURCES.map((src, index) => (
             <li key={src} class="relative group grid gap-3" onClick$={openPiP}>
               <iframe
                 class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"

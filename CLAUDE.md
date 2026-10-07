@@ -73,6 +73,13 @@ bun run build.types
 - Tailwind output goes to `src/styles/css/tailwind.optimized.css`
 - Nodemon watches SCSS changes and auto-rebuilds
 
+### WebMCP
+- `src/webmcp/` exposes site tools to in-browser AI agents via `document.modelContext` (falls back to the deprecated `navigator.modelContext`); no-op when unsupported
+- Registered from the root layout with `useWebMcp()`; an `AbortController` owns the registrations
+- Tools: `get_page_context`, `get_profile`, `list_services`, `list_references`, `list_sessions`, `search_blog_posts`, `get_blog_post` (read-only), `navigate`, `open_blog_post`, `set_theme`, `set_language`, `open_booking`, `send_contact_message`, `subscribe_newsletter`
+- Tools that send data ask the visitor via `confirm()` first; shared submit logic lives in `src/services/contact.service.ts` and `newsletter.service.ts`
+- Shared data (references, session videos, contact details, consulting rate) lives in `src/constants/` so UI and tools stay in sync
+
 ### Contexts
 - `AlertContext` - Global alert/notification system
 - `DialogContext` - Reservation dialog management
