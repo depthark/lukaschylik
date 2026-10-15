@@ -7,7 +7,13 @@
       "emailPlaceholder": "john.doe@email.com",
       "submit": "Odoberať",
       "submitting": "Odosielam...",
-      "error": "Nepodarilo sa prihlásiť na odber. Skúste to prosím znova."
+      "error": "Nepodarilo sa prihlásiť na odber. Skúste to prosím znova.",
+      "agent": {
+        "toolDescription": "Prihlási e-mail na odber noviniek o nových článkoch na blogu. Návštevník prihlásenie potvrdí.",
+        "email": "E-mail odberateľa.",
+        "subscribed": "E-mail bol prihlásený na odber noviniek.",
+        "failed": "Prihlásenie zlyhalo."
+      }
     },
     "gdpr": {
       "before": "Vaše údaje spracúvam v súlade s",
@@ -23,7 +29,13 @@
       "emailPlaceholder": "john.doe@email.com",
       "submit": "Subscribe",
       "submitting": "Sending...",
-      "error": "Failed to subscribe. Please try again."
+      "error": "Failed to subscribe. Please try again.",
+      "agent": {
+        "toolDescription": "Subscribe an email address to the newsletter about new blog articles. The visitor confirms the subscription.",
+        "email": "Subscriber email address.",
+        "subscribed": "The email was subscribed to the newsletter.",
+        "failed": "Subscription failed."
+      }
     },
     "gdpr": {
       "before": "Your data is processed in accordance with the",

@@ -79,6 +79,10 @@ bun run build.types
 - Tools: `get_page_context`, `get_profile`, `list_services`, `list_references`, `list_sessions`, `search_blog_posts`, `get_blog_post` (read-only), `navigate`, `open_blog_post`, `set_theme`, `set_language`, `open_booking`, `send_contact_message`, `subscribe_newsletter`
 - Tools that send data ask the visitor via `confirm()` first; shared submit logic lives in `src/services/contact.service.ts` and `newsletter.service.ts`
 - Shared data (references, session videos, contact details, consulting rate) lives in `src/constants/` so UI and tools stay in sync
+- Contact and newsletter forms are also declarative WebMCP tools (`toolname`/`tooldescription` on the form, `toolparamdescription` on fields; agent texts in the sections' i18n files). Typings in `src/webmcp/webmcp-attributes.d.ts`
+- Form submit handlers read values from the form element (agents may fill fields without input events) and report results via `bridgeAgentSubmit` (`sync$`, calls `respondWith`) + `resolveAgentSubmit` from `src/webmcp/declarative.ts`
+- `PUBLIC_WEBMCP_ORIGIN_TRIAL` (GitHub repo variable `WEBMCP_ORIGIN_TRIAL_TOKEN`) adds the WebMCP origin-trial `<meta>` in `router-head.tsx`
+- `scripts/generate-llms-txt.ts` writes `dist/llms.txt` during `bun run build`
 
 ### Contexts
 - `AlertContext` - Global alert/notification system

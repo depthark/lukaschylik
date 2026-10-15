@@ -60,6 +60,8 @@ export const RouterHead = component$(() => {
   const hasTwitterImage = !!findMeta('twitter:image')
   const hasTwitterCard = !!head.meta.find((m) => m.name === 'twitter:card')
   const hasOgType = !!findMeta('og:type')
+  const webMcpOriginTrial: string | undefined = import.meta.env
+    .PUBLIC_WEBMCP_ORIGIN_TRIAL
 
   return (
     <>
@@ -69,6 +71,9 @@ export const RouterHead = component$(() => {
       <link rel="alternate" hreflang="sk" href={skUrl} />
       <link rel="alternate" hreflang="en" href={enUrl} />
       <link rel="alternate" hreflang="x-default" href={skUrl} />
+      {webMcpOriginTrial && (
+        <meta http-equiv="origin-trial" content={webMcpOriginTrial} />
+      )}
       <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=3, viewport-fit=cover"

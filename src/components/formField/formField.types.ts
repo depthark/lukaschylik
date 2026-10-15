@@ -28,4 +28,6 @@ export interface FormFieldProps {
   placeholder?: string
   /** The autocomplete attribute for the input field */
   autocomplete?: string
+  /** Parameter description for AI agents when the form is a declarative WebMCP tool */
+  toolParamDescription?: string
 }

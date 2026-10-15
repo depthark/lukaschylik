@@ -8,6 +8,7 @@ import { SOCIAL_LINKS } from '~/constants/socialLinks'
 import { useLocale } from '~/i18n'
 import { sendContactMessage } from '~/services'
 import { cls } from '~/utils'
+import { bridgeAgentSubmit, resolveAgentSubmit } from '~/webmcp/declarative'
 import i18n from './contact.i18n.json'
 
 /**
@@ -28,13 +29,18 @@ const Contact = component$(() => {
   const nav = useNavigate()
 
   /**
-   * Handles form submission
+   * Handles form submission. Values are read from the form itself so that
+   * fields filled in by an AI agent (declarative WebMCP tool) are included.
    */
-  const handleSubmit = $(async (event: SubmitEvent) => {
+  const handleSubmit = $(async (event: SubmitEvent, form: HTMLFormElement) => {
     event.preventDefault()
 
-    if (state.honeypot) {
+    const fields = new FormData(form)
+    const read = (key: string) => String(fields.get(key) ?? '').trim()
+
+    if (read('botcheck')) {
       console.warn('Bot detected')
+      resolveAgentSubmit(form, t.form.agent.rejected)
       return
     }
 
@@ -44,25 +50,28 @@ const Contact = component$(() => {
     try {
       await sendContactMessage(
         {
-          fullname: state.fullname,
-          email: state.email,
-          subject: state.subject,
-          message: state.message,
+          fullname: read('fullname'),
+          email: read('email'),
+          subject: read('user_subject'),
+          message: read('message'),
         },
         locale,
       )
 
+      form.reset()
       state.fullname = ''
       state.email = ''
       state.subject = ''
       state.message = ''
       state.honeypot = ''
+      resolveAgentSubmit(form, t.form.agent.sent)
 
       const url = new URL(window.location.href)
       url.searchParams.set('formSubmitted', 'true')
       await nav(`${url.pathname}?${url.searchParams.toString()}`)
     } catch (error) {
       console.error('Form submission error:', error)
+      resolveAgentSubmit(form, `${t.form.agent.failed} ${String(error)}`)
       alert(t.form.error)
     } finally {
       state.submitting = false
@@ -154,7 +163,9 @@ const Contact = component$(() => {
         <form
           preventdefault:submit
           method="post"
-          onSubmit$={handleSubmit}
+          toolname="contact_form"
+          tooldescription={t.form.agent.toolDescription}
+          onSubmit$={[bridgeAgentSubmit, handleSubmit]}
           class={cls(
             'grid grid-cols-1 gap-4 md:gap-6',
             'content-fade-in content-fade-in--entry',
@@ -171,12 +182,14 @@ const Contact = component$(() => {
               onInput$={handleHoneypotInput}
               tabIndex={-1}
               autoComplete="off"
+              toolparamdescription={t.form.agent.honeypot}
             />
           </div>
           <FormField
             label={t.form.fullname}
             type="text"
             name="fullname"
+            toolParamDescription={t.form.agent.fullname}
             value={state.fullname}
             onInput$={handleFullnameInput}
             required
@@ -185,6 +198,7 @@ const Contact = component$(() => {
             label={t.form.email}
             type="email"
             name="email"
+            toolParamDescription={t.form.agent.email}
             value={state.email}
             onInput$={handleEmailInput}
             required
@@ -193,6 +207,7 @@ const Contact = component$(() => {
             label={t.form.subject}
             type="text"
             name="user_subject"
+            toolParamDescription={t.form.agent.subject}
             value={state.subject}
             onInput$={handleSubjectInput}
             required
@@ -201,6 +216,7 @@ const Contact = component$(() => {
             label={t.form.message}
             type="textarea"
             name="message"
+            toolParamDescription={t.form.agent.message}
             value={state.message}
             onInput$={handleMessageInput}
             required

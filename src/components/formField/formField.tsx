@@ -16,6 +16,7 @@ import type { FormFieldProps } from './formField.types'
  * @param {boolean} [props.readOnly] - Whether the form field is read-only.
  * @param {string} [props.placeholder] - The placeholder text for the form field.
  * @param {string} [props.autocomplete] - The autocomplete attribute for the form field.
+ * @param {string} [props.toolParamDescription] - WebMCP parameter description for AI agents.
  * @returns {JSX.Element} The rendered form field component.
  */
 const FormField = component$<FormFieldProps>(
@@ -32,6 +33,7 @@ const FormField = component$<FormFieldProps>(
     readOnly,
     placeholder,
     autocomplete,
+    toolParamDescription,
   }) => {
     const inputClass = [
       type === 'textarea' ? 'field-sizing-content min-h-40' : '',
@@ -64,6 +66,7 @@ const FormField = component$<FormFieldProps>(
             disabled={disabled}
             readOnly={readOnly}
             placeholder={placeholder}
+            toolparamdescription={toolParamDescription}
           />
         ) : (
           <input
@@ -81,6 +84,7 @@ const FormField = component$<FormFieldProps>(
             readOnly={readOnly}
             placeholder={placeholder}
             autoComplete={autocomplete}
+            toolparamdescription={toolParamDescription}
           />
         )}
       </label>

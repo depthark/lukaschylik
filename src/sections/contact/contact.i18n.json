@@ -13,7 +13,18 @@
       "message": "Vaša správa",
       "submit": "Odoslať",
       "submitting": "Odosielam...",
-      "error": "Odoslanie správy zlyhalo. Skúste to znova, prosím."
+      "error": "Odoslanie správy zlyhalo. Skúste to znova, prosím.",
+      "agent": {
+        "toolDescription": "Vyplní kontaktný formulár správou pre Lukáša Chylíka (dopyt na projekt, konzultáciu, workshop alebo prednášku). Návštevník správu pred odoslaním skontroluje.",
+        "fullname": "Celé meno odosielateľa.",
+        "email": "E-mail, na ktorý Lukáš odpovie.",
+        "subject": "Krátky predmet správy.",
+        "message": "Text správy.",
+        "honeypot": "Ochrana proti spamu. Vždy nechajte prázdne.",
+        "sent": "Správa bola odoslaná. Lukáš odpovie e-mailom.",
+        "failed": "Odoslanie zlyhalo.",
+        "rejected": "Odmietnuté: pole ochrany proti spamu musí zostať prázdne."
+      }
     }
   },
   "en": {
@@ -30,7 +41,18 @@
       "message": "Your message",
       "submit": "Send",
       "submitting": "Sending...",
-      "error": "Failed to send the message. Please try again."
+      "error": "Failed to send the message. Please try again.",
+      "agent": {
+        "toolDescription": "Fill in the contact form with a message for Lukáš Chylík (project inquiry, consultation, workshop or speaking invitation). The visitor reviews the message before sending it.",
+        "fullname": "Sender's full name.",
+        "email": "Email address Lukáš should reply to.",
+        "subject": "Short subject line.",
+        "message": "Message body.",
+        "honeypot": "Spam protection. Always leave empty.",
+        "sent": "Message sent. Lukáš will reply by email.",
+        "failed": "Sending failed.",
+        "rejected": "Rejected: the spam protection field must stay empty."
+      }
     }
   }
 }

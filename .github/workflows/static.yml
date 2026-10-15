@@ -39,6 +39,8 @@ jobs:
 
       - name: Build project
         run: bun run build
+        env:
+          PUBLIC_WEBMCP_ORIGIN_TRIAL: ${{ vars.WEBMCP_ORIGIN_TRIAL_TOKEN }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4

@@ -3,8 +3,9 @@ import { useNavigate } from '@qwik.dev/router'
 import { Button, Container, FormField, Section } from '~/components'
 import SectionTitle from '~/components/section/section.title'
 import { localizePath, useLocale } from '~/i18n'
-import { MAILCHIMP_HONEYPOT_FIELD, subscribeToNewsletter } from '~/services'
+import { subscribeToNewsletter } from '~/services'
 import { cls } from '~/utils'
+import { bridgeAgentSubmit, resolveAgentSubmit } from '~/webmcp/declarative'
 import i18n from './newsletter.i18n.json'
 
 /**
@@ -29,31 +30,40 @@ const Newsletter = component$(() => {
   })
 
   /**
-   * Handles newsletter subscription
+   * Handles newsletter subscription. The email is read from the form itself
+   * so that a value filled in by an AI agent (declarative WebMCP tool) is used.
    */
-  const handleSubscribe = $(async (event: SubmitEvent) => {
-    event.preventDefault()
+  const handleSubscribe = $(
+    async (event: SubmitEvent, form: HTMLFormElement) => {
+      event.preventDefault()
 
-    if (!state.email || state.submitting) return
+      const email = String(
+        new FormData(form).get('newsletter_email') ?? '',
+      ).trim()
+      if (!email || state.submitting) return
 
-    state.submitting = true
-    state.error = ''
+      state.submitting = true
+      state.error = ''
 
-    try {
-      await subscribeToNewsletter(state.email)
+      try {
+        await subscribeToNewsletter(email)
 
-      state.email = ''
+        form.reset()
+        state.email = ''
+        resolveAgentSubmit(form, t.form.agent.subscribed)
 
-      const url = new URL(window.location.href)
-      url.searchParams.set('newsletterSubscribed', 'true')
-      await nav(`${url.pathname}?${url.searchParams.toString()}`)
-    } catch (error) {
-      console.error('Subscription error:', error)
-      state.error = t.form.error
-    } finally {
-      state.submitting = false
-    }
-  })
+        const url = new URL(window.location.href)
+        url.searchParams.set('newsletterSubscribed', 'true')
+        await nav(`${url.pathname}?${url.searchParams.toString()}`)
+      } catch (error) {
+        console.error('Subscription error:', error)
+        resolveAgentSubmit(form, `${t.form.agent.failed} ${String(error)}`)
+        state.error = t.form.error
+      } finally {
+        state.submitting = false
+      }
+    },
+  )
 
   return (
     <Section id="newsletter" fullHeight={false}>
@@ -74,22 +84,17 @@ const Newsletter = component$(() => {
 
         <form
           preventdefault:submit
-          onSubmit$={handleSubscribe}
+          toolname="newsletter_signup"
+          tooldescription={t.form.agent.toolDescription}
+          onSubmit$={[bridgeAgentSubmit, handleSubscribe]}
           method="post"
           class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-stretch sm:items-end">
-          <div aria-hidden="true" style="position:absolute; left:-5000px;">
-            <input
-              type="text"
-              name={MAILCHIMP_HONEYPOT_FIELD}
-              tabIndex={-1}
-              defaultValue=""
-            />
-          </div>
           <FormField
             className="flex-1"
             label={t.form.emailLabel}
             type="email"
             name="newsletter_email"
+            toolParamDescription={t.form.agent.email}
             placeholder={t.form.emailPlaceholder}
             value={state.email}
             inputClassName="text-black dark:text-white"
@@ -101,7 +106,7 @@ const Newsletter = component$(() => {
             type="submit"
             title={t.form.submit}
             variant="secondary"
-            disabled={state.submitting || !state.email}>
+            disabled={state.submitting}>
             {state.submitting ? t.form.submitting : t.form.submit}
           </Button>
         </form>

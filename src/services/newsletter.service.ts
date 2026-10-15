@@ -4,7 +4,7 @@ const MAILCHIMP_FORM_URL =
 /**
  * Hidden Mailchimp bot-trap field name; must be submitted empty.
  */
-export const MAILCHIMP_HONEYPOT_FIELD = 'b_e4c1b2f028f9fc3c28ad28630_90b3c6481a'
+const MAILCHIMP_HONEYPOT_FIELD = 'b_e4c1b2f028f9fc3c28ad28630_90b3c6481a'
 
 /**
  * Subscribes an email address to the Mailchimp newsletter list.
