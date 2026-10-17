@@ -45,6 +45,20 @@ export const REFERENCES: ReferenceEntry[] = [
     type: 'collaboration',
   },
   {
+    title: 'Vila SCALA',
+    img: '/images/references/vila-scala.avif',
+    webURL: 'https://www.vila-scala.cz/',
+    website: 'vila-scala.cz',
+    type: 'web',
+  },
+  {
+    title: 'ANEW STYLE',
+    img: '/images/references/anewstyle-2026.avif',
+    webURL: 'https://anewstyle.cz/',
+    website: 'anewstyle.cz',
+    type: 'web',
+  },
+  {
     title: 'Update Conference',
     img: '/images/references/update-conference.avif',
     webURL: 'https://www.updateconference.net/',
@@ -84,13 +98,6 @@ export const REFERENCES: ReferenceEntry[] = [
     img: '/images/references/elendris.avif',
     webURL: 'https://elendris.cz/',
     website: 'elendris.cz',
-    type: 'web',
-  },
-  {
-    title: 'Anew style',
-    img: '/images/references/anewstyle.avif',
-    webURL: 'https://anewstyle.cz/',
-    website: 'anewstyle.cz',
     type: 'web',
   },
 ]

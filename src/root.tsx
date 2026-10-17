@@ -8,7 +8,7 @@ import {
 import { RouterHead } from './components/router-head/router-head'
 import { THEME_INIT_SCRIPT } from './utils'
 import './styles/scss/index.scss'
-import './styles/css/tailwind.css'
+import './styles/css/tailwind.optimized.css'
 
 /**
  * Root component of the application. Initializes Qwik Router via the
