@@ -74,14 +74,14 @@ export const REFERENCES: ReferenceEntry[] = [
   },
   {
     title: 'Vila SCALA',
-    img: '/images/references/vila-scala.avif',
+    img: '/images/references/vila-scala-cover.avif',
     webURL: 'https://www.vila-scala.cz/',
     website: 'vila-scala.cz',
     type: 'web',
   },
   {
     title: 'ANEW STYLE',
-    img: '/images/references/anewstyle-2026.avif',
+    img: '/images/references/anewstyle-2026-cover.avif',
     webURL: 'https://anewstyle.cz/',
     website: 'anewstyle.cz',
     type: 'web',
