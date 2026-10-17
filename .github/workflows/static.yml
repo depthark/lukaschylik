@@ -29,18 +29,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node LTS
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@v1
         with:
-          bun-version-file: package.json
+          bun-version: latest
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Build project
         run: bun run build

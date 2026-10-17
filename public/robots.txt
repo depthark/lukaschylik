@@ -3,11 +3,4 @@ Allow: /*.css$
 Allow: /*.js$
 Allow: /
 
-User-agent: GPTBot
-User-agent: ClaudeBot
-User-agent: CCBot
-User-agent: Google-Extended
-User-agent: Applebot-Extended
-Disallow: /
-
 Sitemap: https://lukaschylik.dev/sitemap.xml
