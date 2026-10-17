@@ -40,26 +40,31 @@ const Reference = component$<ReferenceProps>(
             </small>
           </span>
           {img && (
-            <img
-              src={img}
-              alt=""
+            <span
               aria-hidden="true"
-              loading="lazy"
-              decoding="async"
-              width={425}
-              height={425}
               class={cls(
                 'reference__preview',
                 'hidden lg:block',
                 'absolute end-[calc(100%-2rem)] top-1/2 -translate-y-1/2',
-                'w-[min(300px,22vw)] aspect-square rounded-full object-cover object-top',
+                'w-[min(300px,22vw)] aspect-square rounded-full',
                 'shadow-2xl',
                 'opacity-0 group-hover:opacity-100',
                 'motion-safe:scale-75 motion-safe:group-hover:scale-100',
                 'motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out',
                 'pointer-events-none select-none z-0',
-              )}
-            />
+              )}>
+              <span class="block size-full overflow-hidden rounded-full">
+                <img
+                  src={img}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  width={425}
+                  height={425}
+                  class="reference__image block size-full object-cover object-top"
+                />
+              </span>
+            </span>
           )}
           <span class="relative z-10 flex items-center gap-2 md:gap-3 shrink-0">
             <span
