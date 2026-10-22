@@ -87,16 +87,16 @@ export const REFERENCES: ReferenceEntry[] = [
     type: 'web',
   },
   {
+    title: 'Crystal Interiors',
+    webURL: 'https://www.crystalinteriors.cz/',
+    website: 'crystalinteriors.cz',
+    type: 'web',
+  },
+  {
     title: 'Brand DESIGN',
     img: '/images/references/brand-design.avif',
     webURL: 'https://brand-design.cz/',
     website: 'brand-design.cz',
-    type: 'web',
-  },
-  {
-    title: 'Crystal Interiors',
-    webURL: 'https://www.crystalinteriors.cz/',
-    website: 'crystalinteriors.cz',
     type: 'web',
   },
 ]
