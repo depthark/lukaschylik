@@ -3,8 +3,8 @@
     "title": "Niečo o mne",
     "paragraphs": [
       [
-        { "text": "Som frontend developer s ", "strong": false },
-        { "text": "veľkým presahom do UX/UI", "strong": true },
+        { "text": "Som Creative AI Engineer s ", "strong": false },
+        { "text": "veľkým presahom do frontendu a UX/UI", "strong": true },
         {
           "text": ". Za posledných 10 rokov som pracoval na projektoch od prezentačných webov po PWA a informačné systémy. ",
           "strong": false
@@ -40,8 +40,8 @@
     "title": "About me",
     "paragraphs": [
       [
-        { "text": "I'm a frontend developer with a ", "strong": false },
-        { "text": "strong overlap into UX/UI", "strong": true },
+        { "text": "I'm a Creative AI Engineer with a ", "strong": false },
+        { "text": "strong overlap into frontend and UX/UI", "strong": true },
         {
           "text": ". Over the past 10 years I've worked on projects ranging from presentation websites to PWAs and information systems. ",
           "strong": false

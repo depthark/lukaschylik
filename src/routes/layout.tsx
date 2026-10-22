@@ -72,7 +72,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               '@type': 'Person',
               '@id': '#person',
               name: 'Lukáš Chylík',
-              jobTitle: 'Creative AI engineer',
+              jobTitle: 'Creative AI Engineer',
               email: CONTACT_EMAIL,
               telephone: CONTACT_PHONE,
               image: './images/profile/me.webp',
