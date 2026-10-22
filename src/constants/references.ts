@@ -10,7 +10,7 @@ export interface ReferenceEntry {
   /** Project or client name */
   title: string
   /** Path to the website preview screenshot */
-  img: string
+  img?: string
   /** Full project URL */
   webURL: string
   /** Display hostname */
@@ -94,10 +94,9 @@ export const REFERENCES: ReferenceEntry[] = [
     type: 'web',
   },
   {
-    title: 'Elendris',
-    img: '/images/references/elendris.avif',
-    webURL: 'https://elendris.cz/',
-    website: 'elendris.cz',
+    title: 'Crystal Interiors',
+    webURL: 'https://www.crystalinteriors.cz/',
+    website: 'crystalinteriors.cz',
     type: 'web',
   },
 ]

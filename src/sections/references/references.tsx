@@ -69,37 +69,6 @@ const References = component$(() => {
                   type={t.types[reference.type]}
                 />
               ))}
-              {/* <Reference
-              title="Krossbau s.r.o."
-              webURL="https://www.krossbau.cz/"
-              website="krossbau.cz"
-              type="Web"
-            />
-            <Reference
-              title="IVPA Okná"
-              webURL="https://ivpaokna.sk/"
-              website="ivpaokna.sk"
-              type="Web"
-            />
-            <Reference
-              title="Brand Design"
-              webURL="https://brand-design.cz/"
-              website="brand-design.cz"
-              type="Web"
-            />
-            <Reference
-              title="Filtre na mlieko"
-              webURL="https://filtrenamlieko.sk/"
-              website="filtrenamlieko.sk"
-              type="Web"
-            />
-            <Reference
-              title="IVPA bau"
-              webURL="https://ivpabau.de/"
-              website="ivpabau.de"
-              type="Web"
-            />
-            */}
             </ul>
           </div>
         </div>
