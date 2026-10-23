@@ -13,7 +13,11 @@ const References = component$(() => {
   const t = i18n[locale]
 
   return (
-    <Section id="references" centerContent={false} fullHeight={false}>
+    <Section
+      id="references"
+      className="z-10"
+      centerContent={false}
+      fullHeight={false}>
       <Container size="full">
         <div class="relative grid gap-5 isolate">
           <div>
