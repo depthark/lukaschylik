@@ -99,6 +99,7 @@ const Newsletter = component$(() => {
             value={state.email}
             inputClassName="text-black dark:text-white"
             onInput$={handleEmailInput}
+            autocomplete="email"
             disabled={state.submitting}
             required
           />
