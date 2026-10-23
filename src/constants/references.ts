@@ -78,7 +78,7 @@ export const REFERENCES: ReferenceEntry[] = [
   },
   {
     title: 'Vila SCALA',
-    img: '/images/references/vila-scala-hero.avif',
+    img: '/images/references/vila-scala-headline.avif',
     imgPosition: '0% 50%',
     webURL: 'https://www.vila-scala.cz/',
     website: 'vila-scala.cz',
