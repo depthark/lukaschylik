@@ -52,20 +52,6 @@ export const REFERENCES: ReferenceEntry[] = [
     type: 'collaboration',
   },
   {
-    title: 'Update Days',
-    img: '/images/references/update-days.avif',
-    webURL: 'https://www.updatedays.cz/',
-    website: 'updatedays.cz',
-    type: 'collaboration',
-  },
-  {
-    title: 'Meetupdate',
-    img: '/images/references/meetupdate.avif',
-    webURL: 'https://www.meetupdate.cz/',
-    website: 'meetupdate.cz',
-    type: 'collaboration',
-  },
-  {
     title: 'DotVVM',
     img: '/images/references/dotvvm.avif',
     webURL: 'https://www.dotvvm.com/',
