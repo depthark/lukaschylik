@@ -8,7 +8,7 @@ import type { ReferenceProps } from './reference.types'
  * website domain, a type badge and an external-link indicator.
  */
 const Reference = component$<ReferenceProps>(
-  ({ title, webURL, website, type, img }) => {
+  ({ title, webURL, website, type, img, imgPosition }) => {
     return (
       <li class="border-b border-black/30 dark:border-white/30 first:border-t isolate hover:z-10 relative">
         <a
@@ -62,6 +62,9 @@ const Reference = component$<ReferenceProps>(
                   width={425}
                   height={425}
                   class="reference__image block size-full object-cover object-top"
+                  style={
+                    imgPosition ? { objectPosition: imgPosition } : undefined
+                  }
                 />
               </span>
             </span>

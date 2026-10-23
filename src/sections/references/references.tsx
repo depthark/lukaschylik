@@ -64,6 +64,7 @@ const References = component$(() => {
                   key={reference.webURL}
                   title={reference.title}
                   img={reference.img}
+                  imgPosition={reference.imgPosition}
                   webURL={reference.webURL}
                   website={reference.website}
                   type={t.types[reference.type]}

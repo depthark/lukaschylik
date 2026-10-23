@@ -11,6 +11,8 @@ export interface ReferenceEntry {
   title: string
   /** Path to the website preview screenshot */
   img?: string
+  /** CSS object-position that keeps the site name inside the preview circle */
+  imgPosition?: string
   /** Full project URL */
   webURL: string
   /** Display hostname */
@@ -59,29 +61,33 @@ export const REFERENCES: ReferenceEntry[] = [
     type: 'collaboration',
   },
   {
-    title: 'Vila SCALA',
-    img: '/images/references/vila-scala-cover.avif',
-    webURL: 'https://www.vila-scala.cz/',
-    website: 'vila-scala.cz',
-    type: 'web',
-  },
-  {
     title: 'ANEW STYLE',
-    img: '/images/references/anewstyle-2026-cover.avif',
+    img: '/images/references/anewstyle-hero.avif',
+    imgPosition: '0% 50%',
     webURL: 'https://anewstyle.cz/',
     website: 'anewstyle.cz',
     type: 'web',
   },
   {
     title: 'Crystal Interiors',
-    img: '/images/references/crystalinteriors.avif',
+    img: '/images/references/crystal-interiors-hero.avif',
+    imgPosition: '50% 50%',
     webURL: 'https://www.crystalinteriors.cz/',
     website: 'crystalinteriors.cz',
     type: 'web',
   },
   {
+    title: 'Vila SCALA',
+    img: '/images/references/vila-scala-hero.avif',
+    imgPosition: '0% 50%',
+    webURL: 'https://www.vila-scala.cz/',
+    website: 'vila-scala.cz',
+    type: 'web',
+  },
+  {
     title: 'Brand DESIGN',
-    img: '/images/references/brand-design.avif',
+    img: '/images/references/brand-design-hero.avif',
+    imgPosition: '50% 50%',
     webURL: 'https://brand-design.cz/',
     website: 'brand-design.cz',
     type: 'web',
