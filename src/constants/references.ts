@@ -88,6 +88,7 @@ export const REFERENCES: ReferenceEntry[] = [
   },
   {
     title: 'Crystal Interiors',
+    img: '/images/references/crystalinteriors.avif',
     webURL: 'https://www.crystalinteriors.cz/',
     website: 'crystalinteriors.cz',
     type: 'web',
