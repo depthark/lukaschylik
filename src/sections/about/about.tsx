@@ -1,5 +1,6 @@
-import { component$ } from '@qwik.dev/core'
+import { $, component$ } from '@qwik.dev/core'
 import { Container, Section, Skills } from '~/components'
+import { trackTap } from '~/components/bug-squasher/trigger'
 import SectionTitle from '~/components/section/section.title'
 import { useLocale } from '~/i18n'
 import { cls } from '~/utils'
@@ -30,7 +31,8 @@ const RichText = (props: { segments: Segment[] }) => (
  * About section with a short bio and portrait photo.
  */
 const About = component$(() => {
-  const t = i18n[useLocale()]
+  const locale = useLocale()
+  const t = i18n[locale]
 
   return (
     <Section id="about-me" className="content-center">
@@ -52,6 +54,9 @@ const About = component$(() => {
               loading="lazy"
               width={768}
               height={768}
+              onClick$={$((_: Event, el: HTMLImageElement) =>
+                trackTap(el, locale),
+              )}
             />
           </div>
           <div class="mx-[calc(50%-50vw)] lg:row-start-3 lg:col-start-1 lg:col-span-2">

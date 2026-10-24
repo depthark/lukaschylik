@@ -1,0 +1,32 @@
+{
+  "sk": {
+    "bugLabel": "Bug",
+    "score": "Skóre",
+    "time": "Čas",
+    "best": "Rekord",
+    "escaped": "V produkcii",
+    "close": "Zavrieť hru",
+    "gameOver": "Release je vonku!",
+    "newRecord": "Nový rekord!",
+    "result": "Rozpučené bugy: {score}. Do produkcie ušlo: {escaped}.",
+    "cta": "U mňa bugy do produkcie nechodia. Máš projekt, ktorý potrebuje čistý kód?",
+    "contact": "Napíš mi",
+    "playAgain": "Hrať znova",
+    "dismiss": "Zavrieť"
+  },
+  "en": {
+    "bugLabel": "Bug",
+    "score": "Score",
+    "time": "Time",
+    "best": "Best",
+    "escaped": "In production",
+    "close": "Close game",
+    "gameOver": "Shipped it!",
+    "newRecord": "New record!",
+    "result": "Bugs squashed: {score}. Slipped into production: {escaped}.",
+    "cta": "My bugs don't make it to production. Got a project that needs clean code?",
+    "contact": "Get in touch",
+    "playAgain": "Play again",
+    "dismiss": "Close"
+  }
+}

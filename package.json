@@ -25,7 +25,7 @@
   },
   "type": "module",
   "scripts": {
-    "build": "bun run posts:manifest && bun run tailwind:optimize && qwik build && bun run scripts/generate-sitemap.ts && bun run scripts/generate-llms-txt.ts",
+    "build": "bun run posts:manifest && bun run tailwind:optimize && qwik build && bun run scripts/generate-sitemap.ts && bun run scripts/generate-llms-txt.ts && bun run easter-egg:build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/static/vite.config.ts",
@@ -42,6 +42,7 @@
     "lint:ci": "oxlint --deny-warnings && oxfmt --check && knip",
     "stylelint": "stylelint \"src/**/*.scss\"",
     "stylelint:fix": "stylelint \"src/**/*.scss\" --fix",
+    "easter-egg:build": "bun build src/components/bug-squasher/game.ts --outfile dist/easter-egg/bug-squasher.js --minify --target browser --format esm",
     "posts:manifest": "bun run scripts/generate-posts-manifest.ts",
     "preview": "bun run posts:manifest && vite build --ssr src/entry.preview.tsx && vite preview --open",
     "start": "bun run fix && bun run posts:manifest && concurrently \"vite --open --mode ssr\" \"bun run watch:css\"",

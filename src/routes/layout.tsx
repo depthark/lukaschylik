@@ -4,6 +4,7 @@ import {
   Slot,
   useContextProvider,
   useOn,
+  useOnWindow,
   useSignal,
   useStore,
   useTask$,
@@ -12,6 +13,7 @@ import {
 import type { DocumentHead, RequestHandler } from '@qwik.dev/router'
 import { useLocation, useNavigate } from '@qwik.dev/router'
 import { Alert, Navigation, ReservationDialog } from '~/components'
+import { trackKonami } from '~/components/bug-squasher/trigger'
 import CookieConsent from '~/components/cookie-consent/cookie-consent'
 import Social from '~/components/social/social'
 import { CONTACT_EMAIL, CONTACT_PHONE } from '~/constants/business'
@@ -62,6 +64,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         props: {
           async: true,
         },
+      },
+      {
+        key: 'easter-egg-hint',
+        script: `console.log(${JSON.stringify(`%c${ui[locale].easterEgg.consoleHint}`)},'font:600 13px/1.6 monospace;color:#a855f7')`,
       },
       {
         key: 'structuredData',
@@ -165,6 +171,11 @@ export default component$(() => {
       alertState.visible = true
     }),
   })
+
+  useOnWindow(
+    'keydown',
+    $((event: KeyboardEvent) => trackKonami(event.key, locale)),
+  )
 
   useOn(
     'qvisible',
