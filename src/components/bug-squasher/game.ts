@@ -152,6 +152,31 @@ const place = (bug: Bug) => {
 }
 
 /**
+ * Cancels touch scrolling while the game is open.
+ * @param event - Touch move event
+ */
+const blockTouchScroll = (event: TouchEvent) => event.preventDefault()
+
+/**
+ * Locks page scrolling for the duration of the game, compensating for the
+ * removed scrollbar so the layout does not shift.
+ * Returns a function that restores the previous state.
+ */
+const lockScroll = () => {
+  const html = document.documentElement
+  const { overflow, paddingRight } = html.style
+  const scrollbar = innerWidth - html.clientWidth
+  html.style.overflow = 'hidden'
+  if (scrollbar > 0) html.style.paddingRight = `${scrollbar}px`
+  addEventListener('touchmove', blockTouchScroll, { passive: false })
+  return () => {
+    html.style.overflow = overflow
+    html.style.paddingRight = paddingRight
+    removeEventListener('touchmove', blockTouchScroll)
+  }
+}
+
+/**
  * Launches the bug squasher easter egg on top of the current page.
  * Does nothing when a round is already running.
  * @param locale - Active site locale
@@ -417,10 +442,12 @@ export const startGame = (locale: Locale) => {
     cancelAnimationFrame(state.frame)
     removeEventListener('keydown', onKey)
     host.remove()
+    unlockScroll()
     active = null
-    previousFocus?.focus?.()
+    previousFocus?.focus?.({ preventScroll: true })
   }
 
+  const unlockScroll = lockScroll()
   closeBtn.addEventListener('click', close)
   addEventListener('keydown', onKey)
   active = close
