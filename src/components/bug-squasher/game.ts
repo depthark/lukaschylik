@@ -37,7 +37,13 @@ const STORAGE_KEY = 'bug-squasher-highscore'
 const BUG_SVG = `<svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">
 <defs><linearGradient id="bs-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--bs-a)"/><stop offset="1" stop-color="var(--bs-b)"/></linearGradient></defs>
 <g stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none">
-<path d="M17 20 9 15M17 26H8M17 32l-8 5M31 20l8-5M31 26h9M31 32l8 5M21 10l-3-5M27 10l3-5"/></g>
+<path class="bs-leg bs-leg--a" style="--dir:1;transform-origin:17px 20px" d="M17 20 9 15"/>
+<path class="bs-leg bs-leg--b" style="--dir:1;transform-origin:17px 26px" d="M17 26H8"/>
+<path class="bs-leg bs-leg--a" style="--dir:1;transform-origin:17px 32px" d="M17 32l-8 5"/>
+<path class="bs-leg bs-leg--b" style="--dir:-1;transform-origin:31px 20px" d="M31 20l8-5"/>
+<path class="bs-leg bs-leg--a" style="--dir:-1;transform-origin:31px 26px" d="M31 26h9"/>
+<path class="bs-leg bs-leg--b" style="--dir:-1;transform-origin:31px 32px" d="M31 32l8 5"/>
+<path class="bs-antennae" d="M21 10l-3-5M27 10l3-5"/></g>
 <circle cx="24" cy="13" r="5" fill="currentColor"/>
 <ellipse cx="24" cy="27" rx="9" ry="13" fill="url(#bs-g)"/>
 <path d="M24 15v25" stroke="currentColor" stroke-width="1.5" opacity=".5"/></svg>`
@@ -52,6 +58,9 @@ const STYLES = `
 .bs-bug{position:absolute;top:0;left:0;width:${BUG_SIZE}px;height:${BUG_SIZE}px;padding:0;border:0;background:none;color:#111;cursor:crosshair;pointer-events:auto;touch-action:manipulation;filter:drop-shadow(0 4px 6px hsl(0deg 0% 0% / 35%))}
 .bs-root[data-dark] .bs-bug{color:#f5f5f5}
 .bs-bug svg{display:block}
+.bs-leg{transform-box:view-box;animation:bs-step .24s ease-in-out infinite alternate}
+.bs-leg--b{animation-direction:alternate-reverse}
+.bs-antennae{transform-box:view-box;transform-origin:24px 10px;animation:bs-wiggle .48s ease-in-out infinite alternate}
 .bs-splat{position:absolute;top:0;left:0;width:${BUG_SIZE}px;height:${BUG_SIZE}px;border-radius:50%;background:radial-gradient(circle,var(--bs-b) 0 30%,transparent 62%);animation:bs-fade .6s ease-out forwards}
 .bs-plus{position:absolute;top:0;left:0;font-weight:700;color:var(--bs-a);animation:bs-rise .7s ease-out forwards}
 .bs-panel{position:absolute;left:50%;top:50%;translate:-50% -50%;width:min(420px,calc(100vw - 32px));padding:28px;border-radius:24px;background:hsl(0deg 0% 4% / 92%);backdrop-filter:blur(16px);text-align:center;pointer-events:auto;box-shadow:0 20px 60px hsl(0deg 0% 0% / 50%);border:1px solid hsl(0deg 0% 100% / 12%)}
@@ -65,7 +74,9 @@ const STYLES = `
 @keyframes bs-fade{from{opacity:.9;scale:.6}to{opacity:0;scale:1.6}}
 @keyframes bs-rise{from{opacity:1;translate:0 0}to{opacity:0;translate:0 -32px}}
 @keyframes bs-pop{from{scale:0}to{scale:1}}
-@media (prefers-reduced-motion:reduce){.bs-splat,.bs-plus{animation-duration:.01ms}.bs-bug{animation:none!important}}
+@keyframes bs-step{from{rotate:calc(var(--dir) * -18deg)}to{rotate:calc(var(--dir) * 18deg)}}
+@keyframes bs-wiggle{from{rotate:-6deg}to{rotate:6deg}}
+@media (prefers-reduced-motion:reduce){.bs-splat,.bs-plus{animation-duration:.01ms}.bs-bug,.bs-leg,.bs-antennae{animation:none!important}}
 `
 
 let active: (() => void) | null = null
