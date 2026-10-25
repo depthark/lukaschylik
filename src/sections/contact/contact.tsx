@@ -6,7 +6,7 @@ import SectionTitle from '~/components/section/section.title'
 import socialI18n from '~/components/social/social.i18n.json'
 import { SOCIAL_LINKS } from '~/constants/socialLinks'
 import { useLocale } from '~/i18n'
-import { sendContactMessage } from '~/services'
+import { CONTACT_ENDPOINT, sendContactMessage } from '~/services'
 import { cls } from '~/utils'
 import { bridgeAgentSubmit, resolveAgentSubmit } from '~/webmcp/declarative'
 import i18n from './contact.i18n.json'
@@ -72,7 +72,7 @@ const Contact = component$(() => {
     } catch (error) {
       console.error('Form submission error:', error)
       resolveAgentSubmit(form, `${t.form.agent.failed} ${String(error)}`)
-      alert(t.form.error)
+      alert(error instanceof Error ? error.message : t.form.error)
     } finally {
       state.submitting = false
     }
@@ -163,6 +163,7 @@ const Contact = component$(() => {
         <form
           preventdefault:submit
           method="post"
+          action={CONTACT_ENDPOINT}
           toolname="contact_form"
           tooldescription={t.form.agent.toolDescription}
           onSubmit$={[bridgeAgentSubmit, handleSubmit]}
@@ -170,6 +171,7 @@ const Contact = component$(() => {
             'grid grid-cols-1 gap-4 md:gap-6',
             'content-fade-in content-fade-in--entry',
           )}>
+          <input type="hidden" name="locale" value={locale} />
           <div
             class="absolute -left-[9999px] opacity-0 pointer-events-none"
             aria-hidden="true">

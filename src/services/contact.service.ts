@@ -1,8 +1,10 @@
 import type { Locale } from '~/i18n/core'
 import i18n from '~/sections/contact/contact.i18n.json'
 
-const WEB3FORMS_URL = 'https://api.web3forms.com/submit'
-const WEB3FORMS_ACCESS_KEY = 'fb75ad8a-4efe-4daf-9312-3ebd38d3c228'
+/**
+ * Same-origin Cloudflare Pages Function that sends the message via Resend.
+ */
+export const CONTACT_ENDPOINT = '/api/contact'
 
 /**
  * Contact message payload sent to the site owner.
@@ -19,33 +21,31 @@ export interface ContactMessage {
 }
 
 /**
- * Sends a contact message through Web3Forms.
+ * Sends a contact message through the `/api/contact` Pages Function.
  * Shared by the contact form and the WebMCP `send_contact_message` tool.
+ * Time on page is sent along for the server-side spam check.
  * @param data - Message fields
- * @param locale - Locale used for the notification subject and sender name
- * @throws Error when Web3Forms rejects the submission
+ * @param locale - Locale of the notification and the visitor's confirmation
+ * @throws Error with a visitor-facing message when sending fails
  */
 export const sendContactMessage = async (
   data: ContactMessage,
   locale: Locale,
 ): Promise<void> => {
-  const t = i18n[locale].form
-  const formData = new FormData()
-  formData.append('access_key', WEB3FORMS_ACCESS_KEY)
-  formData.append('subject', t.hiddenSubject)
-  formData.append('from_name', t.hiddenFromName)
-  formData.append('fullname', data.fullname)
-  formData.append('email', data.email)
-  formData.append('user_subject', data.subject)
-  formData.append('message', data.message)
-
-  const response = await fetch(WEB3FORMS_URL, {
+  const response = await fetch(CONTACT_ENDPOINT, {
     method: 'POST',
-    body: formData,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ...data,
+      locale,
+      elapsed: Math.round(performance.now()),
+    }),
   })
-  const result = await response.json()
+  const result: { ok?: boolean; error?: string } = await response
+    .json()
+    .catch(() => ({}))
 
-  if (!result.success) {
-    throw new Error(result.message || 'Failed to submit form')
+  if (!response.ok || !result.ok) {
+    throw new Error(result.error || i18n[locale].form.error)
   }
 }

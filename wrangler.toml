@@ -1,0 +1,5 @@
+# Cloudflare Pages project configuration.
+# Static Qwik SSG build served from dist/; functions/ adds /api/contact.
+name = "lukaschylik"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-10-01"

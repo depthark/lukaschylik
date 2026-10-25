@@ -4,8 +4,6 @@
     "intro": "Chcete vedieť o mne viac, potrebujete poradiť alebo chcete rovno naviazať spoluprácu?",
     "introStrong": "Neváhajte ma kontaktovať.",
     "form": {
-      "hiddenSubject": "Nová správa z kontaktného formulára",
-      "hiddenFromName": "Kontaktný formulár",
       "honeypotLabel": "Nevypĺňajte toto pole",
       "fullname": "Celé meno",
       "email": "Email",
@@ -25,6 +23,19 @@
         "failed": "Odoslanie zlyhalo.",
         "rejected": "Odmietnuté: pole ochrany proti spamu musí zostať prázdne."
       }
+    },
+    "mail": {
+      "notificationSubject": "Nová správa z webu: {subject}",
+      "notificationFooter": "Odoslané z kontaktného formulára na lukaschylik.dev – odpoveďou napíšete priamo odosielateľovi.",
+      "nameLabel": "Meno",
+      "emailLabel": "E-mail",
+      "subjectLabel": "Predmet",
+      "confirmationSubject": "Ďakujem za správu – Lukáš Chylík",
+      "confirmationText": "Ďakujem za vašu správu, {name}. Ozvem sa čo najskôr, zvyčajne do dvoch pracovných dní. Nižšie je kópia toho, čo ste mi poslali.",
+      "invalid": "Vyplňte meno, e-mail, predmet a správu.",
+      "invalidEmail": "Skontrolujte, prosím, e-mailovú adresu.",
+      "tooLong": "Správa je príliš dlhá.",
+      "unavailable": "Odosielanie z webu momentálne nie je dostupné. Napíšte mi, prosím, priamo na {email}."
     }
   },
   "en": {
@@ -32,8 +43,6 @@
     "intro": "Want to know more about me, need advice, or ready to start a collaboration right away?",
     "introStrong": "Don't hesitate to get in touch.",
     "form": {
-      "hiddenSubject": "New message from the contact form",
-      "hiddenFromName": "Contact form",
       "honeypotLabel": "Do not fill in this field",
       "fullname": "Full name",
       "email": "Email",
@@ -53,6 +62,19 @@
         "failed": "Sending failed.",
         "rejected": "Rejected: the spam protection field must stay empty."
       }
+    },
+    "mail": {
+      "notificationSubject": "New message from the website: {subject}",
+      "notificationFooter": "Sent from the contact form on lukaschylik.dev – replying answers the sender directly.",
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "subjectLabel": "Subject",
+      "confirmationSubject": "Thanks for your message – Lukáš Chylík",
+      "confirmationText": "Thank you for your message, {name}. I will get back to you as soon as possible, usually within two business days. Below is a copy of what you sent me.",
+      "invalid": "Please fill in your name, email, subject and message.",
+      "invalidEmail": "Please check your email address.",
+      "tooLong": "The message is too long.",
+      "unavailable": "Sending from the website is not available right now. Please email me directly at {email}."
     }
   }
 }

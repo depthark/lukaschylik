@@ -43,6 +43,14 @@ export const checkUrlForAlerts = (
     window.history.replaceState({}, document.title, url.toString())
   }
 
+  if (location.searchParams.has('formError')) {
+    trigger(t.formError)
+
+    const url = new URL(window.location.href)
+    url.searchParams.delete('formError')
+    window.history.replaceState({}, document.title, url.toString())
+  }
+
   // Fallback: detect GET-submitted contact form (pre-hydration)
   const hasLegacyContactParams =
     location.searchParams.has('fullname') &&

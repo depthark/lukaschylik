@@ -20,5 +20,5 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["src", "./*.d.ts", "./*.config.ts", "./*.config.js"]
+  "include": ["src", "functions", "./*.d.ts", "./*.config.ts", "./*.config.js"]
 }

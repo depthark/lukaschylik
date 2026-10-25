@@ -2,11 +2,13 @@
   "sk": {
     "formSubmitted": "Vaša správa bola úspešne odoslaná.",
     "newsletterSubscribed": "Úspešne ste sa prihlásili na odber noviniek.",
-    "newsletterUnsubscribed": "Boli ste odhlásený z odberu noviniek."
+    "newsletterUnsubscribed": "Boli ste odhlásený z odberu noviniek.",
+    "formError": "Správu sa nepodarilo odoslať. Skúste to znova alebo mi napíšte e-mail."
   },
   "en": {
     "formSubmitted": "Your message has been sent successfully.",
     "newsletterSubscribed": "You have successfully subscribed to the newsletter.",
-    "newsletterUnsubscribed": "You have been unsubscribed from the newsletter."
+    "newsletterUnsubscribed": "You have been unsubscribed from the newsletter.",
+    "formError": "Your message could not be sent. Please try again or send me an email."
   }
 }

@@ -5,8 +5,14 @@
     "src/entry.ssr.tsx",
     "src/entry.preview.tsx",
     "src/entry.dev.tsx",
-    "src/routes/**/*.{tsx,ts,mdx}"
+    "src/routes/**/*.{tsx,ts,mdx}",
+    "functions/**/*.ts"
   ],
-  "project": ["src/**/*.{ts,tsx}", "scripts/**/*.ts", "adapters/**/*.ts"],
+  "project": [
+    "src/**/*.{ts,tsx}",
+    "scripts/**/*.ts",
+    "adapters/**/*.ts",
+    "functions/**/*.ts"
+  ],
   "ignoreDependencies": ["caniuse-lite"]
 }
