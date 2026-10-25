@@ -297,7 +297,7 @@ The website includes a fully functional blog system with:
 - **Code Highlighting**: Shiki for syntax highlighting
 - **Dynamic Routing**: File-based routing with Qwik Router
 - **Blog Progress**: Reading progress indicator on articles
-- **Custom 404 Page**: Statically generated bilingual `404.html` served by GitHub Pages
+- **Custom 404 Page**: Statically generated bilingual `404.html` served by Cloudflare Pages
 - **i18n**: Slovak (default) + English under `/en` with fully translated articles, hreflang/alternate links, localized sitemap and a flag-based language toggle
 
 ### Adding Blog Posts

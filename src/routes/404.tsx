@@ -8,7 +8,7 @@ import ui from '~/i18n/ui.json'
 
 /**
  * Custom 404 page. Statically generated as `404.html` at build time, which
- * GitHub Pages serves for any unknown URL — in both locales, since the host
+ * Cloudflare Pages serves for any unknown URL — in both locales, since the host
  * serves a single 404 document. Content is therefore rendered bilingually.
  */
 export default component$(() => {
