@@ -12,12 +12,14 @@ import i18n from './blog-card.i18n.json'
 interface BlogCardProps {
   /** Blog post data to display */
   post: PostMeta
+  /** Loads the cover eagerly with high priority (first card above the fold) */
+  priority?: boolean
 }
 
 /**
  * Blog card component that displays a blog post preview with themed gradient header
  */
-const BlogCard = component$(({ post }: BlogCardProps) => {
+const BlogCard = component$(({ post, priority = false }: BlogCardProps) => {
   const locale = useLocale()
   const t = i18n[locale]
   const minutes = post.readingTime
@@ -45,11 +47,11 @@ const BlogCard = component$(({ post }: BlogCardProps) => {
           <img
             src={post.cardImg}
             alt={t.coverAlt.replace('{title}', post.title)}
-            loading="lazy"
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : 'auto'}
             decoding="async"
             width={1600}
             height={900}
-            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             class={cls(
               'absolute inset-0 w-full h-full object-cover',
               'transition-transform duration-[1000ms] ease-in-out will-change-transform',

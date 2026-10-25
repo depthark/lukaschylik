@@ -1,4 +1,4 @@
-import { component$ } from '@qwik.dev/core'
+import { component$, useStyles$ } from '@qwik.dev/core'
 import { isDev } from '@qwik.dev/core/build'
 import {
   RouterOutlet,
@@ -7,18 +7,24 @@ import {
 } from '@qwik.dev/router'
 import { RouterHead } from './components/router-head/router-head'
 import { THEME_INIT_SCRIPT } from './utils'
-import './styles/scss/index.scss'
-import './styles/css/tailwind.css'
+import siteStyles from './styles/scss/index.scss?inline'
+import tailwindStyles from './styles/css/tailwind.css?inline'
+
+const STYLES = (siteStyles + tailwindStyles).replaceAll('@charset "UTF-8";', '')
 
 /**
  * Root component of the application. Initializes Qwik Router via the
  * `useQwikRouter()` hook (Qwik 2 API), immediately followed by the
  * document's `<head>` and `<body>`.
  *
+ * All CSS is inlined into the document head, so the first paint needs no
+ * extra render-blocking request.
+ *
  * Don't remove the `<head>` and `<body>` elements.
  */
 export default component$(() => {
   useQwikRouter()
+  useStyles$(STYLES)
 
   return (
     <>
@@ -28,19 +34,8 @@ export default component$(() => {
         <script
           id="theme-init"
           dangerouslySetInnerHTML={THEME_INIT_SCRIPT}></script>
-        {isDev && <link rel="stylesheet" href="/src/styles/css/tailwind.css" />}
-        {!isDev && (
-          <link
-            rel="manifest"
-            href={`${import.meta.env.BASE_URL}manifest.json`}
-          />
-        )}
       </head>
       <body class="bg-black-900">
-        <noscript
-          dangerouslySetInnerHTML={
-            '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQFH8PWL" height="0" width="0" title="Google Tag Manager" style="display:none;visibility:hidden"></iframe>'
-          }></noscript>
         <RouterOutlet />
         {!isDev && <ServiceWorkerRegister />}
       </body>

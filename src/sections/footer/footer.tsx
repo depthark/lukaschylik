@@ -1,5 +1,6 @@
 import { component$ } from '@qwik.dev/core'
 import { Container, Icon } from '~/components'
+import { OPEN_COOKIE_PREFERENCES } from '~/components/cookie-consent/cookie-consent.events'
 import { LogoFooter as Logo } from '~/components/logo/logo'
 import socialI18n from '~/components/social/social.i18n.json'
 import { COMPANY_ID, CONTACT_EMAIL } from '~/constants/business'
@@ -116,8 +117,10 @@ const Footer = component$(() => {
             <Icon name="cookie" cls="w-3" />
             <button
               type="button"
-              onClick$={() => (window as any).__openCookiePreferences?.()}
-              class="text-white underline underline-offset-2 font-normal hover:text-neutral-200 cursor-pointer">
+              onClick$={() =>
+                document.dispatchEvent(new Event(OPEN_COOKIE_PREFERENCES))
+              }
+              class="inline-flex min-h-6 items-center text-white underline underline-offset-2 font-normal hover:text-neutral-200 cursor-pointer">
               {t.cookieSettings}
             </button>
           </small>
@@ -126,7 +129,7 @@ const Footer = component$(() => {
           <small>
             <a
               href={localizePath('/gdpr/', locale)}
-              class="text-white underline underline-offset-2 font-normal hover:text-neutral-200">
+              class="inline-flex min-h-6 items-center text-white underline underline-offset-2 font-normal hover:text-neutral-200">
               {t.gdprLink}
             </a>
           </small>

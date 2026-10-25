@@ -135,14 +135,9 @@
         white-space: pre-line;
         overflow: hidden;
         z-index: -1;
-        clip: rect(0, attr(data-width px), attr(data-height px), 0);
+        clip-path: inset(0);
         pointer-events: none;
         -webkit-text-stroke: 0;
-        
-        // Fallback for browsers that don't support typed attr()
-        @supports not (width: attr(data-width px)) {
-          display: none;
-        }
       }
 
       &::before {
@@ -273,133 +268,133 @@
 
   @keyframes noise-anim {
     0% {
-      clip: rect(calc(attr(data-height px) * 0.0), attr(data-width px), calc(attr(data-height px) * 0.2), 0);
+      clip-path: inset(0 0 80% 0);
     }
     5% {
-      clip: rect(calc(attr(data-height px) * 0.3), attr(data-width px), calc(attr(data-height px) * 0.6), 0);
+      clip-path: inset(30% 0 40% 0);
     }
     10% {
-      clip: rect(calc(attr(data-height px) * 0.1), attr(data-width px), calc(attr(data-height px) * 0.4), 0);
+      clip-path: inset(10% 0 60% 0);
     }
     15% {
-      clip: rect(calc(attr(data-height px) * 0.5), attr(data-width px), calc(attr(data-height px) * 0.8), 0);
+      clip-path: inset(50% 0 20% 0);
     }
     20% {
-      clip: rect(calc(attr(data-height px) * 0.2), attr(data-width px), calc(attr(data-height px) * 0.7), 0);
+      clip-path: inset(20% 0 30% 0);
     }
     25% {
-      clip: rect(calc(attr(data-height px) * 0.4), attr(data-width px), calc(attr(data-height px) * 0.9), 0);
+      clip-path: inset(40% 0 10% 0);
     }
     30% {
-      clip: rect(calc(attr(data-height px) * 0.6), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(60% 0 0 0);
     }
     35% {
-      clip: rect(calc(attr(data-height px) * 0.15), attr(data-width px), calc(attr(data-height px) * 0.55), 0);
+      clip-path: inset(15% 0 45% 0);
     }
     40% {
-      clip: rect(calc(attr(data-height px) * 0.35), attr(data-width px), calc(attr(data-height px) * 0.85), 0);
+      clip-path: inset(35% 0 15% 0);
     }
     45% {
-      clip: rect(calc(attr(data-height px) * 0.7), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(70% 0 0 0);
     }
     50% {
-      clip: rect(calc(attr(data-height px) * 0.0), attr(data-width px), calc(attr(data-height px) * 0.3), 0);
+      clip-path: inset(0 0 70% 0);
     }
     55% {
-      clip: rect(calc(attr(data-height px) * 0.45), attr(data-width px), calc(attr(data-height px) * 0.75), 0);
+      clip-path: inset(45% 0 25% 0);
     }
     60% {
-      clip: rect(calc(attr(data-height px) * 0.25), attr(data-width px), calc(attr(data-height px) * 0.65), 0);
+      clip-path: inset(25% 0 35% 0);
     }
     65% {
-      clip: rect(calc(attr(data-height px) * 0.55), attr(data-width px), calc(attr(data-height px) * 0.95), 0);
+      clip-path: inset(55% 0 5% 0);
     }
     70% {
-      clip: rect(calc(attr(data-height px) * 0.05), attr(data-width px), calc(attr(data-height px) * 0.45), 0);
+      clip-path: inset(5% 0 55% 0);
     }
     75% {
-      clip: rect(calc(attr(data-height px) * 0.75), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(75% 0 0 0);
     }
     80% {
-      clip: rect(calc(attr(data-height px) * 0.3), attr(data-width px), calc(attr(data-height px) * 0.8), 0);
+      clip-path: inset(30% 0 20% 0);
     }
     85% {
-      clip: rect(calc(attr(data-height px) * 0.1), attr(data-width px), calc(attr(data-height px) * 0.6), 0);
+      clip-path: inset(10% 0 40% 0);
     }
     90% {
-      clip: rect(calc(attr(data-height px) * 0.65), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(65% 0 0 0);
     }
     95% {
-      clip: rect(calc(attr(data-height px) * 0.0), attr(data-width px), calc(attr(data-height px) * 0.35), 0);
+      clip-path: inset(0 0 65% 0);
     }
     100% {
-      clip: rect(calc(attr(data-height px) * 0.8), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(80% 0 0 0);
     }
   }
 
   @keyframes noise-anim-2 {
     0% {
-      clip: rect(calc(attr(data-height px) * 0.4), attr(data-width px), calc(attr(data-height px) * 0.9), 0);
+      clip-path: inset(40% 0 10% 0);
     }
     5% {
-      clip: rect(calc(attr(data-height px) * 0.1), attr(data-width px), calc(attr(data-height px) * 0.5), 0);
+      clip-path: inset(10% 0 50% 0);
     }
     10% {
-      clip: rect(calc(attr(data-height px) * 0.6), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(60% 0 0 0);
     }
     15% {
-      clip: rect(calc(attr(data-height px) * 0.2), attr(data-width px), calc(attr(data-height px) * 0.7), 0);
+      clip-path: inset(20% 0 30% 0);
     }
     20% {
-      clip: rect(calc(attr(data-height px) * 0.8), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(80% 0 0 0);
     }
     25% {
-      clip: rect(calc(attr(data-height px) * 0.0), attr(data-width px), calc(attr(data-height px) * 0.4), 0);
+      clip-path: inset(0 0 60% 0);
     }
     30% {
-      clip: rect(calc(attr(data-height px) * 0.5), attr(data-width px), calc(attr(data-height px) * 0.85), 0);
+      clip-path: inset(50% 0 15% 0);
     }
     35% {
-      clip: rect(calc(attr(data-height px) * 0.15), attr(data-width px), calc(attr(data-height px) * 0.6), 0);
+      clip-path: inset(15% 0 40% 0);
     }
     40% {
-      clip: rect(calc(attr(data-height px) * 0.7), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(70% 0 0 0);
     }
     45% {
-      clip: rect(calc(attr(data-height px) * 0.25), attr(data-width px), calc(attr(data-height px) * 0.75), 0);
+      clip-path: inset(25% 0 25% 0);
     }
     50% {
-      clip: rect(calc(attr(data-height px) * 0.45), attr(data-width px), calc(attr(data-height px) * 0.95), 0);
+      clip-path: inset(45% 0 5% 0);
     }
     55% {
-      clip: rect(calc(attr(data-height px) * 0.05), attr(data-width px), calc(attr(data-height px) * 0.55), 0);
+      clip-path: inset(5% 0 45% 0);
     }
     60% {
-      clip: rect(calc(attr(data-height px) * 0.65), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(65% 0 0 0);
     }
     65% {
-      clip: rect(calc(attr(data-height px) * 0.3), attr(data-width px), calc(attr(data-height px) * 0.8), 0);
+      clip-path: inset(30% 0 20% 0);
     }
     70% {
-      clip: rect(calc(attr(data-height px) * 0.0), attr(data-width px), calc(attr(data-height px) * 0.35), 0);
+      clip-path: inset(0 0 65% 0);
     }
     75% {
-      clip: rect(calc(attr(data-height px) * 0.55), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(55% 0 0 0);
     }
     80% {
-      clip: rect(calc(attr(data-height px) * 0.35), attr(data-width px), calc(attr(data-height px) * 0.85), 0);
+      clip-path: inset(35% 0 15% 0);
     }
     85% {
-      clip: rect(calc(attr(data-height px) * 0.75), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(75% 0 0 0);
     }
     90% {
-      clip: rect(calc(attr(data-height px) * 0.1), attr(data-width px), calc(attr(data-height px) * 0.6), 0);
+      clip-path: inset(10% 0 40% 0);
     }
     95% {
-      clip: rect(calc(attr(data-height px) * 0.9), attr(data-width px), calc(attr(data-height px) * 1.0), 0);
+      clip-path: inset(90% 0 0 0);
     }
     100% {
-      clip: rect(calc(attr(data-height px) * 0.0), attr(data-width px), calc(attr(data-height px) * 0.3), 0);
+      clip-path: inset(0 0 70% 0);
     }
   }
 }

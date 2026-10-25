@@ -25,7 +25,7 @@
   },
   "type": "module",
   "scripts": {
-    "build": "bun run posts:manifest && bun run tailwind:optimize && qwik build && bun run scripts/generate-sitemap.ts && bun run scripts/generate-llms-txt.ts && bun run easter-egg:build",
+    "build": "bun run posts:manifest && bun run tailwind:optimize && qwik build && bun run scripts/generate-sitemap.ts && bun run scripts/generate-llms-txt.ts && bun run scripts/generate-agent-json.ts && bun run easter-egg:build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/static/vite.config.ts",

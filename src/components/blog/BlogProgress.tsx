@@ -1,60 +1,32 @@
-import { $, component$, useOn, useOnWindow, useSignal } from '@qwik.dev/core'
+import { $, component$, useOnWindow, useSignal } from '@qwik.dev/core'
 import { supportsScrollTimeline } from '~/utils'
 
+let ticking = false
+
 /**
- * Blog progress component that shows reading progress at the top of the page
- * Uses CSS scroll-driven animations with a JS fallback for browsers without support
+ * Blog progress component that shows reading progress at the top of the page.
+ * Uses CSS scroll-driven animations; the JS fallback for browsers without
+ * support is only downloaded on the first scroll.
  */
 export const BlogProgress = component$(() => {
   const progressRef = useSignal<HTMLDivElement>()
-  const needsFallback = useSignal(false)
-  const lastScrollPercentage = useSignal(0)
-  const ticking = useSignal(false)
 
-  // Check if browser supports scroll timeline on component mount
-  useOn(
-    'qvisible',
-    $(() => {
-      needsFallback.value = !supportsScrollTimeline()
-    }),
-  )
-
-  // Optimized scroll handler with requestAnimationFrame for better performance
   useOnWindow(
     'scroll',
     $(() => {
-      if (!needsFallback.value || !progressRef.value) return
-
-      if (!ticking.value) {
-        window.requestAnimationFrame(() => {
-          const scrollTop =
-            document.documentElement.scrollTop || document.body.scrollTop
-          const scrollHeight =
-            document.documentElement.scrollHeight -
-            document.documentElement.clientHeight
-          const scrollPercentage = Math.max(
-            0,
-            Math.min(1, scrollTop / scrollHeight),
-          )
-
-          // Only update if there's a significant change (reduces unnecessary style updates)
-          if (Math.abs(scrollPercentage - lastScrollPercentage.value) > 0.005) {
-            progressRef.value!.style.scale = `${scrollPercentage} 1`
-            lastScrollPercentage.value = scrollPercentage
-          }
-
-          ticking.value = false
-        })
-
-        ticking.value = true
-      }
+      const el = progressRef.value
+      if (!el || ticking || supportsScrollTimeline()) return
+      ticking = true
+      el.classList.add('blog__progress--fallback')
+      requestAnimationFrame(() => {
+        const html = document.documentElement
+        const max = html.scrollHeight - html.clientHeight
+        const progress = Math.max(0, Math.min(1, html.scrollTop / max))
+        el.style.scale = `${progress} 1`
+        ticking = false
+      })
     }),
   )
 
-  return (
-    <div
-      ref={progressRef}
-      class={`blog__progress ${needsFallback.value ? 'blog__progress--fallback' : ''}`}
-    />
-  )
+  return <div ref={progressRef} class="blog__progress" />
 })

@@ -3,6 +3,12 @@ import { getLocaleFromPathname } from '~/i18n'
 import i18n from './alert.i18n.json'
 
 /**
+ * Document event dispatched after load when the initial URL carries query
+ * parameters, so alert handling code is only fetched when it can matter.
+ */
+export const URL_ALERTS_EVENT = 'url-alerts'
+
+/**
  * Checks URL parameters for form submission flags and shows appropriate alerts
  *
  * @description This service checks URL parameters for specific flags and triggers

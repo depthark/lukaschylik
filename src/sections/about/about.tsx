@@ -50,10 +50,12 @@ const About = component$(() => {
             <img
               class="me relative z-0 block mx-auto"
               src="/images/me.webp"
+              srcset="/images/me-480.webp 480w, /images/me.webp 905w"
+              sizes="(min-width: 1024px) min(768px, 42vw), 70vw"
               alt={t.photoAlt}
               loading="lazy"
-              width={768}
-              height={768}
+              width={905}
+              height={1000}
               onClick$={$((_: Event, el: HTMLImageElement) =>
                 trackTap(el, locale),
               )}

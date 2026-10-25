@@ -14,7 +14,8 @@
       "CSS scroll driven animations",
       "Frontendové novinky Máj 2025",
       "CSS anchor positioning"
-    ]
+    ],
+    "play": "Prehrať video"
   },
   "en": {
     "title": "Sessions",
@@ -31,6 +32,7 @@
       "CSS scroll driven animations",
       "Frontend news May 2025",
       "CSS anchor positioning"
-    ]
+    ],
+    "play": "Play video"
   }
 }

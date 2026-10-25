@@ -1,14 +1,14 @@
 import {
   $,
   component$,
+  isServer,
   Slot,
   useContextProvider,
-  useOn,
+  useOnDocument,
   useOnWindow,
   useSignal,
   useStore,
   useTask$,
-  useVisibleTask$,
 } from '@qwik.dev/core'
 import type { DocumentHead, RequestHandler } from '@qwik.dev/router'
 import { useLocation, useNavigate } from '@qwik.dev/router'
@@ -16,13 +16,12 @@ import { Alert, Navigation, ReservationDialog } from '~/components'
 import { trackKonami } from '~/components/bug-squasher/trigger'
 import CookieConsent from '~/components/cookie-consent/cookie-consent'
 import Social from '~/components/social/social'
-import { CONTACT_EMAIL, CONTACT_PHONE } from '~/constants/business'
 import { getLocaleFromPathname, stripLocale, useLocale } from '~/i18n'
 import ui from '~/i18n/ui.json'
 import { Footer, Header } from '~/sections'
-import { checkUrlForAlerts } from '~/services'
+import { checkUrlForAlerts, URL_ALERTS_EVENT } from '~/services'
 import { AlertContext, type AlertMessage, DialogContext } from '~/utils'
-import { useWebMcp } from '~/webmcp'
+import { useWebMcp, WEBMCP_DETECT_SCRIPT } from '~/webmcp'
 
 export const onGet: RequestHandler = async ({ cacheControl, headers }) => {
   cacheControl({
@@ -34,11 +33,10 @@ export const onGet: RequestHandler = async ({ cacheControl, headers }) => {
 
 /**
  * Default head metadata for all routes
- * This includes the Google Tag Manager script and structured data
+ * Consent mode bootstrap, deferred Google Tag Manager loader and lazy signals
  */
 export const head: DocumentHead = ({ url }) => {
   const locale = getLocaleFromPathname(url.pathname)
-  const meta = ui[locale].siteMeta
 
   return {
     scripts: [
@@ -51,71 +49,16 @@ export const head: DocumentHead = ({ url }) => {
         },
       },
       {
-        key: 'consent-restore',
-        script: `try{var k='cookie-consent-v1';var raw=localStorage.getItem(k);if(raw){var parsed=JSON.parse(raw);var v=parsed.analytics?'granted':'denied';window.dataLayer=window.dataLayer||[];window.gtag=window.gtag||function(){dataLayer.push(arguments);};gtag('consent','update',{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v});}}catch(e){}`,
+        key: 'consent-init',
+        script: `(function(w,d){var h=d.documentElement;w.__loadGtm=function(){if(w.__gtmLoaded)return;w.__gtmLoaded=1;w.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});var s=d.createElement('script');s.async=1;s.src='https://www.googletagmanager.com/gtm.js?id=GTM-KQFH8PWL';d.head.appendChild(s)};try{var p=JSON.parse(localStorage.getItem('cookie-consent-v1')||'null');if(!p||typeof p.analytics!=='boolean'){h.dataset.consent='pending';return}var v=p.analytics?'granted':'denied';gtag('consent','update',{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v});if(!p.analytics)return;if(d.readyState==='complete')w.__loadGtm();else w.addEventListener('load',function(){setTimeout(w.__loadGtm,0)})}catch(e){h.dataset.consent='pending'}})(window,document)`,
       },
       {
-        key: 'gtm',
-        script: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KQFH8PWL');`,
-        props: {
-          async: true,
-        },
+        key: 'deferred-signals',
+        script: `if(location.search)addEventListener('load',function(){document.dispatchEvent(new Event('${URL_ALERTS_EVENT}'))});${WEBMCP_DETECT_SCRIPT}`,
       },
       {
         key: 'easter-egg-hint',
         script: `console.log(${JSON.stringify(`%c${ui[locale].easterEgg.consoleHint}`)},'font:600 13px/1.6 monospace;color:#a855f7')`,
-      },
-      {
-        key: 'structuredData',
-        script: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@graph': [
-            {
-              '@type': 'Person',
-              '@id': '#person',
-              name: 'Lukáš Chylík',
-              jobTitle: 'Creative AI Engineer',
-              email: CONTACT_EMAIL,
-              telephone: CONTACT_PHONE,
-              image: './images/profile/me.webp',
-              address: {
-                '@type': 'PostalAddress',
-                streetAddress: 'Hybešova 308/61',
-                addressLocality: 'Brno',
-                postalCode: '602 00',
-                addressCountry:
-                  locale === 'sk' ? 'Česká republika' : 'Czech Republic',
-              },
-              sameAs: [`mailto:${CONTACT_EMAIL}`],
-            },
-            {
-              '@type': 'WebSite',
-              '@id': '#website',
-              url: 'https://lukaschylik.dev/',
-              name: meta.defaultTitle,
-              description: meta.defaultDescription,
-              publisher: { '@id': '#person' },
-            },
-            {
-              '@type': 'ProfilePage',
-              '@id': '#webpage',
-              url: 'https://lukaschylik.dev/',
-              name: meta.defaultTitle,
-              description: meta.defaultDescription,
-              about: { '@id': '#person' },
-              mainEntity: { '@id': '#person' },
-              isPartOf: { '@id': '#website' },
-              inLanguage: locale,
-            },
-          ],
-        }),
-        props: {
-          type: 'application/ld+json',
-        },
       },
     ],
   }
@@ -134,7 +77,6 @@ export default component$(() => {
 
   // Create dialog ref for global reservation dialog
   const dialogRef = useSignal<HTMLDialogElement>()
-  const clientReady = useSignal(false)
 
   // Provide alert context
   useContextProvider(AlertContext, {
@@ -177,33 +119,27 @@ export default component$(() => {
     $((event: KeyboardEvent) => trackKonami(event.key, locale)),
   )
 
-  useOn(
-    'qvisible',
-    $(() => {
-      clientReady.value = true
-    }),
+  const showUrlAlert = $((message: string) => {
+    alertState.text = message
+    alertState.visible = true
+  })
+
+  useOnDocument(
+    URL_ALERTS_EVENT,
+    $(() => checkUrlForAlerts(new URL(window.location.href), showUrlAlert)),
   )
 
-  // Check for URL parameters on initial load
+  // Check for URL parameters after client-side navigation
   useTask$(({ track }) => {
-    // React to URL changes (e.g., query params added by client-side navigation)
     track(() => location.url.href)
-    track(() => clientReady.value)
-    if (!clientReady.value) return
-
-    // Use the alert service to check for URL parameters and show appropriate alerts
-    const showAlertFn = $((message: string) => {
-      alertState.text = message
-      alertState.visible = true
-    })
-
-    checkUrlForAlerts(location.url, showAlertFn)
+    if (isServer || !location.url.search) return
+    checkUrlForAlerts(location.url, showUrlAlert)
   })
 
   // Disable smooth scroll only when navigating forward into a blog article
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ track }) => {
+  useTask$(({ track }) => {
     const navigating = track(() => location.isNavigating)
+    if (isServer) return
     const pathname = stripLocale(location.url.pathname)
     const goingToArticle =
       pathname.startsWith('/blog/') && pathname !== '/blog/'

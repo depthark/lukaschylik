@@ -54,17 +54,12 @@ const Reference = component$<ReferenceProps>(
                 'pointer-events-none select-none z-0',
               )}>
               <span class="block size-full overflow-hidden rounded-full">
-                <img
-                  src={img}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  width={425}
-                  height={425}
-                  class="reference__image block size-full object-cover object-top"
-                  style={
-                    imgPosition ? { objectPosition: imgPosition } : undefined
-                  }
+                <span
+                  class="reference__image block size-full bg-cover bg-no-repeat"
+                  style={{
+                    '--reference-preview': `url(${img})`,
+                    backgroundPosition: imgPosition ?? '50% 0%',
+                  }}
                 />
               </span>
             </span>

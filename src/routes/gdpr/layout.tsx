@@ -1,16 +1,17 @@
-import { component$, Slot } from '@qwik.dev/core'
+import { component$, Slot, useStyles$ } from '@qwik.dev/core'
 import type { DocumentHead } from '@qwik.dev/router'
 import Container from '~/components/container/container'
 import Section from '~/components/section/section'
 import { getLocaleFromPathname } from '~/i18n'
 import i18n from './gdpr.i18n.json'
-import '~/styles/css/shiki.css'
+import shikiStyles from '~/styles/css/shiki.css?inline'
 
 /**
  * Simple layout wrapper for the GDPR page.
  * Reuses the `.blog` typography styles for readable Markdown.
  */
 export default component$(() => {
+  useStyles$(shikiStyles)
   return (
     <Section id="gdpr" className=" dark:bg-black-800">
       <Container size="sm">

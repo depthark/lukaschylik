@@ -8,6 +8,7 @@ import {
 } from '~/constants/business'
 import { REFERENCES } from '~/constants/references'
 import { SESSION_VIDEO_SOURCES } from '~/constants/sessions'
+import { SITE_URL } from '~/constants/site'
 import { SOCIAL_LINKS } from '~/constants/socialLinks'
 import { type Locale, localizePath } from '~/i18n/core'
 import ui from '~/i18n/ui.json'
@@ -31,11 +32,15 @@ const toPlainText = (segments: Segment[]): string =>
   segments.map((segment) => segment.text).join('')
 
 /**
- * Converts a site-relative path into an absolute URL on the current origin.
+ * Converts a site-relative path into an absolute URL on the current origin,
+ * or on the production origin when running outside the browser (build time).
  * @param path - Site-relative path
  */
 export const toAbsoluteUrl = (path: string): string =>
-  new URL(path, window.location.origin).toString()
+  new URL(
+    path,
+    typeof window === 'undefined' ? SITE_URL : window.location.origin,
+  ).toString()
 
 /**
  * Returns public profile and contact information about the site owner.

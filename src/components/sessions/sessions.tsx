@@ -9,6 +9,34 @@ import { cls } from '~/utils'
 import i18n from './sessions.i18n.json'
 
 /**
+ * Escapes text for use inside an HTML attribute or element body.
+ * @param text - Raw text
+ */
+const escapeHtml = (text: string) =>
+  text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+
+/**
+ * Builds a lightweight `srcdoc` placeholder for a YouTube embed: a thumbnail
+ * with a play link that swaps in the privacy-enhanced player on click, so no
+ * YouTube scripts or cookies load until the visitor asks for the video.
+ * @param src - Original YouTube embed URL
+ * @param title - Video title
+ * @param playLabel - Accessible label of the play link
+ */
+const youTubeFacade = (src: string, title: string, playLabel: string) => {
+  const id = new URL(src).pathname.split('/').pop() ?? ''
+  const player = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`
+  const thumb = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+  const label = escapeHtml(`${playLabel}: ${title}`)
+  return `<style>html,body{height:100%;margin:0;background:#000}a{position:relative;display:block;height:100%}img{width:100%;height:100%;object-fit:cover}span{position:absolute;inset:0;margin:auto;width:68px;height:48px;border-radius:12px;background:#f00;opacity:.9}span::after{content:'';position:absolute;inset:0;margin:auto;width:0;height:0;border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent #fff;translate:3px 0}a:hover span,a:focus-visible span{opacity:1}a:focus-visible{outline:3px solid #a855f7;outline-offset:-3px}</style><a href='${player}' aria-label='${label}'><img src='${thumb}' alt='' loading='lazy'><span></span></a>`
+}
+
+/**
  * Document head for the sessions routes; locale derived from the URL so a
  * single export serves both /sessions and /en/sessions.
  */
@@ -91,7 +119,7 @@ const Sessions = component$(() => {
                 class="w-full aspect-video block rounded-lg overflow-clip border-2 border-black dark:border-white"
                 loading="lazy"
                 width="560"
-                src={src}
+                srcdoc={youTubeFacade(src, t.videos[index], t.play)}
                 title={t.videos[index]}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerPolicy="strict-origin-when-cross-origin"

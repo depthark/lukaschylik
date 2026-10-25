@@ -125,9 +125,12 @@ const generateLlmsTxt = (): void => {
     '',
     'Every page registers [WebMCP](https://webmachinelearning.github.io/webmcp/) tools in supporting browsers: `get_page_context`, `get_profile`, `list_services`, `list_references`, `list_sessions`, `search_blog_posts`, `get_blog_post`, `navigate`, `open_blog_post`, `set_theme`, `set_language`, `open_booking`, `send_contact_message` and `subscribe_newsletter`. The contact and newsletter forms are also annotated as declarative WebMCP tools.',
     '',
+    `Machine-readable profile, services, references, talks, posts and the full WebMCP tool catalog: [agent/site.json](${SITE_URL}/agent/site.json). Every indexable page also embeds a schema.org JSON-LD graph.`,
+    '',
     '## Optional',
     '',
     `- [Sitemap](${SITE_URL}/sitemap.xml)`,
+    `- [Agent data (JSON)](${SITE_URL}/agent/site.json)`,
     '',
   ]
 

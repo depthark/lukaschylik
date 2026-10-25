@@ -43,7 +43,7 @@ export default defineConfig((): UserConfig => {
     },
     css: {
       preprocessorOptions: {
-        scss: {},
+        scss: { charset: false },
       },
     },
     optimizeDeps: {

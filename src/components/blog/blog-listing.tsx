@@ -107,8 +107,8 @@ const BlogListing = component$(() => {
               'grid-rows-[repeat(auto-fill,auto_1fr_auto)]',
             )}>
             {filteredPosts.value.length > 0 ? (
-              filteredPosts.value.map((post) => (
-                <BlogCard key={post.slug} post={post} />
+              filteredPosts.value.map((post, index) => (
+                <BlogCard key={post.slug} post={post} priority={index === 0} />
               ))
             ) : (
               <div

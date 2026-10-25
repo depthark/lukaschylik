@@ -1,4 +1,4 @@
-import { $, component$, useOn } from '@qwik.dev/core'
+import { component$ } from '@qwik.dev/core'
 import { Button, Container } from '~/components'
 import { useLocale } from '~/i18n'
 import { cls } from '~/utils'
@@ -9,30 +9,6 @@ import i18n from './header.i18n.json'
  */
 const Header = component$(() => {
   const t = i18n[useLocale()]
-
-  useOn(
-    'qvisible',
-    $(() => {
-      const titleElement = document.querySelector(
-        '.intro__title',
-      ) as HTMLElement
-      if (titleElement) {
-        // Set the client dimensions as data attributes for use in CSS
-        const clientHeight = titleElement.clientHeight
-        const clientWidth = titleElement.clientWidth
-        console.log('Title element height:', clientHeight)
-        console.log('Title element width:', clientWidth)
-        titleElement.setAttribute('data-height', clientHeight.toString())
-        titleElement.setAttribute('data-width', clientWidth.toString())
-        console.log(
-          'Data attributes set - height:',
-          titleElement.getAttribute('data-height'),
-          'width:',
-          titleElement.getAttribute('data-width'),
-        )
-      }
-    }),
-  )
 
   return (
     <header
@@ -52,9 +28,7 @@ const Header = component$(() => {
               'font-extrabold uppercase leading-none tracking-widest',
               'relative z-10',
             )}
-            data-glitch={t.name.join('\n')}
-            data-height="200"
-            data-width="800">
+            data-glitch={t.name.join('\n')}>
             {t.name[0]}
             <br />
             {t.name[1]}

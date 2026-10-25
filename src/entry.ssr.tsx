@@ -30,6 +30,7 @@ export default createRenderer((opts) => {
     jsx: <Root />,
     options: {
       ...opts,
+      preloader: { ssrPreloads: 0 },
       containerAttributes: {
         lang: resolveLang(opts.serverData?.url),
         ...opts.containerAttributes,

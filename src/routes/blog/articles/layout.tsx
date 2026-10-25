@@ -1,6 +1,6 @@
-import { component$, Slot } from '@qwik.dev/core'
+import { component$, Slot, useStyles$ } from '@qwik.dev/core'
 import ArticleLayout from '~/components/blog/article-layout'
-import '~/styles/css/shiki.css'
+import shikiStyles from '~/styles/css/shiki.css?inline'
 
 export { head } from '~/components/blog/article-layout'
 
@@ -9,6 +9,7 @@ export { head } from '~/components/blog/article-layout'
  * article layout. Serves the Slovak article tree.
  */
 export default component$(() => {
+  useStyles$(shikiStyles)
   return (
     <ArticleLayout>
       <Slot />

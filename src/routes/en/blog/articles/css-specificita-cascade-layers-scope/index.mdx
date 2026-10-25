@@ -166,10 +166,7 @@ Globally overriding links via a class on the parent:
 
 Links are affected everywhere, which can lead to contrast problems when mixing themes.
 
-<iframe height="550" style="width: 100%;" scrolling="no" title="Contrast issue without @scope" src="https://codepen.io/web-dot-dev/embed/eYbLpQw?default-tab=css%2Cresult" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-  See the Pen <a href="https://codepen.io/web-dot-dev/pen/eYbLpQw">
-  Contrast issue without @scope</a> on <a href="https://codepen.io">CodePen</a>.
-</iframe>
+<iframe height="550" style="width: 100%;" title="Contrast issue without @scope" loading="lazy" srcdoc="<style>html,body{height:100%;margin:0}a{display:grid;place-content:center;gap:8px;height:100%;padding:24px;box-sizing:border-box;background:#111;color:#fff;font:600 18px/1.4 system-ui,sans-serif;text-align:center;text-decoration:none}a span{font-weight:400;font-size:15px;color:#bbb}a:hover,a:focus-visible{background:#1c1c1c;outline:3px solid #a855f7;outline-offset:-3px}</style><a href='https://codepen.io/web-dot-dev/embed/eYbLpQw?default-tab=css%2Cresult'>▶ Run the CodePen demo<span>Contrast issue without @scope</span></a>"></iframe>
 
 ### The solution with `@scope` (root + limit)
 
@@ -192,10 +189,7 @@ Links are affected everywhere, which can lead to contrast problems when mixing t
 
 The scoped notation keeps specificity low and isolates theme colors to specific blocks without affecting the rest of the page.
 
-<iframe height="550" style="width: 100%;" scrolling="no" title="Contrast fix with @scope" src="https://codepen.io/web-dot-dev/embed/MWZqazx?default-tab=css%2Cresult" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-  See the Pen <a href="https://codepen.io/web-dot-dev/pen/MWZqazx">
-  Contrast fix with @scope</a> on <a href="https://codepen.io">CodePen</a>.
-</iframe>
+<iframe height="550" style="width: 100%;" title="Contrast fix with @scope" loading="lazy" srcdoc="<style>html,body{height:100%;margin:0}a{display:grid;place-content:center;gap:8px;height:100%;padding:24px;box-sizing:border-box;background:#111;color:#fff;font:600 18px/1.4 system-ui,sans-serif;text-align:center;text-decoration:none}a span{font-weight:400;font-size:15px;color:#bbb}a:hover,a:focus-visible{background:#1c1c1c;outline:3px solid #a855f7;outline-offset:-3px}</style><a href='https://codepen.io/web-dot-dev/embed/MWZqazx?default-tab=css%2Cresult'>▶ Run the CodePen demo<span>Contrast fix with @scope</span></a>"></iframe>
 
 ### Relationship to specificity
 

@@ -1,11 +1,4 @@
-import {
-  $,
-  component$,
-  useContext,
-  useOn,
-  useSignal,
-  useStore,
-} from '@qwik.dev/core'
+import { $, component$, useContext, useStore } from '@qwik.dev/core'
 import { Link, useLocation } from '@qwik.dev/router'
 import { getLocaleFromPathname, localizePath, stripLocale } from '~/i18n'
 import ui from '~/i18n/ui.json'
@@ -23,20 +16,11 @@ import type { NavigationLinkProps, NavigationProps } from './navigation.types'
  */
 const Navigation = component$<NavigationProps>(({ links }) => {
   const state = useStore({ isOpen: false })
-  const isHydrated = useSignal(false)
   const location = useLocation()
   const dialogContext = useContext(DialogContext)
 
   const locale = getLocaleFromPathname(location.url.pathname)
   const t = ui[locale].nav
-
-  // Ensure proper hydration
-  useOn(
-    'qvisible',
-    $(() => {
-      isHydrated.value = true
-    }),
-  )
 
   const toggleMenu = $(() => {
     state.isOpen = !state.isOpen
@@ -98,7 +82,6 @@ const Navigation = component$<NavigationProps>(({ links }) => {
           'md:flex-row md:justify-center py-6 px-8',
           'backdrop-blur-md md:backdrop-blur-none bg-white/70 dark:bg-black/70 md:bg-transparent dark:md:bg-transparent',
           'list-none m-0',
-          !isHydrated.value && 'invisible md:visible',
           state.isOpen ? 'grid' : 'hidden md:flex',
         )}>
         {links?.map((link: NavigationLinkProps) => {

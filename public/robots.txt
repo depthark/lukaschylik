@@ -1,6 +1,5 @@
 User-agent: *
-Allow: /*.css$
-Allow: /*.js$
 Allow: /
 
+# AI agents: a concise brief lives at /llms.txt, structured data at /agent/site.json
 Sitemap: https://lukaschylik.dev/sitemap.xml

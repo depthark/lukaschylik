@@ -1,6 +1,7 @@
 import { $, component$, Slot, useContext } from '@qwik.dev/core'
 import { type DocumentHead, Link, useLocation } from '@qwik.dev/router'
 import { Icon } from '~/components'
+import { SITE_URL } from '~/constants/site'
 import { BlogProgress } from '~/components/blog/BlogProgress'
 import Container from '~/components/container/container'
 import Section from '~/components/section/section'
@@ -50,16 +51,6 @@ export const head: DocumentHead = ({ url }) => {
   const locale = getLocaleFromPathname(url.pathname)
   const t = i18n[locale]
   const post = resolvePost(url)
-  const site = 'https://lukaschylik.dev'
-  const articlesBase = localizePath('/blog/articles/', locale)
-  const canonicalUrl = post?.slug
-    ? `${site}${articlesBase}${post.slug}/`
-    : `${site}${articlesBase}`
-  const imageAbs = post?.cardImg
-    ? /^https?:\/\//i.test(post.cardImg)
-      ? post.cardImg
-      : `${site}${post.cardImg}`
-    : undefined
 
   return {
     title: post ? `${post.title} | ${t.headTitleSuffix}` : t.headTitleSuffix,
@@ -76,30 +67,9 @@ export const head: DocumentHead = ({ url }) => {
         ? ({ property: 'article:published_time', content: post.date } as any)
         : undefined,
       post?.author
-        ? ({ property: 'article:author', content: post.author } as any)
+        ? ({ property: 'article:author', content: `${SITE_URL}/` } as any)
         : undefined,
     ].filter(Boolean) as any,
-    scripts: imageAbs
-      ? [
-          {
-            key: 'blog-structured-data',
-            script: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'BlogPosting',
-              headline: post?.title,
-              description: post?.description,
-              image: [imageAbs],
-              author: { '@type': 'Person', name: post?.author },
-              datePublished: post?.date,
-              dateModified: post?.date,
-              mainEntityOfPage: canonicalUrl,
-              inLanguage: locale,
-              publisher: { '@type': 'Person', name: 'Lukáš Chylík' },
-            }),
-            props: { type: 'application/ld+json' },
-          },
-        ]
-      : [],
   }
 }
 
@@ -188,6 +158,7 @@ const ArticleLayout = component$(() => {
                       alt={`${t.coverAlt}: ${post.title}`}
                       width={1600}
                       height={900}
+                      fetchPriority="high"
                       class="absolute inset-0 w-full h-full object-cover"
                     />
                   </div>
