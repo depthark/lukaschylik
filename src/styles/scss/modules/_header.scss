@@ -107,7 +107,7 @@
       text-shadow: 
         -2px 0 var(--color-purple-300),
         2px 0 var(--color-turquoise-300);
-      animation: show-title-glitch 0.5s ease-out 0.35s forwards;
+      animation: show-title-glitch 0.5s ease-out forwards;
 
       @include mq-reduce-motion {
         opacity: initial;
