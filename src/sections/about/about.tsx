@@ -48,7 +48,8 @@ const About = component$(() => {
           />
           <div class="lg:row-start-1 lg:row-span-2 lg:col-start-2">
             <img
-              class="me relative z-0 block mx-auto"
+              class="me relative z-0 block mx-auto touch-manipulation select-none [-webkit-touch-callout:none] [-webkit-tap-highlight-color:transparent]"
+              draggable={false}
               src="/images/me.webp"
               srcset="/images/me-480.webp 480w, /images/me.webp 905w"
               sizes="(min-width: 1024px) min(768px, 42vw), 70vw"
