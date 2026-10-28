@@ -13,6 +13,8 @@ interface Env {
   CONTACT_FROM?: string
   /** Optional comma-separated recipients, defaults to {@link CONTACT_EMAIL} */
   CONTACT_TO?: string
+  /** Cloudflare Turnstile secret key (secret); when set, a valid token is required */
+  TURNSTILE_SECRET_KEY?: string
 }
 
 /**
@@ -27,7 +29,13 @@ interface Context {
  * Normalized contact form submission.
  */
 type Submission = Record<
-  'fullname' | 'email' | 'subject' | 'message' | 'botcheck' | 'elapsed',
+  | 'fullname'
+  | 'email'
+  | 'subject'
+  | 'message'
+  | 'botcheck'
+  | 'elapsed'
+  | 'token',
   string
 > & { locale: Locale }
 
@@ -38,8 +46,11 @@ type Outcome = { ok: true } | { error: string; status: number }
 
 const RESEND_URL = 'https://api.resend.com/emails'
 const DEFAULT_FROM = `${SITE_OWNER} <web@lukaschylik.dev>`
+const TURNSTILE_VERIFY_URL =
+  'https://challenges.cloudflare.com/turnstile/v0/siteverify'
 const MIN_FILL_MS = 3000
 const MAX_LINKS = 2
+const FOREIGN_SCRIPT = /[\u0400-\u04ff\u0600-\u06ff\u3040-\u30ff\u4e00-\u9fff]/
 const EMAIL_PATTERN = /^[^\s@<>,;"]+@[^\s@<>,;"]+\.[^\s@<>,;"]+$/
 const LIMITS = { fullname: 120, email: 200, subject: 200, message: 5000 }
 
@@ -80,6 +91,7 @@ const readSubmission = async (
     message: field('message'),
     botcheck: field('botcheck'),
     elapsed: field('elapsed'),
+    token: field('turnstile', 'cf-turnstile-response'),
     locale:
       locale === 'en' || locale === 'sk'
         ? locale
@@ -106,14 +118,39 @@ const validate = (data: Submission): string | null => {
 }
 
 /**
- * Honeypot, time on page and link count. True means "a bot, drop it silently".
+ * Honeypot, time on page, link count and non-Latin scripts (the site is
+ * Slovak and English). True means "a bot, drop it silently".
  * @param data - Submission
- * @param viaScript - Whether the page script sent it (only then is `elapsed` known)
  */
-const looksLikeSpam = (data: Submission, viaScript: boolean) => {
-  const links = data.message.match(/https?:\/\/|www\./gi)?.length ?? 0
-  const tooFast = viaScript && !(Number(data.elapsed) >= MIN_FILL_MS)
-  return Boolean(data.botcheck) || tooFast || links > MAX_LINKS
+const looksLikeSpam = (data: Submission) => {
+  const text = `${data.fullname} ${data.subject} ${data.message}`
+  const links = text.match(/https?:\/\/|www\./gi)?.length ?? 0
+  const tooFast = !(Number(data.elapsed) >= MIN_FILL_MS)
+  return (
+    Boolean(data.botcheck) ||
+    tooFast ||
+    links > MAX_LINKS ||
+    FOREIGN_SCRIPT.test(text)
+  )
+}
+
+/**
+ * Verifies a Cloudflare Turnstile token. Without a configured secret the
+ * check is skipped (local development).
+ * @param env - Function environment
+ * @param token - Token from the widget
+ * @param ip - Visitor IP reported by Cloudflare
+ */
+const passesTurnstile = async (env: Env, token: string, ip: string | null) => {
+  if (!env.TURNSTILE_SECRET_KEY) return true
+  if (!token) return false
+  const body = new FormData()
+  body.append('secret', env.TURNSTILE_SECRET_KEY)
+  body.append('response', token)
+  if (ip) body.append('remoteip', ip)
+  const response = await fetch(TURNSTILE_VERIFY_URL, { method: 'POST', body })
+  const result: { success?: boolean } = await response.json()
+  return result.success === true
 }
 
 /**
@@ -190,17 +227,20 @@ const sendEmail = (env: Env, email: Record<string, unknown>) =>
   })
 
 /**
- * Validates the submission and sends the notification and confirmation.
+ * Validates the submission and sends the notification. The confirmation copy
+ * to the visitor is only sent after a verified Turnstile challenge, so the
+ * form can never be abused to mail arbitrary addresses.
  * @param data - Submission
  * @param env - Function environment
- * @param viaScript - Whether the page script sent it
+ * @param ip - Visitor IP reported by Cloudflare
  */
 const handleSubmission = async (
   data: Submission,
   env: Env,
-  viaScript: boolean,
+  ip: string | null,
 ): Promise<Outcome> => {
-  if (looksLikeSpam(data, viaScript)) return { ok: true }
+  if (looksLikeSpam(data)) return { ok: true }
+  if (!(await passesTurnstile(env, data.token, ip))) return { ok: true }
 
   const invalid = validate(data)
   if (invalid) return { error: invalid, status: 400 }
@@ -222,6 +262,8 @@ const handleSubmission = async (
     return unavailable
   }
 
+  if (!env.TURNSTILE_SECRET_KEY) return { ok: true }
+
   const confirmation = await sendEmail(env, {
     to: [data.email],
     reply_to: to,
@@ -241,8 +283,9 @@ const handleSubmission = async (
  * POST /api/contact – contact form → e-mail via Resend.
  *
  * Script submissions (JSON) get `200 { ok: true }` or `4xx/5xx { error }`.
- * Plain form posts (no JavaScript) are redirected back to the contact
- * section with `?formSubmitted=true` or `?formError=true`.
+ * Plain form posts cannot carry the Turnstile token or time on page, so they
+ * are never sent; the visitor is redirected back with `?formError=true`,
+ * whose alert points to the e-mail address.
  * @param context - Pages Function context
  */
 export const onRequestPost = async ({
@@ -253,23 +296,29 @@ export const onRequestPost = async ({
     'application/json',
   )
 
+  if (!viaScript) {
+    const locale = getLocaleFromPathname(
+      new URL(request.headers.get('Referer') ?? request.url).pathname,
+    )
+    const home = locale === 'en' ? '/en/' : '/'
+    return Response.redirect(
+      new URL(`${home}?formError=true#contact`, request.url).toString(),
+      303,
+    )
+  }
+
   let outcome: Outcome
   let locale: Locale = 'sk'
   try {
     const data = await readSubmission(request, viaScript)
     locale = data.locale
-    outcome = await handleSubmission(data, env, viaScript)
+    outcome = await handleSubmission(
+      data,
+      env,
+      request.headers.get('CF-Connecting-IP'),
+    )
   } catch {
     outcome = { error: i18n[locale].mail.invalid, status: 400 }
-  }
-
-  if (!viaScript) {
-    const home = locale === 'en' ? '/en/' : '/'
-    const flag = 'ok' in outcome ? 'formSubmitted' : 'formError'
-    return Response.redirect(
-      new URL(`${home}?${flag}=true#contact`, request.url).toString(),
-      303,
-    )
   }
 
   return new Response(JSON.stringify(outcome), {

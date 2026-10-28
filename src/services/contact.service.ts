@@ -1,5 +1,6 @@
 import type { Locale } from '~/i18n/core'
 import i18n from '~/sections/contact/contact.i18n.json'
+import { getTurnstileToken } from './turnstile.service'
 
 /**
  * Same-origin Cloudflare Pages Function that sends the message via Resend.
@@ -23,7 +24,8 @@ export interface ContactMessage {
 /**
  * Sends a contact message through the `/api/contact` Pages Function.
  * Shared by the contact form and the WebMCP `send_contact_message` tool.
- * Time on page is sent along for the server-side spam check.
+ * A Turnstile token and the time on page are sent along for the server-side
+ * spam checks.
  * @param data - Message fields
  * @param locale - Locale of the notification and the visitor's confirmation
  * @throws Error with a visitor-facing message when sending fails
@@ -32,12 +34,14 @@ export const sendContactMessage = async (
   data: ContactMessage,
   locale: Locale,
 ): Promise<void> => {
+  const turnstile = await getTurnstileToken()
   const response = await fetch(CONTACT_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       ...data,
       locale,
+      turnstile,
       elapsed: Math.round(performance.now()),
     }),
   })

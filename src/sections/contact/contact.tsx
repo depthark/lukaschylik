@@ -6,7 +6,11 @@ import SectionTitle from '~/components/section/section.title'
 import socialI18n from '~/components/social/social.i18n.json'
 import { SOCIAL_LINKS } from '~/constants/socialLinks'
 import { useLocale } from '~/i18n'
-import { CONTACT_ENDPOINT, sendContactMessage } from '~/services'
+import {
+  CONTACT_ENDPOINT,
+  preloadTurnstile,
+  sendContactMessage,
+} from '~/services'
 import { cls } from '~/utils'
 import { bridgeAgentSubmit, resolveAgentSubmit } from '~/webmcp/declarative'
 import i18n from './contact.i18n.json'
@@ -167,6 +171,7 @@ const Contact = component$(() => {
           toolname="contact_form"
           tooldescription={t.form.agent.toolDescription}
           onSubmit$={[bridgeAgentSubmit, handleSubmit]}
+          onFocusIn$={() => preloadTurnstile()}
           class={cls(
             'grid grid-cols-1 gap-4 md:gap-6',
             'content-fade-in content-fade-in--entry',
@@ -226,6 +231,7 @@ const Contact = component$(() => {
             onInput$={handleMessageInput}
             required
           />
+          <div id="turnstile-widget" class="empty:hidden" />
           <Button
             type="submit"
             title={t.form.submit}
