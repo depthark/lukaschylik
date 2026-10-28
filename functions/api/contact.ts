@@ -135,14 +135,17 @@ const looksLikeSpam = (data: Submission) => {
 }
 
 /**
- * Verifies a Cloudflare Turnstile token. Without a configured secret the
- * check is skipped (local development).
+ * Verifies a Cloudflare Turnstile token. Fails closed: without a configured
+ * secret nothing is ever sent (use Cloudflare's test secret locally).
  * @param env - Function environment
  * @param token - Token from the widget
  * @param ip - Visitor IP reported by Cloudflare
  */
 const passesTurnstile = async (env: Env, token: string, ip: string | null) => {
-  if (!env.TURNSTILE_SECRET_KEY) return true
+  if (!env.TURNSTILE_SECRET_KEY) {
+    console.error('TURNSTILE_SECRET_KEY is not configured; dropping submission')
+    return false
+  }
   if (!token) return false
   const body = new FormData()
   body.append('secret', env.TURNSTILE_SECRET_KEY)
@@ -262,8 +265,6 @@ const handleSubmission = async (
     return unavailable
   }
 
-  if (!env.TURNSTILE_SECRET_KEY) return { ok: true }
-
   const confirmation = await sendEmail(env, {
     to: [data.email],
     reply_to: to,
@@ -329,3 +330,22 @@ export const onRequestPost = async ({
     },
   })
 }
+
+/**
+ * GET /api/contact – reports only whether the required secrets are present
+ * in this deployment (never their values), to diagnose configuration.
+ * @param context - Pages Function context
+ */
+export const onRequestGet = ({ env }: Context): Response =>
+  new Response(
+    JSON.stringify({
+      resend: Boolean(env.RESEND_API_KEY),
+      turnstile: Boolean(env.TURNSTILE_SECRET_KEY),
+    }),
+    {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+      },
+    },
+  )
