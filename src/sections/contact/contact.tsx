@@ -56,7 +56,7 @@ const Contact = component$(() => {
         {
           fullname: read('fullname'),
           email: read('email'),
-          subject: read('user_subject'),
+          subject: read('subject'),
           message: read('message'),
         },
         locale,
@@ -215,7 +215,7 @@ const Contact = component$(() => {
           <FormField
             label={t.form.subject}
             type="text"
-            name="user_subject"
+            name="subject"
             toolParamDescription={t.form.agent.subject}
             value={state.subject}
             onInput$={handleSubjectInput}
