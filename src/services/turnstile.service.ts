@@ -56,18 +56,19 @@ const getContainer = (): HTMLElement => {
 }
 
 /**
- * Starts downloading Turnstile ahead of the first submission (e.g. when the
- * visitor focuses the form), keeping it off the initial page load.
+ * Turnstile tokens are single-use and expire after 300 s; reuse a prefetched
+ * one only while it is comfortably younger than that.
  */
-export const preloadTurnstile = () => {
-  loadScript().catch(() => undefined)
-}
+const TOKEN_MAX_AGE_MS = 240_000
+
+/** A challenge started ahead of the submission, waiting to be used. */
+let prefetched: { token: Promise<string>; startedAt: number } | null = null
 
 /**
  * Runs a Turnstile challenge and resolves with a single-use token. Most
  * visitors never see anything; suspicious traffic gets an interactive check.
  */
-export const getTurnstileToken = async (): Promise<string> => {
+const runChallenge = async (): Promise<string> => {
   const api = await loadScript()
   const container = getContainer()
   container.replaceChildren()
@@ -82,4 +83,35 @@ export const getTurnstileToken = async (): Promise<string> => {
     })
     api.execute(widgetId)
   })
+}
+
+/**
+ * Starts the "verify you are human" check as soon as the visitor begins to fill
+ * in the form (also downloads the Turnstile script then, keeping it off the
+ * initial page load). When Send is pressed the token is already there, and a
+ * visitor who gets an interactive challenge solves it while typing instead of
+ * being interrupted mid-submit. Safe to call repeatedly.
+ */
+export const prefetchTurnstileToken = () => {
+  if (prefetched && Date.now() - prefetched.startedAt < TOKEN_MAX_AGE_MS) return
+  const entry = { token: runChallenge(), startedAt: Date.now() }
+  prefetched = entry
+  // A failed early attempt is dropped; sending then runs a fresh challenge.
+  entry.token.catch(() => {
+    if (prefetched === entry) prefetched = null
+  })
+}
+
+/**
+ * Returns the token for the submission: the prefetched one when it is still
+ * fresh, otherwise a new challenge (e.g. WebMCP agents never focus the form).
+ * Tokens are single-use, so the prefetched one is consumed.
+ */
+export const getTurnstileToken = (): Promise<string> => {
+  const entry = prefetched
+  prefetched = null
+  if (entry && Date.now() - entry.startedAt < TOKEN_MAX_AGE_MS) {
+    return entry.token.catch(() => runChallenge())
+  }
+  return runChallenge()
 }

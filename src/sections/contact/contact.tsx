@@ -8,7 +8,7 @@ import { SOCIAL_LINKS } from '~/constants/socialLinks'
 import { useLocale } from '~/i18n'
 import {
   CONTACT_ENDPOINT,
-  preloadTurnstile,
+  prefetchTurnstileToken,
   sendContactMessage,
 } from '~/services'
 import { cls } from '~/utils'
@@ -171,7 +171,7 @@ const Contact = component$(() => {
           toolname="contact_form"
           tooldescription={t.form.agent.toolDescription}
           onSubmit$={[bridgeAgentSubmit, handleSubmit]}
-          onFocusIn$={() => preloadTurnstile()}
+          onFocusIn$={() => prefetchTurnstileToken()}
           class={cls(
             'grid grid-cols-1 gap-4 md:gap-6',
             'content-fade-in content-fade-in--entry',
