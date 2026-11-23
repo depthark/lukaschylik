@@ -33,7 +33,7 @@ const youTubeFacade = (src: string, title: string, playLabel: string) => {
   const player = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`
   const thumb = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
   const label = escapeHtml(`${playLabel}: ${title}`)
-  return `<style>html,body{height:100%;margin:0;background:#000}a{position:relative;display:block;height:100%}img{width:100%;height:100%;object-fit:cover}span{position:absolute;inset:0;margin:auto;width:68px;height:48px;border-radius:12px;background:#f00;opacity:.9}span::after{content:'';position:absolute;inset:0;margin:auto;width:0;height:0;border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent #fff;translate:3px 0}a:hover span,a:focus-visible span{opacity:1}a:focus-visible{outline:3px solid #a855f7;outline-offset:-3px}</style><a href='${player}' aria-label='${label}'><img src='${thumb}' alt='' loading='lazy'><span></span></a>`
+  return `<style>html,body{height:100%;margin:0;overflow:hidden;background:#000}a{position:relative;display:block;height:100%}img{display:block;width:100%;height:100%;object-fit:cover}span{position:absolute;inset:0;margin:auto;width:68px;height:48px;border-radius:12px;background:#f00;opacity:.9}span::after{content:'';position:absolute;inset:0;margin:auto;width:0;height:0;border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent #fff;translate:3px 0}a:hover span,a:focus-visible span{opacity:1}a:focus-visible{outline:3px solid #a855f7;outline-offset:-3px}</style><a href='${player}' aria-label='${label}'><img src='${thumb}' alt='' loading='lazy'><span></span></a>`
 }
 
 /**
